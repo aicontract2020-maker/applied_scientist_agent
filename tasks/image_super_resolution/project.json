@@ -1,0 +1,29 @@
+{
+  "task_id": "swinir-lightweight-x2",
+  "status": "SELECTED_NOT_REGISTERED",
+  "selected_on": "2026-11-03",
+  "repository": "https://github.com/JingyunLiang/SwinIR",
+  "revision": "6545850fbf8df298df73d81f3e8cba638787c8bd",
+  "revision_verified_by": "git ls-remote HEAD",
+  "task": "lightweight_sr",
+  "scale": 2,
+  "checkpoint_name": "002_lightweightSR_DIV2K_s64w8_SwinIR-S_x2.pth",
+  "checkpoint_url": "https://github.com/JingyunLiang/SwinIR/releases/download/v0.0/002_lightweightSR_DIV2K_s64w8_SwinIR-S_x2.pth",
+  "checkpoint_sha256": null,
+  "checkpoint_downloaded": false,
+  "baseline_scope": "Official fixed SwinIR-S x2 checkpoint; reproducibility baseline, not a claim of current strongest SR method",
+  "setup_dataset": "Official repository Set5 HR and LR_bicubic/X2 pairs; setup/reproduction only",
+  "heldout_dataset": null,
+  "primary_metric": {"name": "mean per-image PSNR-Y", "direction": "higher", "unit": "dB", "crop_border": 2},
+  "secondary_metrics": ["SSIM-Y", "inference latency", "peak memory", "artifact storage"],
+  "expected_reference_score": null,
+  "code_license": "Apache-2.0",
+  "data_and_weights_terms": "Must be checked separately before use; code license does not establish dataset/weight rights",
+  "execution": null,
+  "assets_executed": false,
+  "sources": [
+    "https://github.com/JingyunLiang/SwinIR",
+    "https://raw.githubusercontent.com/JingyunLiang/SwinIR/6545850fbf8df298df73d81f3e8cba638787c8bd/main_test_swinir.py",
+    "https://raw.githubusercontent.com/JingyunLiang/SwinIR/6545850fbf8df298df73d81f3e8cba638787c8bd/utils/util_calculate_psnr_ssim.py"
+  ]
+}
