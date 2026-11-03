@@ -42,10 +42,15 @@ def main():
     export = sub.add_parser("report", help="Export a decision report without overwriting files")
     export.add_argument("id")
     export.add_argument("--out", required=True)
+    autonomous = sub.add_parser("autonomous", help="Run one externally isolated agent-authored SR research cycle (macOS)")
+    autonomous.add_argument("--out", required=True)
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
-        if args.command == "register":
+        if args.command == "autonomous":
+            from .autonomy import AutonomousStudy
+            output = AutonomousStudy(args.out).launch()
+        elif args.command == "register":
             output = {"registered": str(workspace.register(json.loads(Path(args.protocol).read_text())))}
         elif args.command == "record":
             output = workspace.record(args.id, json.loads(Path(args.result).read_text()))

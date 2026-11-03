@@ -1,0 +1,100 @@
+[
+  {
+    "id": "img_001",
+    "baseline_score": 26.587811697970967,
+    "candidate_score": 26.540379897372457,
+    "baseline_latency_ms": 3346.1558339186013,
+    "candidate_latency_ms": 1699.5622930116951
+  },
+  {
+    "id": "img_002",
+    "baseline_score": 30.08066503836094,
+    "candidate_score": 29.811630333300236,
+    "baseline_latency_ms": 6009.084750432521,
+    "candidate_latency_ms": 2924.632207490504
+  },
+  {
+    "id": "img_003",
+    "baseline_score": 29.549800548646928,
+    "candidate_score": 29.512793443495326,
+    "baseline_latency_ms": 3620.4765839502215,
+    "candidate_latency_ms": 1848.4107917174697
+  },
+  {
+    "id": "img_004",
+    "baseline_score": 31.23410975883462,
+    "candidate_score": 31.118954823164128,
+    "baseline_latency_ms": 1446.9904587604105,
+    "candidate_latency_ms": 690.1138331741095
+  },
+  {
+    "id": "img_005",
+    "baseline_score": 30.54341736318858,
+    "candidate_score": 30.392897841953083,
+    "baseline_latency_ms": 1194.639458321035,
+    "candidate_latency_ms": 636.4648756571114
+  },
+  {
+    "id": "img_006",
+    "baseline_score": 36.06238131301206,
+    "candidate_score": 36.02511436344284,
+    "baseline_latency_ms": 1094.7649581357837,
+    "candidate_latency_ms": 522.4500009790063
+  },
+  {
+    "id": "img_007",
+    "baseline_score": 35.52354405849306,
+    "candidate_score": 35.348608929095995,
+    "baseline_latency_ms": 2461.589707992971,
+    "candidate_latency_ms": 1251.4515416696668
+  },
+  {
+    "id": "img_008",
+    "baseline_score": 37.91304151485227,
+    "candidate_score": 37.71786124638305,
+    "baseline_latency_ms": 1437.2627497650683,
+    "candidate_latency_ms": 733.1771668978035
+  },
+  {
+    "id": "img_009",
+    "baseline_score": 37.57617948934099,
+    "candidate_score": 37.491466929686425,
+    "baseline_latency_ms": 3660.7965831644833,
+    "candidate_latency_ms": 1816.0922089591622
+  },
+  {
+    "id": "img_010",
+    "baseline_score": 31.601129523480537,
+    "candidate_score": 31.5510424811631,
+    "baseline_latency_ms": 3651.4025828801095,
+    "candidate_latency_ms": 1835.407874546945
+  },
+  {
+    "id": "img_011",
+    "baseline_score": 40.47952033060734,
+    "candidate_score": 40.22802116783737,
+    "baseline_latency_ms": 5494.471125304699,
+    "candidate_latency_ms": 2702.586126513779
+  },
+  {
+    "id": "img_012",
+    "baseline_score": 37.722585350730704,
+    "candidate_score": 37.6595898492032,
+    "baseline_latency_ms": 3611.478874925524,
+    "candidate_latency_ms": 1817.7017918787897
+  },
+  {
+    "id": "img_013",
+    "baseline_score": 35.50764685485782,
+    "candidate_score": 35.025665675301596,
+    "baseline_latency_ms": 5206.790708005428,
+    "candidate_latency_ms": 2520.3776666894555
+  },
+  {
+    "id": "img_014",
+    "baseline_score": 34.73795412362305,
+    "candidate_score": 34.63317710040918,
+    "baseline_latency_ms": 3084.6313750371337,
+    "candidate_latency_ms": 1490.1033747009933
+  }
+]

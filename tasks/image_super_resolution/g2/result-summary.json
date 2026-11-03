@@ -1,0 +1,69 @@
+{
+  "workflow_completed": true,
+  "scientific_result": {
+    "status": "STOP",
+    "measurement_valid": true,
+    "mean_gain_db": -0.14732734887084828,
+    "baseline_psnr_y": 33.93712764042856,
+    "candidate_psnr_y": 33.78980029155771,
+    "reason": "Effect, interval, or latency did not meet the frozen adoption threshold.",
+    "observation_count": 14,
+    "observation_effects": [
+      -0.04743180059850971,
+      -0.2690347050607045,
+      -0.037007105151602104,
+      -0.11515493567049262,
+      -0.1505195212354984,
+      -0.03726694956922216,
+      -0.17493512939706335,
+      -0.19518026846921543,
+      -0.08471255965456237,
+      -0.050087042317436214,
+      -0.2514991627699743,
+      -0.062995501527503,
+      -0.48198117955622166,
+      -0.10477702321387028
+    ],
+    "observation_effect_std": 0.12351163985002844,
+    "bootstrap_interval": [
+      -0.21534401892624974,
+      -0.09199941983867811
+    ],
+    "bootstrap_confidence": 0.95,
+    "latency_ratio": 0.4962106334674507,
+    "bootstrap_scope": "Original-image sampling variability; not training replication or proof against dataset contamination",
+    "experiment_wall_seconds": 71.40771374991164,
+    "local_compute_proxy_usd": 0.01983547609972043,
+    "planner_billing_usd": null
+  },
+  "session": {
+    "actor_directory": "/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-g2-3drd73wa/agent",
+    "control_directory": "/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-g2-3drd73wa/control",
+    "total_wall_seconds": 184.44134283298627,
+    "local_proxy_usd": 0.05123370653949678,
+    "billing_usd": null,
+    "actual_model_id": null,
+    "candidate_execution_network": "DENIED",
+    "agent_network": "Model service connectivity allowed; task prohibits external benchmark access; not a fully closed egress environment"
+  },
+  "resources": {
+    "shared_assets_environment_cache_bytes": 1461553763,
+    "temporary_session_bytes": 92643253,
+    "retained_footprint_bytes": 1554197016,
+    "session_byte_hours_upper_estimate": 79627273.51612784,
+    "storage_assumption": "Upper residency estimate: end-of-run footprint times session wall duration; no retention price or exact allocation-time accounting.",
+    "candidate_peak_rss_bytes": 156549120,
+    "reference_peak_rss_bytes": null,
+    "reference_peak_note": "Not metered by this controller version; do not infer it from candidate RSS.",
+    "model_usage": [
+      {
+        "input_tokens": 660147,
+        "cached_input_tokens": 642816,
+        "output_tokens": 5976,
+        "reasoning_output_tokens": 343
+      }
+    ],
+    "actual_model_id": null,
+    "actual_model_billing_usd": null
+  }
+}

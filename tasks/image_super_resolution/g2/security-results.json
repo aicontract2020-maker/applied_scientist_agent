@@ -1,0 +1,18 @@
+{
+  "actual_os_tests": "PASS",
+  "actor": {
+    "holdout": "DENIED",
+    "volume_alias": "DENIED",
+    "control_state": "DENIED",
+    "outside_write": "DENIED"
+  },
+  "candidate": {
+    "holdout": "DENIED",
+    "volume_alias": "DENIED",
+    "control_state": "DENIED",
+    "outside_write": "DENIED",
+    "network": "DENIED",
+    "numpy_cv2_imports": "OK"
+  },
+  "scope": "macOS Seatbelt checks on current host; not a multi-tenant penetration test"
+}

@@ -1,0 +1,47 @@
+{
+  "hypothesis": "On all 14 frozen original Set14 x2 pairs, one conservative cubic back-projection correction with gain 0.20 applied to plain SwinIR-S will improve mean paired PSNR-Y by at least 0.05 dB versus the fixed two-pass horizontal-flip reference, with a candidate/reference latency ratio no greater than 2.5.",
+  "mechanism": "A fixed externally trained SR model can produce a high-resolution estimate whose cubic reduction is not exactly consistent with the observed low-resolution RGB image. I infer that the low-frequency residual between the actual LR input and a cubic downsample of plain SwinIR identifies recoverable observation mismatch. Cubically lifting 20% of that signed residual and adding it once to the float32 SR estimate should correct mismatch conservatively while retaining most learned high-frequency detail. This is a single deterministic approximation to observation-consistency back-projection, not optimization or learning.",
+  "baseline": "The stronger comparator is the existing fixed two-pass reference that averages SwinIR-S x2 predictions for the original and horizontally flipped input. The candidate instead receives only the single plain, unensembled SwinIR float32 prediction and applies two inexpensive cubic resizes plus one residual addition; it performs no extra model forward and does not use the comparator output.",
+  "why_not_g1_retry": "G1 altered prediction sampling through a second transformed model forward and averaged two predictions. This candidate never flips, ensembles, or calls the model again. Its causal route is explicit LR observation consistency: calculate the plain prediction's reduction residual and partially project it back. Thus it neither retunes G1 nor adds complexity atop G1's rejected output.",
+  "new_evidence": [
+    {
+      "source": "https://arxiv.org/abs/2008.13751",
+      "claim": "The primary paper shows that image restoration can combine a learned prior with an explicit observation model through plug-and-play optimization.",
+      "why_distinct": "The paper uses iterative optimization and a learned denoiser; it does not establish this postprocessor's gain. My distinct inference is that one cheap residual correction may capture a useful fraction of observation-consistency benefit without training, extra weights, or iteration."
+    },
+    {
+      "source": "https://arxiv.org/abs/1811.12866",
+      "claim": "The primary paper reports an SR approach that incorporates input-image information and addresses observation-model mismatch using image-adapted learning.",
+      "why_distinct": "Its learning procedure is excluded here and its results do not prove this method. It motivates testing the separate causal proposition that LR information remaining after plain SwinIR can be used by a fixed, deterministic consistency correction."
+    }
+  ],
+  "controls": [
+    "All 14 original Set14 x2 image pairs, frozen before candidate creation",
+    "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+    "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+    "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+    "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+    "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+  ],
+  "minimum_effect": 0.05,
+  "max_latency_ratio": 2.5,
+  "bootstrap": {
+    "resamples": 10000,
+    "seed": 20261103,
+    "confidence": 0.95
+  },
+  "observation_ids": [
+    "img_001", "img_002", "img_003", "img_004", "img_005", "img_006", "img_007",
+    "img_008", "img_009", "img_010", "img_011", "img_012", "img_013", "img_014"
+  ],
+  "stop_route": "If the valid paired gain is below +0.05 dB, or the latency ratio exceeds 2.5, abandon this fixed one-step gain-0.20 cubic LR-residual back-projection route; do not retune its gain, interpolation, or number of steps on this holdout.",
+  "parameters": {
+    "downsample": "cv2.INTER_CUBIC from 2H x 2W to the exact LR W x H shape",
+    "residual": "float32 LR minus cubic-downsampled plain float32 SwinIR prediction, channelwise RGB",
+    "upsample": "cv2.INTER_CUBIC from LR residual to the exact SR shape",
+    "gain": 0.20,
+    "steps": 1,
+    "clipping": "none; trusted adapter owns final clamping and quantization",
+    "rationale": "Cubic resizing is a deterministic approximation to the x2 observation relationship. A single 0.20 step is deliberately under-relaxed: it can reduce signed low-frequency mismatch without fully injecting interpolation-shaped residuals or destabilizing SwinIR detail. The constants are reasoning-chosen and will not be tuned."
+  }
+}

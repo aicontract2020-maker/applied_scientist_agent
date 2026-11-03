@@ -1,0 +1,36 @@
+{
+  "status": "STOP",
+  "measurement_valid": true,
+  "mean_gain_db": -0.14732734887084828,
+  "baseline_psnr_y": 33.93712764042856,
+  "candidate_psnr_y": 33.78980029155771,
+  "reason": "Effect, interval, or latency did not meet the frozen adoption threshold.",
+  "observation_count": 14,
+  "observation_effects": [
+    -0.04743180059850971,
+    -0.2690347050607045,
+    -0.037007105151602104,
+    -0.11515493567049262,
+    -0.1505195212354984,
+    -0.03726694956922216,
+    -0.17493512939706335,
+    -0.19518026846921543,
+    -0.08471255965456237,
+    -0.050087042317436214,
+    -0.2514991627699743,
+    -0.062995501527503,
+    -0.48198117955622166,
+    -0.10477702321387028
+  ],
+  "observation_effect_std": 0.12351163985002844,
+  "bootstrap_interval": [
+    -0.21534401892624974,
+    -0.09199941983867811
+  ],
+  "bootstrap_confidence": 0.95,
+  "latency_ratio": 0.4962106334674507,
+  "bootstrap_scope": "Original-image sampling variability; not training replication or proof against dataset contamination",
+  "experiment_wall_seconds": 71.40771374991164,
+  "local_compute_proxy_usd": 0.01983547609972043,
+  "planner_billing_usd": null
+}

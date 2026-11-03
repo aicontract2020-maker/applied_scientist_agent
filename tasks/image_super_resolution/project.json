@@ -84,5 +84,16 @@
       "timing_limitation": "Brief concurrent software unit tests on the same host; noted before quality was evaluated; no exclusion or rerun allowed.",
       "next_action": "STOP this intervention. Do not auto-try the unused shortlisted intervention or lower the threshold."
     }
+  },
+  "g2": {
+    "workflow_completed": true,
+    "scientific_decision": "STOP",
+    "mean_gain_db": -0.14732734887084828,
+    "interval": [
+      -0.21534401892624974,
+      -0.09199941983867811
+    ],
+    "latency_ratio": 0.4962106334674507,
+    "human_candidate_edits": false
   }
 }

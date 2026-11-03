@@ -1,0 +1,10 @@
+{
+  "actor_directory": "/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-g2-3drd73wa/agent",
+  "control_directory": "/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-g2-3drd73wa/control",
+  "total_wall_seconds": 184.44134283298627,
+  "local_proxy_usd": 0.05123370653949678,
+  "billing_usd": null,
+  "actual_model_id": null,
+  "candidate_execution_network": "DENIED",
+  "agent_network": "Model service connectivity allowed; task prohibits external benchmark access; not a fully closed egress environment"
+}

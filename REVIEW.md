@@ -1,7 +1,9 @@
 # ResearchHarness v0.3：首次审查
 
 日期：2026-11-03
-状态：G0 已通过；已完成一次真实规划与 G1 对照。G1 增益 0.01472 dB < 0.05 dB，决策 STOP。
+状态：G0 已通过；G1 已 STOP。新增 G2 完整自主方案/代码/执行/报告已跑通，科学效应 -0.14733 dB，仍为 STOP。
+
+当前先看 `tasks/image_super_resolution/g2/REPORT.md`；agent 原始报告和未改写候选均已归档。
 
 先看 `tasks/image_super_resolution/g1/REPORT.md`。该干预已停止，未自动尝试备选。
 

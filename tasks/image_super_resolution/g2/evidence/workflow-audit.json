@@ -1,0 +1,25 @@
+{
+  "workflow_completed": true,
+  "candidate_written_by_agent": true,
+  "candidate_sha256": "81da8466a8777916fd3a69708b2ab8a0a4b530a34e7324a6a3d7008f9f325b8f",
+  "agent_executed_check_register_run": true,
+  "registered_experiments": 1,
+  "scientific_decision": "STOP",
+  "valid_measurement": true,
+  "report_matches_decision_and_primary_effect": true,
+  "candidate_unchanged_after_registration": true,
+  "trusted_inputs_unchanged": true,
+  "model_usage": [
+    {
+      "input_tokens": 660147,
+      "cached_input_tokens": 642816,
+      "output_tokens": 5976,
+      "reasoning_output_tokens": 343
+    }
+  ],
+  "completed_command_count": 7,
+  "agent_file_change_count": 2,
+  "actual_model_id": null,
+  "model_billing_usd": null,
+  "scope": "One deterministic postprocessing study with fixed baseline, data, evaluator and broker; not general autonomy or new scientific discovery."
+}

@@ -1,0 +1,26 @@
+{
+  "objective": "A real research agent independently proposes a distinct hypothesis, writes candidate code, preregisters it, invokes the broker to execute the experiment, and reports the fixed decision without human candidate implementation.",
+  "baseline": "G1: real agent chose among supplied methods, but the collaborator implemented and ran the candidate.",
+  "primary_metric": "Binary end-to-end completion: agent proposal + code hash + preregistration + agent-triggered execution + valid independent metrics + faithful final report.",
+  "minimum_meaningful_effect": "All stages completed; a scientific STOP can still satisfy workflow completion.",
+  "controls": [
+    "Fixed 14 Set14 image identities",
+    "Immutable reference/evaluation/statistical code",
+    "One real experiment",
+    "No direct HR access",
+    "No human edits to candidate.py"
+  ],
+  "replication": "One feasibility cycle, not a reliability estimate across tasks/seeds.",
+  "uncertainty": "No claim of general autonomy, research novelty, or replacing a profession from a single trial.",
+  "stop_go": {
+    "pass": "Workflow feasibility established for this constrained task; preserve scientific decision and review before broadening.",
+    "fail": "Do not claim end-to-end autonomy; preserve the exact incomplete/invalid stage."
+  },
+  "budget": {
+    "one_agent_session_seconds": 900,
+    "one_experiment_reference_seconds": 300,
+    "candidate_seconds": 90,
+    "synthetic_checks_max": 3,
+    "model_billing_usd": null
+  }
+}

@@ -1,0 +1,19 @@
+Completed the full autonomous research cycle.
+
+Result: **STOP**
+
+- Mean PSNR-Y gain: **−0.147327 dB**
+- 95% paired-bootstrap CI: **[−0.215344, −0.091999] dB**
+- All 14 image effects were negative
+- Latency ratio: **0.496×**, within the 2.5 limit
+- Quality failed the preregistered **+0.05 dB** threshold
+
+The candidate route is abandoned without retuning or retrying.
+
+Artifacts:
+
+- [REPORT.md](/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-g2-3drd73wa/agent/REPORT.md)
+- [candidate.py](/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-g2-3drd73wa/agent/candidate.py)
+- [research.json](/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-g2-3drd73wa/agent/research.json)
+
+Registered protocol SHA-256: `bea4075e77458cc8a345b73835eafc003252893d15b54c8d5ab1052b67b8fa5c`.

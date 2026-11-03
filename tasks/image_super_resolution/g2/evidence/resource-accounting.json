@@ -1,0 +1,20 @@
+{
+  "shared_assets_environment_cache_bytes": 1461553763,
+  "temporary_session_bytes": 92643253,
+  "retained_footprint_bytes": 1554197016,
+  "session_byte_hours_upper_estimate": 79627273.51612784,
+  "storage_assumption": "Upper residency estimate: end-of-run footprint times session wall duration; no retention price or exact allocation-time accounting.",
+  "candidate_peak_rss_bytes": 156549120,
+  "reference_peak_rss_bytes": null,
+  "reference_peak_note": "Not metered by this controller version; do not infer it from candidate RSS.",
+  "model_usage": [
+    {
+      "input_tokens": 660147,
+      "cached_input_tokens": 642816,
+      "output_tokens": 5976,
+      "reasoning_output_tokens": 343
+    }
+  ],
+  "actual_model_id": null,
+  "actual_model_billing_usd": null
+}
