@@ -1,0 +1,13 @@
+{
+  "device": "cpu",
+  "threads": 4,
+  "precision": "float32",
+  "inference_wall_seconds": 330.1423152079806,
+  "parent_peak_rss_bytes": 798736384,
+  "child_peak_rss_bytes": 273399808,
+  "rss_note": "macOS bytes; peaks are not simultaneous",
+  "setup_disk_bytes": 1461553763,
+  "artifact_bytes": 54027813,
+  "bootstrap_unit": "Original image, not patch or repeated inference",
+  "timing_scope": "One warmed forward per arm and image; alternating order; excludes image IO; not a production latency benchmark"
+}

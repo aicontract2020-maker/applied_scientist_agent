@@ -195,3 +195,22 @@ python3 -m research_harness report EXPERIMENT_ID --out runs/REPORT.md
 
 Codex 接口依据：[官方非交互模式文档](https://developers.openai.com/codex/noninteractive)。
 本地适配器已对照安装版本的 `codex exec --help`，未进行真实模型调用。
+
+## 确定性图像配对研究
+
+`design=paired_observations` 适用于固定权重、一次冻结推理对照。它要求提前冻结
+至少 10 个原始 observation_ids、bootstrap 的 resamples/seed/confidence、
+minimum_effect 与 max_latency_ratio。一次执行用 seeds=[0] 标识，不伪装成训练重复。
+逐图上报两臂分数和延迟，汇总值必须等于全部原图均值；子集、重复 ID 或虚假汇总会拒绝。
+
+CONTINUE 必须同时满足平均效应达到阈值、原图 bootstrap 区间下界 >0、总延迟比
+不超过门槛。该 bootstrap 描述图像抽样差异，不证明独立训练稳定性，也不能消除
+公开 benchmark 污染和原图相关性带来的限制。
+
+首轮图像研究材料位于 `tasks/image_super_resolution/g1/`。规划是一次真实模型调用，
+从预先提供的两项已知方法中选一个；代码实现与执行检查仍由协作者完成。
+
+
+首轮 G1 已完成，结果为 STOP：平均增益 0.01472 dB，未达预注册的 0.05 dB。
+见 [真实规划与研究负结果](tasks/image_super_resolution/g1/REPORT.md)。系统保留该负结果，
+不会降低阈值或自动切换另一个候选来寻找成功。

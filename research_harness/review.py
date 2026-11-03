@@ -36,6 +36,10 @@ def build_review(proposal_path, execution_path, output_dir):
     p = protocol
     c = execution
     reserve = sum(c['fixed_costs'].values()) + c['timeout_seconds'] / 3600 * c['compute_usd_per_hour']
+    if p.get('design') == 'paired_observations':
+        decision_rule = f'- CONTINUE：平均图像效应 >= {p["minimum_effect"]}，bootstrap 区间下界 > 0，延迟比 <= {p["max_latency_ratio"]}。'
+    else:
+        decision_rule = '- CONTINUE：平均效应达到阈值，且每个 seed 都改善。其他有效测量结果 STOP。'
     lines = [f'# 研究计划审查：{p["id"]}', '',
              '**状态：等待人工审查。未注册、未启动实验。**', '',
              f'内容摘要：`{bundle["sha256"]}`', '',
@@ -44,11 +48,14 @@ def build_review(proposal_path, execution_path, output_dir):
              f'- 指标：{p["primary_metric"]["name"]}；{p["primary_metric"]["direction"]}；单位 {p["primary_metric"]["unit"]}',
              f'- 最小有意义效果：{p["minimum_effect"]}（绝对单位）',
              f'- 配对重复：{p["replicates"]}；seeds={p["seeds"]}',
-             '- CONTINUE：平均效应达到阈值，且每个 seed 都改善。其他有效测量结果 STOP。',
+             decision_rule,
              f'- 成功后的决策：{p["outcomes"]["go"]}',
              f'- 未达标后的决策：{p["outcomes"]["stop"]}',
              f'- 测量失效后的决策：{p["outcomes"]["invalid"]}', '',
              '## 控制变量与有效性检查', '']
+    if p.get('design') == 'paired_observations':
+        lines += ['', f'图像样本数：{len(p["observation_ids"])}；bootstrap：{p["bootstrap"]}',
+                  f'冻结干预：{p["intervention"]}；一次执行，不是独立训练重复。']
     lines += [f'- {x}' for x in p['controlled_variables'] + p['validity_checks']]
     lines += ['', '## 执行范围和成本', '',
               f'- 工作目录：`{c["cwd"]}`',
@@ -120,6 +127,17 @@ def report(workspace, experiment_id, output):
         if e['event'] == 'RESULT':
             r = e['result']
             lines.append(f'| {r["seed"]} | {r["baseline_score"]} | {r["candidate_score"]} | {sign * (r["candidate_score"] - r["baseline_score"]):.6g} | {r["artifact"]} |')
+    if decision.get('design') == 'paired_observations' and 'observation_count' in decision:
+        lines += ['', f'图像配对数：{decision["observation_count"]}',
+                  f'图像效应标准差：{decision["observation_effect_std"]}',
+                  f'Bootstrap 区间：{decision["bootstrap_interval"]}；置信度 {decision["bootstrap_confidence"]}',
+                  f'候选/基线延迟比：{decision["latency_ratio"]}；阈值 {p["max_latency_ratio"]}',
+                  '该区间描述原图之间的抽样差异，不代表训练重复或全新数据上的泛化保证。', '',
+                  '| 图像 | 基线 | 候选 | 基线延迟 ms | 候选延迟 ms |', '|---|---:|---:|---:|---:|']
+        for event in events:
+            if event['event'] == 'RESULT':
+                for row in event['result']['observations']:
+                    lines.append(f'| {row["id"]} | {row["baseline_score"]:.6f} | {row["candidate_score"]:.6f} | {row["baseline_latency_ms"]:.3f} | {row["candidate_latency_ms"]:.3f} |')
     if decision.get('design') == 'deterministic_reproduction':
         lines += ['', '确定性复现：一次固定权重运行，不代表独立训练重复。',
                   f'与参考绝对误差：{decision["absolute_error"]}；容差：{decision["reproduction_tolerance"]}',

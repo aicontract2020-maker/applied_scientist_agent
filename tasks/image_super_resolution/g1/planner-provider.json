@@ -1,0 +1,25 @@
+{
+  "provider": "codex",
+  "model": null,
+  "billing_usd": null,
+  "billing_note": "Unknown; reconcile external account usage. Fixture replay has no model charge.",
+  "command": [
+    "codex",
+    "-c",
+    "approval_policy=\"never\"",
+    "exec",
+    "--sandbox",
+    "read-only",
+    "--ephemeral",
+    "--ignore-user-config",
+    "--skip-git-repo-check",
+    "--json",
+    "--output-schema",
+    "/Users/kaimaplespark/git/applied_scientist_agent/proposals/swinir-g1-p1/schema.json",
+    "--output-last-message",
+    "/Users/kaimaplespark/git/applied_scientist_agent/proposals/swinir-g1-p1/response.json",
+    "-"
+  ],
+  "status": "RECEIVED",
+  "elapsed_seconds": 43.38134879199788
+}

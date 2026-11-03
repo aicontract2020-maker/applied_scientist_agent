@@ -44,7 +44,7 @@ def validate_protocol(p, check_inputs=True):
     if not isinstance(metric, dict) or not metric.get("name") or metric.get("direction") not in ("higher", "lower") or not metric.get("unit"):
         raise ValueError("primary_metric needs name, unit, and direction: higher/lower")
     design = p.get("design", "paired_improvement")
-    if design not in ("paired_improvement", "deterministic_reproduction"):
+    if design not in ("paired_improvement", "deterministic_reproduction", "paired_observations"):
         raise ValueError("Unknown experimental design")
     number(p["minimum_effect"], "minimum_effect", 0)
     if design == "paired_improvement":
@@ -52,6 +52,9 @@ def validate_protocol(p, check_inputs=True):
             raise ValueError("minimum_effect must be positive (absolute metric units)")
         if type(p["replicates"]) is not int or p["replicates"] < 3:
             raise ValueError("At least 3 paired replications are required")
+    elif design == "paired_observations":
+        from .observations import validate_design
+        validate_design(p)
     else:
         if p["replicates"] != 1 or type(p["replicates"]) is not int or p["seeds"] != [0] or p["minimum_effect"] != 0:
             raise ValueError("Deterministic reproduction requires one execution, seeds=[0], minimum_effect=0")
@@ -126,6 +129,9 @@ class Workspace:
             raise ValueError("Preregistered replication count reached")
         for field in ("baseline_score", "candidate_score"):
             number(result.get(field), field)
+        if p.get("design") == "paired_observations":
+            from .observations import validate_result
+            validate_result(p, result)
         if p.get("design") == "deterministic_reproduction" and result["baseline_score"] != p["reference_score"]:
             raise ValueError("Reproduction baseline must match the frozen reference score")
         if not isinstance(result.get("artifact"), str) or not result["artifact"].strip():
@@ -173,6 +179,9 @@ class Workspace:
             report["reference_score"] = p["reference_score"]
             report["absolute_error"] = abs(effects[0]) if effects else None
             report["reproduction_tolerance"] = p["reproduction_tolerance"]
+        if report["design"] == "paired_observations" and records:
+            from .observations import summarize
+            report.update(summarize(p, records[0]["observations"]))
         if failures:
             status, reason, outcome = "STOP", failures[-1].get("reason") or failures[-1]["error"], "invalid"
         elif any(not all(r["validity"].values()) for r in records):
@@ -182,6 +191,10 @@ class Workspace:
         elif len(records) < p["replicates"]:
             report.update(status="PENDING", reason="Collect exactly the preregistered replications; no early success decision.")
             return report
+        elif p.get("design") == "paired_observations":
+            passed = report["mean_effect"] >= p["minimum_effect"] and report["bootstrap_interval"][0] > 0 and report["latency_ratio"] <= p["max_latency_ratio"]
+            status, outcome = ("CONTINUE", "go") if passed else ("STOP", "stop")
+            reason = "Paired-image effect, interval and latency thresholds met." if passed else "Paired-image effect, uncertainty or latency threshold not met. Stop this intervention."
         elif p.get("design") == "deterministic_reproduction":
             passed = report["absolute_error"] <= p["reproduction_tolerance"] + 1e-12
             status = "CONTINUE" if passed else "STOP"

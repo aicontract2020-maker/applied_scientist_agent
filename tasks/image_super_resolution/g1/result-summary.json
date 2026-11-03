@@ -1,0 +1,29 @@
+{
+  "decision": "STOP",
+  "reason": "Mean gain below predeclared minimum meaningful effect; interval and latency conditions passed.",
+  "baseline_psnr_y": 32.31403726974944,
+  "candidate_psnr_y": 32.32875640805887,
+  "mean_gain_db": 0.014719138309430946,
+  "minimum_gain_db": 0.05,
+  "gain_std_db": 0.014834496925388905,
+  "bootstrap_interval_db": [
+    0.01196506051305814,
+    0.017713423249750768
+  ],
+  "bootstrap_confidence": 0.95,
+  "latency_ratio": 2.003960590000678,
+  "max_latency_ratio": 2.5,
+  "n_original_images": 100,
+  "seconds": 332.1952156671323,
+  "experiment_proxy_usd": 0.09227644879642563,
+  "planner_usd": null,
+  "planner_tokens": {
+    "input_tokens": 20092,
+    "cached_input_tokens": 0,
+    "output_tokens": 1737,
+    "reasoning_output_tokens": 117
+  },
+  "uncertainty_scope": "Original images only; not independent training or unseen-domain generalization",
+  "timing_limitation": "Brief concurrent software unit tests on the same host; noted before quality was evaluated; no exclusion or rerun allowed.",
+  "next_action": "STOP this intervention. Do not auto-try the unused shortlisted intervention or lower the threshold."
+}

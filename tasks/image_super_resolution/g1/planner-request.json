@@ -1,0 +1,24 @@
+{
+  "id": "planner-p1",
+  "hypothesis": "A single bounded planner request produces a schema-valid, constraint-compliant, ready-for-review protocol from this complete brief.",
+  "baseline": "Human-authored frozen brief and deterministic schema/constraint oracle; no claim of outperforming human research.",
+  "controls": [
+    "same brief and schema",
+    "no tools or experiments",
+    "one request only"
+  ],
+  "metric": "All syntax and frozen-constraint checks pass (binary)",
+  "minimum_effect": "Pass=1; otherwise stop planning route and preserve failure",
+  "replication": "One integration attempt, not a statistical model-quality benchmark",
+  "uncertainty": "No generalization or reliability claim from one response",
+  "budget": {
+    "requests": 1,
+    "timeout_seconds": 120,
+    "account_usd": null
+  },
+  "outcomes": {
+    "pass": "Inspect proposal and implement only the frozen intervention before registering G1",
+    "fail": "Stop; preserve output, classify missing context or protocol violation; no candidate experiment",
+    "transport_invalid": "Record exact failure; repair transport only under a newly logged request protocol"
+  }
+}

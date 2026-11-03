@@ -1,0 +1,14 @@
+{
+  "status": "PASS_OPERATOR_CONSTRAINT_CHECK",
+  "proposal_sha256": "55da6fdb07c5c76ee6b06d41d4996ca8972008b70a860668ec66cb46e6e0989f",
+  "request_sha256": "5c52bbf36cc1de9d77bae0a16e36ff3afddb00052e80bd9b8da8183c90975b2b",
+  "usage": {
+    "input_tokens": 20092,
+    "cached_input_tokens": 0,
+    "output_tokens": 1737,
+    "reasoning_output_tokens": 117
+  },
+  "billing_usd": null,
+  "limitations": "One request from a two-option supplied shortlist; not open-ended invention; no human approval record created.",
+  "registration_basis": "Existing user instruction to continue the bounded local pilot, with operator-audited trusted code."
+}
