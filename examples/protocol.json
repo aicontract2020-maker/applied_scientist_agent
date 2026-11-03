@@ -1,0 +1,17 @@
+{
+  "id": "forecast-pilot",
+  "hypothesis": "A prespecified candidate reduces MAE by at least 0.5 units versus the strongest reproduced baseline.",
+  "baseline": "REPLACE before real use: strongest relevant reproduced forecast baseline, code revision and tuning budget",
+  "controlled_variables": ["Frozen time splits and dataset hash", "Paired random seeds: 11, 22, 33", "Same compute and tuning limits; one fixed candidate"],
+  "primary_metric": {"name": "MAE", "direction": "lower", "unit": "target units"},
+  "minimum_effect": 0.5,
+  "replicates": 3,
+  "seeds": [11, 22, 33],
+  "budget_usd": 30,
+  "validity_checks": ["No test leakage", "Evaluation implementation unchanged"],
+  "outcomes": {
+    "go": "Proceed to an independently preregistered deployment-cost evaluation; this is not deployment approval.",
+    "stop": "Reject this candidate route. Do not increase architecture or tuning to rescue it.",
+    "invalid": "No hypothesis conclusion: document the failed check and preregister a corrected measurement."
+  }
+}

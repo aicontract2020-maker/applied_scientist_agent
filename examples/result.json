@@ -1,0 +1,16 @@
+{
+  "seed": 11,
+  "baseline_score": 10.0,
+  "candidate_score": 9.2,
+  "validity": {"No test leakage": true, "Evaluation implementation unchanged": true},
+  "artifact": "SYNTHETIC_EXAMPLE_ONLY: replace with raw logs/checkpoints",
+  "costs": {
+    "compute_seconds": 60,
+    "storage_byte_hours": 1024,
+    "latency_ms": 5,
+    "data_usd": 0,
+    "tuning_usd": 0,
+    "compute_usd": 0.1,
+    "storage_usd": 0
+  }
+}
