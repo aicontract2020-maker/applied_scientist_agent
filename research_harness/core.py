@@ -27,10 +27,12 @@ def number(value, name, minimum=None):
 
 
 def validate_protocol(p, check_inputs=True):
+    if not isinstance(p, dict):
+        raise ValueError("Protocol must be an object")
     for field in ("id", "hypothesis", "baseline", "controlled_variables", "primary_metric", "minimum_effect", "replicates", "seeds", "outcomes", "validity_checks", "budget_usd"):
         if field not in p:
             raise ValueError(f"Missing protocol field: {field}")
-    if not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,79}", p["id"]):
+    if not isinstance(p["id"], str) or not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,79}", p["id"]):
         raise ValueError("id must be a safe lowercase identifier")
     for field in ("hypothesis", "baseline"):
         if not isinstance(p[field], str) or not p[field].strip():
@@ -95,6 +97,8 @@ class Workspace:
         folder, p, events = self.load(experiment_id)
         if any(e["event"] == "DECISION" for e in events):
             raise ValueError("Experiment closed. A new hypothesis requires a new preregistration.")
+        if not isinstance(result, dict):
+            raise ValueError("Result must be an object")
         if "execution" in p:
             attempt = result.get("execution_attempt")
             finished = [e for e in events if e["event"] == "ATTEMPT_FINISHED" and e["attempt"] == attempt and e["seed"] == result.get("seed") and not e["error"]]
@@ -114,10 +118,10 @@ class Workspace:
         if not isinstance(result.get("artifact"), str) or not result["artifact"].strip():
             raise ValueError("artifact must identify the raw output/log location")
         checks = result.get("validity", {})
-        if set(checks) != set(p["validity_checks"]) or any(type(v) is not bool for v in checks.values()):
+        if not isinstance(checks, dict) or set(checks) != set(p["validity_checks"]) or any(type(v) is not bool for v in checks.values()):
             raise ValueError("Report true/false for every preregistered validity check")
         costs = result.get("costs", {})
-        if set(costs) != set(COST_FIELDS):
+        if not isinstance(costs, dict) or set(costs) != set(COST_FIELDS):
             raise ValueError(f"Report all costs (baseline + candidate + failed attempts): {COST_FIELDS}")
         for k in COST_FIELDS:
             number(costs[k], k, 0)

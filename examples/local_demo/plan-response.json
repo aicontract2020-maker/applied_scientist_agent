@@ -1,0 +1,45 @@
+{
+  "status": "ready_for_review",
+  "summary": "合成软件流程演示；不提供科学或商业证据。",
+  "rationale": "检查计划、审查、执行和报告是否能串联。",
+  "protocol": {
+    "id": "synthetic-reviewed-demo",
+    "hypothesis": "Synthetic software fixture: verify control flow only; no scientific claim.",
+    "baseline": "Constant synthetic score 10; not a real research baseline",
+    "controlled_variables": [
+      "Frozen time splits and dataset hash",
+      "Paired random seeds: 11, 22, 33",
+      "Same compute and tuning limits; one fixed candidate"
+    ],
+    "primary_metric": {
+      "name": "MAE",
+      "direction": "lower",
+      "unit": "target units"
+    },
+    "minimum_effect": 0.5,
+    "replicates": 3,
+    "seeds": [
+      11,
+      22,
+      33
+    ],
+    "budget_usd": 0,
+    "validity_checks": [
+      "No test leakage",
+      "Evaluation implementation unchanged"
+    ],
+    "outcomes": {
+      "go": "Proceed to an independently preregistered deployment-cost evaluation; this is not deployment approval.",
+      "stop": "Reject this candidate route. Do not increase architecture or tuning to rescue it.",
+      "invalid": "No hypothesis conclusion: document the failed check and preregister a corrected measurement."
+    }
+  },
+  "evidence": [],
+  "assumptions": [
+    "所有输出都是预先设定的软件测试数据。"
+  ],
+  "questions": [],
+  "risks": [
+    "本地 worker 有当前用户权限，只能运行人工检查过的可信代码。"
+  ]
+}
