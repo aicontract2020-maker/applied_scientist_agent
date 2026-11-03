@@ -1,0 +1,14 @@
+{
+  "seed": 0,
+  "baseline_score": 38.14,
+  "candidate_score": 38.13940980477476,
+  "validity": {
+    "All five frozen image pairs evaluated": true,
+    "Frozen assets and metric code unchanged": true,
+    "No training, tuning, or model changes": true
+  },
+  "measurements": {
+    "storage_byte_hours": 2094545.818270906,
+    "latency_ms": 864.1604579053819
+  }
+}

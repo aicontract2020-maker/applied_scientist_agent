@@ -1,6 +1,6 @@
 {
   "task_id": "swinir-lightweight-x2",
-  "status": "SELECTED_NOT_REGISTERED",
+  "status": "G0_REPRODUCED",
   "selected_on": "2026-11-03",
   "repository": "https://github.com/JingyunLiang/SwinIR",
   "revision": "6545850fbf8df298df73d81f3e8cba638787c8bd",
@@ -9,21 +9,44 @@
   "scale": 2,
   "checkpoint_name": "002_lightweightSR_DIV2K_s64w8_SwinIR-S_x2.pth",
   "checkpoint_url": "https://github.com/JingyunLiang/SwinIR/releases/download/v0.0/002_lightweightSR_DIV2K_s64w8_SwinIR-S_x2.pth",
-  "checkpoint_sha256": null,
-  "checkpoint_downloaded": false,
+  "checkpoint_sha256": "193b229909ca89cd8b55de9c9e7fce146ae759d59dfcd78d8feb9dd1d6fa0fd7",
+  "checkpoint_downloaded": true,
   "baseline_scope": "Official fixed SwinIR-S x2 checkpoint; reproducibility baseline, not a claim of current strongest SR method",
   "setup_dataset": "Official repository Set5 HR and LR_bicubic/X2 pairs; setup/reproduction only",
   "heldout_dataset": null,
-  "primary_metric": {"name": "mean per-image PSNR-Y", "direction": "higher", "unit": "dB", "crop_border": 2},
-  "secondary_metrics": ["SSIM-Y", "inference latency", "peak memory", "artifact storage"],
-  "expected_reference_score": null,
+  "primary_metric": {
+    "name": "mean per-image PSNR-Y",
+    "direction": "higher",
+    "unit": "dB",
+    "crop_border": 2
+  },
+  "secondary_metrics": [
+    "SSIM-Y",
+    "inference latency",
+    "peak memory",
+    "artifact storage"
+  ],
+  "expected_reference_score": 38.14,
   "code_license": "Apache-2.0",
   "data_and_weights_terms": "Must be checked separately before use; code license does not establish dataset/weight rights",
-  "execution": null,
-  "assets_executed": false,
+  "execution": {
+    "experiment_id": "swinir-g0-reproduction",
+    "backend": "cpu",
+    "precision": "float32",
+    "threads": 4,
+    "result": "CONTINUE",
+    "protocol_sha256": "9f7462f65d41a92d3a1662bcd54a667680d71fc22bc0265f138e7ac232b5057b"
+  },
+  "assets_executed": true,
   "sources": [
     "https://github.com/JingyunLiang/SwinIR",
     "https://raw.githubusercontent.com/JingyunLiang/SwinIR/6545850fbf8df298df73d81f3e8cba638787c8bd/main_test_swinir.py",
     "https://raw.githubusercontent.com/JingyunLiang/SwinIR/6545850fbf8df298df73d81f3e8cba638787c8bd/utils/util_calculate_psnr_ssim.py"
-  ]
+  ],
+  "reproduction": {
+    "psnr_y": 38.13940980477476,
+    "ssim_y": 0.9611209353045552,
+    "reference_absolute_error_db": 0.000590195225242951,
+    "tolerance_db": 0.02
+  }
 }

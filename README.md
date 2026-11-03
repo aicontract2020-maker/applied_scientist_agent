@@ -7,7 +7,7 @@
 
 ## 快速开始
 
-需要 Python 3.10+，直接从仓库运行，无需安装依赖：
+建议 Python 3.10+（本次真实任务环境为 Python 3.12.14），直接从仓库运行，无需安装依赖：
 
 ```sh
 python3 -m research_harness --help
@@ -22,12 +22,22 @@ python3 -m unittest discover -s tests -v
 不能重复录入 seed=11。真实实验前替换假设、最强基线及版本、控制变量和原始产物位置。
 可通过 `--workspace /path/to/store` 指定实验目录（放在子命令前）。默认 runs/ 不纳入 Git。
 
+## 已完成的真实基线
+
+图像超分 SwinIR-S ×2 / Set5 已完成一次确定性复现：PSNR-Y 38.13941 dB，
+参考 38.14 dB，误差 0.00059 dB，小于预注册的 0.02 dB。
+详见 [基线报告](tasks/image_super_resolution/G0_REPORT.md)。这不是模型改进或 agent 能力验证。
+
 ## 决策规则 v0.1
 
 - 注册协议后冻结并记录 SHA-256，禁止覆盖；结果附加到 ledger.jsonl。
-- 预注册至少三个唯一 seed，按相同 seed 配对运行基线与候选方法。
+- 随机改进研究（默认 paired_improvement）：预注册至少三个唯一 seed，配对运行基线与候选方法。
+- 确定性复现（deterministic_reproduction）：一次执行、seeds=[0]、minimum_effect=0；
+  必须冻结 reference_score、reference_source、reproduction_tolerance，并使用双侧绝对误差门槛。
+  seed=0 是执行编号，不是假装独立训练。
 - 效应使用主要指标的**绝对单位**：higher 为 candidate-baseline，lower 为 baseline-candidate。
-- 完成所有预定重复后，平均效应 >= 最小有意义效果且每次效应均 > 0 才 CONTINUE。
+- 随机改进完成所有预定重复后，平均效应 >= 最小有意义效果且每次效应均 > 0 才 CONTINUE。
+- 确定性复现与参考绝对误差 <= 容差才 CONTINUE，分数大幅高于参考也视为复现不符。
 - 报告每次效应、均值、样本标准差；这是一条保守的一致性规则，不是显著性检验或置信区间。
 - 任一有效性检查失败或总美元成本超过预算，立即 STOP。
 - STOP/CONTINUE 均关闭当前实验；CONTINUE 只允许规划下一项预注册研究，不是部署批准。

@@ -43,11 +43,22 @@ def validate_protocol(p, check_inputs=True):
     metric = p["primary_metric"]
     if not isinstance(metric, dict) or not metric.get("name") or metric.get("direction") not in ("higher", "lower") or not metric.get("unit"):
         raise ValueError("primary_metric needs name, unit, and direction: higher/lower")
+    design = p.get("design", "paired_improvement")
+    if design not in ("paired_improvement", "deterministic_reproduction"):
+        raise ValueError("Unknown experimental design")
     number(p["minimum_effect"], "minimum_effect", 0)
-    if p["minimum_effect"] == 0:
-        raise ValueError("minimum_effect must be positive (absolute metric units)")
-    if type(p["replicates"]) is not int or p["replicates"] < 3:
-        raise ValueError("At least 3 paired replications are required")
+    if design == "paired_improvement":
+        if p["minimum_effect"] == 0:
+            raise ValueError("minimum_effect must be positive (absolute metric units)")
+        if type(p["replicates"]) is not int or p["replicates"] < 3:
+            raise ValueError("At least 3 paired replications are required")
+    else:
+        if p["replicates"] != 1 or type(p["replicates"]) is not int or p["seeds"] != [0] or p["minimum_effect"] != 0:
+            raise ValueError("Deterministic reproduction requires one execution, seeds=[0], minimum_effect=0")
+        number(p.get("reference_score"), "reference_score")
+        number(p.get("reproduction_tolerance"), "reproduction_tolerance", 0)
+        if not isinstance(p.get("reference_source"), str) or not p["reference_source"].strip():
+            raise ValueError("Deterministic reproduction requires a reference_source")
     if not isinstance(p["seeds"], list) or len(p["seeds"]) != p["replicates"] or any(type(x) is not int for x in p["seeds"]) or len(set(p["seeds"])) != len(p["seeds"]):
         raise ValueError("seeds must contain exactly replicates unique integers")
     number(p["budget_usd"], "budget_usd", 0)
@@ -115,6 +126,8 @@ class Workspace:
             raise ValueError("Preregistered replication count reached")
         for field in ("baseline_score", "candidate_score"):
             number(result.get(field), field)
+        if p.get("design") == "deterministic_reproduction" and result["baseline_score"] != p["reference_score"]:
+            raise ValueError("Reproduction baseline must match the frozen reference score")
         if not isinstance(result.get("artifact"), str) or not result["artifact"].strip():
             raise ValueError("artifact must identify the raw output/log location")
         checks = result.get("validity", {})
@@ -155,6 +168,11 @@ class Workspace:
                   "mean_latency_ms": statistics.mean(latency) if latency else None,
                   "max_latency_ms": max(latency) if latency else None}
         failures = [e for e in events if e["event"] == "EXECUTION_STOP" or (e["event"] == "ATTEMPT_FINISHED" and e["error"])]
+        report["design"] = p.get("design", "paired_improvement")
+        if report["design"] == "deterministic_reproduction":
+            report["reference_score"] = p["reference_score"]
+            report["absolute_error"] = abs(effects[0]) if effects else None
+            report["reproduction_tolerance"] = p["reproduction_tolerance"]
         if failures:
             status, reason, outcome = "STOP", failures[-1].get("reason") or failures[-1]["error"], "invalid"
         elif any(not all(r["validity"].values()) for r in records):
@@ -164,6 +182,11 @@ class Workspace:
         elif len(records) < p["replicates"]:
             report.update(status="PENDING", reason="Collect exactly the preregistered replications; no early success decision.")
             return report
+        elif p.get("design") == "deterministic_reproduction":
+            passed = report["absolute_error"] <= p["reproduction_tolerance"] + 1e-12
+            status = "CONTINUE" if passed else "STOP"
+            reason = "Reference reproduced within frozen tolerance." if passed else "Reference reproduction exceeded frozen tolerance."
+            outcome = "go" if passed else "stop"
         elif report["mean_effect"] >= p["minimum_effect"] and min(effects) > 0:
             status, reason, outcome = "CONTINUE", "Mean effect meets threshold and every paired replication improves.", "go"
         else:

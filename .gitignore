@@ -10,3 +10,7 @@ dist/
 runs/
 proposals/
 reviews/
+external/
+assets/
+.cache/
+.venv-sr/

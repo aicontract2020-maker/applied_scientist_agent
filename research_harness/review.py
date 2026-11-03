@@ -120,6 +120,10 @@ def report(workspace, experiment_id, output):
         if e['event'] == 'RESULT':
             r = e['result']
             lines.append(f'| {r["seed"]} | {r["baseline_score"]} | {r["candidate_score"]} | {sign * (r["candidate_score"] - r["baseline_score"]):.6g} | {r["artifact"]} |')
+    if decision.get('design') == 'deterministic_reproduction':
+        lines += ['', '确定性复现：一次固定权重运行，不代表独立训练重复。',
+                  f'与参考绝对误差：{decision["absolute_error"]}；容差：{decision["reproduction_tolerance"]}',
+                  f'参考来源：{p["reference_source"]}']
     lines += ['', '## 完整成本与延迟', '', '```json', json.dumps({k: decision[k] for k in ('cost_totals', 'mean_latency_ms', 'max_latency_ms')}, indent=2), '```', '',
               '执行失效和预算停止不等于科学假设被否定；请核对原因和账本。',
               '有效性检查仍由执行代码声明；费用依赖配置，未核验云账单。',

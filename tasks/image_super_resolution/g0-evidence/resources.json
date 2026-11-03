@@ -1,0 +1,34 @@
+{
+  "device": "cpu",
+  "threads": 4,
+  "dtype": "float32",
+  "seed_is_execution_id": true,
+  "timings": [
+    {
+      "image": "baby",
+      "seconds": 1.942171790637076
+    },
+    {
+      "image": "bird",
+      "seconds": 0.6242029159329832
+    },
+    {
+      "image": "butterfly",
+      "seconds": 0.46864416683092713
+    },
+    {
+      "image": "head",
+      "seconds": 0.6204447909258306
+    },
+    {
+      "image": "woman",
+      "seconds": 0.6653386252000928
+    }
+  ],
+  "mean_inference_seconds": 0.8641604579053819,
+  "peak_parent_rss_bytes": 1087766528,
+  "peak_child_rss_bytes": 297648128,
+  "rss_unit": "bytes on macOS; parent/child peaks are not simultaneous peak memory",
+  "asset_storage_bytes": 1379886392,
+  "storage_accounting": "setup footprint + current artifacts, charged for worker wall duration only; retention excluded"
+}
