@@ -26,7 +26,7 @@ def number(value, name, minimum=None):
     return value
 
 
-def validate_protocol(p):
+def validate_protocol(p, check_inputs=True):
     for field in ("id", "hypothesis", "baseline", "controlled_variables", "primary_metric", "minimum_effect", "replicates", "seeds", "outcomes", "validity_checks", "budget_usd"):
         if field not in p:
             raise ValueError(f"Missing protocol field: {field}")
@@ -52,6 +52,10 @@ def validate_protocol(p):
     if not isinstance(p["outcomes"], dict) or any(not isinstance(p["outcomes"].get(k), str) or not p["outcomes"][k].strip() for k in ("go", "stop", "invalid")):
         raise ValueError("outcomes needs go, stop, invalid decision implications")
 
+    if "execution" in p and check_inputs:
+        from .execution import validate_execution
+        validate_execution(p["execution"])
+
 
 class Workspace:
     def __init__(self, root):
@@ -75,7 +79,7 @@ class Workspace:
         folder = self.folder(experiment_id)
         envelope = json.loads((folder / "protocol.json").read_text())
         p = envelope["protocol"]
-        validate_protocol(p)
+        validate_protocol(p, check_inputs=False)
         events = [json.loads(line) for line in (folder / "ledger.jsonl").read_text().splitlines()]
         if p["id"] != experiment_id or digest(p) != envelope["sha256"] or events[0]["protocol_sha256"] != digest(p):
             raise ValueError("Frozen protocol changed")
@@ -91,6 +95,11 @@ class Workspace:
         folder, p, events = self.load(experiment_id)
         if any(e["event"] == "DECISION" for e in events):
             raise ValueError("Experiment closed. A new hypothesis requires a new preregistration.")
+        if "execution" in p:
+            attempt = result.get("execution_attempt")
+            finished = [e for e in events if e["event"] == "ATTEMPT_FINISHED" and e["attempt"] == attempt and e["seed"] == result.get("seed") and not e["error"]]
+            if not finished:
+                raise ValueError("Managed results require a completed execution attempt")
         if type(result.get("seed")) is not int:
             raise ValueError("A paired integer seed is required")
         if result["seed"] not in p["seeds"]:
@@ -123,7 +132,13 @@ class Workspace:
         if previous:
             return previous[-1]["report"]
         records = [e["result"] for e in events if e["event"] == "RESULT"]
-        totals = {k: sum(r["costs"][k] for r in records) for k in COST_FIELDS if k != "latency_ms"}
+        # Managed result charges overlap their attempt charges. Count each attempt
+        # once, including failed/unrecorded attempts; use result storage measurement.
+        attempts = [e for e in events if e["event"] == "ATTEMPT_FINISHED"]
+        billed = [r["costs"] for r in records if "execution_attempt" not in r]
+        by_attempt = {r["execution_attempt"]: r["costs"] for r in records if "execution_attempt" in r}
+        billed.extend(by_attempt.get(e["attempt"], e["costs"]) for e in attempts)
+        totals = {k: sum(c[k] for c in billed) for k in COST_FIELDS if k != "latency_ms"}
         # Latency is per replication, not additive.
         latency = [r["costs"]["latency_ms"] for r in records]
         usd = sum(totals[k] for k in ("compute_usd", "storage_usd", "data_usd", "tuning_usd"))
@@ -135,7 +150,10 @@ class Workspace:
                   "cost_totals": totals, "total_usd": usd,
                   "mean_latency_ms": statistics.mean(latency) if latency else None,
                   "max_latency_ms": max(latency) if latency else None}
-        if any(not all(r["validity"].values()) for r in records):
+        failures = [e for e in events if e["event"] == "EXECUTION_STOP" or (e["event"] == "ATTEMPT_FINISHED" and e["error"])]
+        if failures:
+            status, reason, outcome = "STOP", failures[-1].get("reason") or failures[-1]["error"], "invalid"
+        elif any(not all(r["validity"].values()) for r in records):
             status, reason, outcome = "STOP", "Measurement invalid; a revised protocol must explain the failed validity check.", "invalid"
         elif usd > p["budget_usd"]:
             status, reason, outcome = "STOP", "Declared cost budget exceeded.", "stop"

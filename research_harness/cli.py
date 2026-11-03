@@ -1,7 +1,9 @@
 import argparse
 import json
 import sys
+from pathlib import Path
 from .core import Workspace
+from .execution import run
 
 
 def main():
@@ -15,13 +17,17 @@ def main():
     record.add_argument("result")
     evaluate = sub.add_parser("evaluate", help="Show progress or a final decision")
     evaluate.add_argument("id")
+    execute = sub.add_parser("run", help="Run preregistered trusted local commands (not a sandbox)")
+    execute.add_argument("id")
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
         if args.command == "register":
-            output = {"registered": str(workspace.register(json.loads(open(args.protocol).read())))}
+            output = {"registered": str(workspace.register(json.loads(Path(args.protocol).read_text())))}
         elif args.command == "record":
-            output = workspace.record(args.id, json.loads(open(args.result).read()))
+            output = workspace.record(args.id, json.loads(Path(args.result).read_text()))
+        elif args.command == "run":
+            output = run(workspace, args.id)
         else:
             output = workspace.evaluate(args.id)
         print(json.dumps(output, indent=2, ensure_ascii=False))
