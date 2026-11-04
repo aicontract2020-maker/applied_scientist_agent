@@ -70,3 +70,26 @@ class PortableStudyTests(unittest.TestCase):
         result=subprocess.run([sys.executable,'-m','research_harness','doctor'],capture_output=True,text=True,env=env)
         self.assertEqual(result.returncode,1)
         self.assertFalse(json.loads(result.stdout)['ok'])
+
+class WorkflowAuditTests(unittest.TestCase):
+    def setUp(self):
+        import hashlib
+        self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.root=Path(self.temp.name)
+        source='def enhance(lr,sr): return sr\n';plan={'hypothesis':'fixture'}
+        values={'result.json':{'status':'STOP','measurement_valid':True},'session.json':{'total_wall_seconds':1,'local_proxy_usd':1/3600},'registered.json':{'candidate_sha256':hashlib.sha256(source.encode()).hexdigest(),'plan':plan},'agent-research.json':plan,'search-records.json':[{'type':'web_search'}]}
+        for name,value in values.items():(self.root/name).write_text(json.dumps(value))
+        (self.root/'agent-candidate.py').write_text(source);(self.root/'agent-REPORT.md').write_text('STOP; fixture negative, no retry')
+        events=[{'event':'PRIMARY_READ_COMPLETED','full':True},{'event':'PRIMARY_READ_COMPLETED','full':False},{'event':'AGENT_REQUEST','operation':'register'},{'event':'REGISTER'},{'event':'AGENT_REQUEST','operation':'run'},{'event':'EXPERIMENT_STARTED'},{'event':'DECISION'},{'event':'AGENT_FINISHED','exit_code':0}]
+        (self.root/'ledger.jsonl').write_text('\n'.join(map(json.dumps,events)))
+        (self.root/'agent-events.jsonl').write_text(json.dumps({'type':'turn.completed','usage':{'input_tokens':1}})+'\n')
+
+    def test_valid_negative_is_completed_workflow(self):
+        verdict=validate_workflow(self.root)
+        self.assertTrue(verdict['workflow_completed']);self.assertEqual(verdict['scientific_status'],'STOP')
+        self.assertTrue((self.root/'REPORT.md').is_file())
+
+    def test_changed_candidate_or_missing_report_cannot_claim_completion(self):
+        (self.root/'agent-candidate.py').write_text('changed after registration')
+        (self.root/'agent-REPORT.md').unlink()
+        verdict=validate_workflow(self.root)
+        self.assertFalse(verdict['workflow_completed']);self.assertEqual(len(verdict['errors']),2)

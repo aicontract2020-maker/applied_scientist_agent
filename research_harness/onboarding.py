@@ -17,6 +17,8 @@ def validate_workflow(destination):
     required=['REGISTER','EXPERIMENT_STARTED','DECISION','AGENT_FINISHED']
     if not all(types.count(event)==1 for event in required):errors.append('Missing or repeated registration/experiment/decision/session finish')
     elif not all(types.index(a)<types.index(b) for a,b in zip(required,required[1:])):errors.append('Lifecycle order incorrect')
+    finished=[e for e in events if e['event']=='AGENT_FINISHED']
+    if not finished or finished[-1].get('exit_code')!=0:errors.append('Agent did not exit successfully')
     if operations.count('run')!=1 or operations.count('register')!=1:errors.append('Not exactly one agent-triggered registration/run')
     if not result.get('measurement_valid'):errors.append('Experiment measurement invalid/incomplete')
     registered=destination/'registered.json'

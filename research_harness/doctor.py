@@ -71,6 +71,7 @@ def doctor(network=False):
         return message
     check('platform',lambda:require(sys.platform=='darwin','Full autonomous SR requires macOS; offline demo is portable'),'Use a Mac; do not disable the isolation profile')
     check('python',lambda:require(sys.version_info[:2]==(3,12),f'Python {platform.python_version()} (required 3.12)'),'Run bootstrap.sh with Python 3.12')
+    check('repo_environment',lambda:require(Path(sys.prefix).resolve()==(ROOT/'.venv-sr').resolve(),'Interpreter must use this clone’s .venv-sr'), 'Use .venv-sr/bin/python after bootstrap')
     def dependencies():
         found={}
         for line in (ROOT/'requirements-sr.txt').read_text().splitlines():
