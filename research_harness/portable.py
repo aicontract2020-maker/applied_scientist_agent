@@ -122,11 +122,11 @@ def new_study(name, root=ROOT):
     (here/'literature.json').write_text('[]\n')
     shutil.copyfile(template/'labctl.py',here/'labctl.py')
     (here/'selection.json').write_text(json.dumps({'selected_ids':ids,'excluded_ids':sorted(used),'rule':'12 smallest SHA256(study_id:ID), sorted, before search/inference; reservations are not reclaimed automatically'},indent=2)+'\n')
-    files = [* (root/'research_harness').glob('*.py'), root/'requirements-sr.txt', root/'requirements-sr.lock.txt', root/WEIGHT,
+    files = [* (root/'research_harness').glob('*.py'), root/'requirements-sr.txt', root/'requirements-sr.lock.txt', root/'requirements-sr-linux.lock.txt', root/WEIGHT,
              root/'external/SwinIR/models/network_swinir.py',root/'external/SwinIR/utils/util_calculate_psnr_ssim.py',
              *here.glob('*'), *template.glob('*')]
     if (root/'.cache/environment.freeze.txt').exists(): files.append(root/'.cache/environment.freeze.txt')
     for image in ids:
         files.extend(root/f'external/SelfExSR/data/Urban100/image_SRF_2/{image}_SRF_2_{kind}.png' for kind in ('LR','HR'))
-    (here/'inputs.lock.json').write_text(json.dumps({'files':{str(p.relative_to(root)):sha(p) for p in files if p.is_file()},'runtime':{'python':sys.version,'executable':str(Path(sys.executable).resolve())}},indent=2)+'\n')
+    (here/'inputs.lock.json').write_text(json.dumps({'files':{str(p.relative_to(root)):sha(p) for p in files if p.is_file()},'runtime':{'python':sys.version,'executable':str(Path(sys.executable).resolve()),'platform':sys.platform,'architecture':__import__('platform').machine()}},indent=2)+'\n')
     return here

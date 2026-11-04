@@ -47,7 +47,7 @@ def main():
         np.save(args.output / f'{name}.npy', result.astype(np.float32), allow_pickle=False)
         records.append({'id': name, 'postprocess_seconds': seconds})
     (args.output / 'timings.json').write_text(json.dumps(records, indent=2))
-    (args.output / 'resources.json').write_text(json.dumps({'peak_rss_bytes': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+    (args.output / 'resources.json').write_text(json.dumps({'peak_rss_bytes': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * (1024 if sys.platform == 'linux' else 1),
                                                           'platform': sys.platform, 'smoke': args.smoke}))
 
 

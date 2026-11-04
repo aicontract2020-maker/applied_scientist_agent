@@ -43,7 +43,7 @@ def main():
     export = sub.add_parser("report", help="Export a decision report without overwriting files")
     export.add_argument("id")
     export.add_argument("--out", required=True)
-    autonomous = sub.add_parser("autonomous", help="Run one externally isolated agent-authored SR research cycle (macOS)")
+    autonomous = sub.add_parser("autonomous", help="Run one externally isolated agent-authored SR research cycle (macOS/Linux)")
     autonomous.add_argument("--out", required=True)
     autonomous.add_argument("--study", help="A separately frozen task directory")
     autonomous.add_argument("--literature", action="store_true", help="Require agent live search and independently fetched primary papers")

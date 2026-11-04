@@ -186,12 +186,20 @@ class AutonomousStudy:
         return {'status': 'REGISTERED', 'protocol_sha256': digest(protocol), 'next': 'Request run exactly once; no code changes are accepted.'}
 
     def candidate_run(self, snapshot, inputs, output, smoke=False):
-        profile = self.control / f'{output.name}.sb'
-        profile.write_text(candidate_profile(self.control, snapshot, inputs, output, self.control / 'trusted'))
-        command = ['/usr/bin/sandbox-exec', '-f', str(profile), str(PYTHON), '-B', str(self.control / 'trusted/runner.py'),
+        profile = self.control / (output.name + ('.sb' if sys.platform=='darwin' else '.json'))
+        if sys.platform=='darwin': profile.write_text(candidate_profile(self.control, snapshot, inputs, output, self.control / 'trusted'))
+        argv = [str(PYTHON), '-B', str(self.control / 'trusted/runner.py'),
                    '--candidate', str(snapshot / 'candidate.py'), '--inputs', str(inputs), '--output', str(output)]
         if smoke:
-            command.append('--smoke')
+            argv.append('--smoke')
+        if sys.platform == 'darwin':
+            command = ['/usr/bin/sandbox-exec', '-f', str(profile), *argv]
+        elif sys.platform == 'linux':
+            from .linux_isolation import linux_candidate_command, write_command_manifest
+            command = linux_candidate_command(argv, ROOT, PYTHON, snapshot, inputs, output, self.control/'trusted')
+            write_command_manifest(profile, command)
+        else:
+            raise ValueError('Unsupported isolation backend; refusing unisolated execution')
         env = {k: v for k, v in os.environ.items() if k in ('PATH', 'LANG', 'LC_ALL', 'SYSTEMROOT')}
         env.update(PYTHONNOUSERSITE='1', PYTHONDONTWRITEBYTECODE='1', OPENBLAS_NUM_THREADS='4', OMP_NUM_THREADS='4')
         return bounded_process(command, snapshot, output, 20 if smoke else self.policy.get('limits', {}).get('candidate_seconds', 90), env)
@@ -314,13 +322,22 @@ class AutonomousStudy:
         shutil.copyfile(self.study / 'literature.json', self.actor / 'literature.json')
         atomic_json(self.actor / 'policy.json', self.policy)
         (self.actor / 'AGENTS.md').write_text('Follow TASK.md. Work only here. Use labctl.py for registered experiments. Never inspect hidden data or fetch benchmark labels.\n')
-        profile = self.destination / 'actor.sb'; profile.write_text(actor_profile(self.control, self.actor))
-        command = ['/usr/bin/sandbox-exec', '-f', str(profile), 'codex', '-c', 'approval_policy="never"',
+        profile = self.destination / ('actor.sb' if sys.platform=='darwin' else 'actor-isolation.json')
+        if sys.platform=='darwin': profile.write_text(actor_profile(self.control, self.actor))
+        command = ['codex', '-c', 'approval_policy="never"',
                    'exec', '--ignore-user-config', '--ephemeral', '--skip-git-repo-check', '--sandbox', 'danger-full-access',
                    '--json', '--output-last-message', str(self.actor / 'final.txt'),
                    'Read TASK.md and policy.json. Complete the autonomous research task yourself: propose, implement, synthetic-check, preregister, request the experiment, interpret its result, and write REPORT.md. Use the file broker; do not ask the human to do your coding or execution.']
         if self.policy.get('live_web_search'):
             command.insert(command.index('codex') + 1, '--search')
+        if sys.platform == 'darwin':
+            command = ['/usr/bin/sandbox-exec', '-f', str(profile), *command]
+        elif sys.platform == 'linux':
+            from .linux_isolation import linux_actor_command, write_command_manifest
+            command = linux_actor_command(command, ROOT, self.control, self.actor)
+            write_command_manifest(profile, command)
+        else:
+            raise ValueError('Unsupported isolation backend; refusing unisolated execution')
         self.log('AGENT_STARTED', command=command, external_profile=str(profile))
         done = set()
         with (self.destination / 'agent-events.jsonl').open('wb') as stdout, (self.destination / 'agent-stderr.log').open('wb') as stderr:
@@ -384,7 +401,7 @@ class AutonomousStudy:
             atomic_json(self.destination / 'result.json', {'status': 'INCOMPLETE', 'reason': 'Agent did not complete a registered experiment', 'exit_code': process.returncode})
         metadata = {'actor_directory': str(self.actor), 'control_directory': str(self.control),
                     'total_wall_seconds': time.monotonic() - self.start, 'local_proxy_usd': (time.monotonic() - self.start) / 3600,
-                    'billing_usd': None, 'actual_model_id': None, 'candidate_execution_network': 'DENIED',
+                    'billing_usd': None, 'actual_model_id': None, 'candidate_execution_network': 'DENIED', 'isolation_backend': 'linux-bubblewrap' if sys.platform=='linux' else 'macos-seatbelt',
                     'agent_network': 'Model service connectivity allowed; task prohibits external benchmark access; not a fully closed egress environment'}
         atomic_json(self.destination / 'session.json', metadata)
         return json.loads((self.destination / 'result.json').read_text())
