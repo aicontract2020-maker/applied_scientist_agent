@@ -20,6 +20,8 @@
 
 软件测试 64 项通过；离线完整演示成功。直接依赖和实际解析的全部传递依赖分别记录于 requirements-sr.txt、requirements-sr.lock.txt；最终 bootstrap 使用同一版本约束，doctor 检查完整列表。详细原始环境、探针、输入哈希位于 [portability-evidence](portability-evidence/)。
 
+最终约束安装幂等复检、最终 `doctor --network` 与 64 项软件检查均通过；另建无第三方依赖环境，64 项中 61 项通过、3 项可选 SR 检查跳过，离线演示成功。重复使用同一研究 ID 返回 1，账本摘要不变且没有第二次 agent/实验。证据见 doctor-final.json、offline-final.json、final-checks.json。
+
 ## 真实自主周期
 
 调用：`.venv-sr/bin/python -m research_harness research --id handoff-validation-20261104`。

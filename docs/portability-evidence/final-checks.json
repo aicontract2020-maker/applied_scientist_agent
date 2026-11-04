@@ -1,0 +1,11 @@
+{
+  "final_software_tests": 64,
+  "all_passed_with_sr_environment": true,
+  "bare_environment_optional_skips": 3,
+  "offline_demo_passed": true,
+  "full_locked_bootstrap_repeat_exit": 0,
+  "doctor_network_and_isolation_passed": true,
+  "duplicate_id_exit": 1,
+  "duplicate_id_ledger_unchanged": true,
+  "additional_model_calls_or_experiments": 0
+}
