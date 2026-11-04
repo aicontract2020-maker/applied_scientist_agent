@@ -1,0 +1,34 @@
+[
+  {
+    "url": "https://arxiv.org/abs/2304.11743",
+    "title": "GamutMLP: A Lightweight MLP for Color Loss Recovery",
+    "authors": [
+      "Le, Hoang M.",
+      "Price, Brian",
+      "Cohen, Scott",
+      "Brown, Michael S."
+    ],
+    "date": "2023/04/23",
+    "read_at": "2026-11-04T16:41:17.742986+00:00",
+    "html_sha256": "9147a07f4b0c714e884ffcea5718fdae6ecd537b355e17a5a0b1f0abf32619ab",
+    "download_bytes": 9881972,
+    "full_text_truncated": true,
+    "pdf_url": "https://arxiv.org/pdf/2304.11743",
+    "pdf_sha256": "b7e9373c9519365d1316f2010acb107b5dd7615e4f0ac0ae7a5b8d44f32e75e2",
+    "extraction_note": "First 40000 extracted characters; includes methods where available; images are never returned."
+  },
+  {
+    "url": "https://arxiv.org/abs/2409.16032",
+    "title": "Deep chroma compression of tone-mapped images",
+    "authors": [
+      "Milidonis, Xenios",
+      "Banterle, Francesco",
+      "Artusi, Alessandro"
+    ],
+    "date": "2024/09/24",
+    "read_at": "2026-11-04T16:41:22.064888+00:00",
+    "html_sha256": "4cb9cd17b399885f5762894adf93a6539c6cd667e5f51c1db195142988a122db",
+    "download_bytes": 41555,
+    "full_text_truncated": false
+  }
+]

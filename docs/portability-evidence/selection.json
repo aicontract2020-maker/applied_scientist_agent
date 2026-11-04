@@ -1,0 +1,43 @@
+{
+  "selected_ids": [
+    "img_004",
+    "img_006",
+    "img_022",
+    "img_026",
+    "img_032",
+    "img_040",
+    "img_041",
+    "img_068",
+    "img_070",
+    "img_077",
+    "img_078",
+    "img_087"
+  ],
+  "excluded_ids": [
+    "img_001",
+    "img_002",
+    "img_010",
+    "img_014",
+    "img_020",
+    "img_021",
+    "img_028",
+    "img_037",
+    "img_047",
+    "img_048",
+    "img_052",
+    "img_057",
+    "img_062",
+    "img_065",
+    "img_067",
+    "img_076",
+    "img_080",
+    "img_084",
+    "img_088",
+    "img_089",
+    "img_090",
+    "img_093",
+    "img_098",
+    "img_099"
+  ],
+  "rule": "12 smallest SHA256(study_id:ID), sorted, before search/inference; reservations are not reclaimed automatically"
+}

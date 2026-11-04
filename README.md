@@ -9,7 +9,7 @@
 | 部分 | 支持情况 |
 |---|---|
 | 离线工作流、账本、协议与软件测试 | Python 3.10+；不调用模型 |
-| 完整自主超分流程 | macOS，Python 3.12，CPU；实际验证为 Apple Silicon |
+| 完整自主超分流程 | Apple Silicon macOS，Python 3.12，CPU；Intel Mac 未验证 |
 | Windows / Linux 的完整自主研究 | 尚不支持；不会降级成无隔离执行 |
 | 安装方式 | 从源码运行，在仓库根目录执行命令 |
 
@@ -34,7 +34,7 @@ bash scripts/bootstrap.sh
 .venv-sr/bin/python -m research_harness doctor --network
 ```
 
-`bootstrap.sh` 创建仓库自己的 `.venv-sr`，安装 `requirements-sr.txt` 的固定直接依赖，保存实际解析的完整环境列表，下载并核对固定上游提交和权重 SHA-256。不会读取原开发者的环境或复制其数据。已有文件不匹配时拒绝自动重置/覆盖。
+`bootstrap.sh` 创建仓库自己的 `.venv-sr`，安装 `requirements-sr.txt` 的直接依赖与 `requirements-sr.lock.txt` 的完整版本约束，保存实际解析的完整环境列表，下载并核对固定上游提交和权重 SHA-256。不会读取原开发者的环境或复制其数据。已有文件不匹配时拒绝自动重置/覆盖。
 
 找不到 Python 时，可指定解释器，例如 `PYTHON_BIN=/path/to/python3.12 bash scripts/bootstrap.sh`。脚本也支持 `--skip-assets`，但完整研究必须随后运行 `.venv-sr/bin/python -m research_harness setup-assets`。普通终端中 `doctor` 的所有检查都通过才继续。
 
@@ -71,7 +71,7 @@ bash scripts/bootstrap.sh
 
 这些本地产物、环境、第三方数据默认不提交 Git。日志可能含输入文本；分享时自行选择允许公开的内容。不同同事的 clone 没有共享实时登记中心，跨机器继续同一个研究计划时须先交换已用图像、文献和停止决策；仅换 clone 不能把旧路线当新研究。
 
-历史 G0 复现达到参考容差；G1–G4 候选均 STOP。见[决策账本](tasks/image_super_resolution/DECISIONS.md)、[G3](tasks/image_super_resolution/g3/REPORT.md)、[G4](tasks/image_super_resolution/g4/REPORT.md)。四条停止路线已纳入新任务模板：集成、LR 残差回投、弱高频收缩、全局亮度对比度扩张。本机后续 STOP 和使用过的文献也会带入新任务。历史目录是证据，不能作为可直接重跑的安装模板；不要修改其中旧哈希去迁就新环境。
+历史 G0 复现达到参考容差；G1–G4 候选均 STOP。见[决策账本](tasks/image_super_resolution/DECISIONS.md)、[G3](tasks/image_super_resolution/g3/REPORT.md)、[G4](tasks/image_super_resolution/g4/REPORT.md)。五条停止路线已纳入新任务模板：集成、LR 残差回投、弱高频收缩、全局亮度对比度扩张、此次安装验证中未通过的保亮度色域压缩。本机后续 STOP 和使用过的文献也会带入新任务。历史目录是证据，不能作为可直接重跑的安装模板；不要修改其中旧哈希去迁就新环境。
 
 ## 不调用模型的演示与检查
 

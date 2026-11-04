@@ -41,20 +41,23 @@
   "dataset": "Urban100",
   "live_web_search": true,
   "excluded_evidence_ids": [
+    "1612.07919",
+    "1702.00783",
     "1712.06087",
-    "2008.13751",
     "1811.12866",
     "1911.07850",
+    "2008.13751",
     "2108.10257",
-    "1702.00783",
-    "1612.07919"
+    "2304.11743",
+    "2409.16032"
   ],
   "stopped_route_compliance": {
     "uses_prediction_ensembles": false,
     "uses_lr_residual_backprojection": false,
     "uses_weak_high_frequency_shrinkage": false,
     "retunes_stopped_parameters": false,
-    "uses_global_luminance_contrast_expansion": false
+    "uses_global_luminance_contrast_expansion": false,
+    "uses_luminance_preserving_gamut_compression": false
   },
   "show_progress": true
 }

@@ -1,0 +1,28 @@
+[
+  {
+    "id": "exec-4f370c42-9339-4c81-bed3-be97a75fb845",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs image super-resolution color shift correction chrominance post-processing primary paper ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs image super-resolution color shift correction chrominance post-processing primary paper",
+        "site:arxiv.org/abs single image super resolution color consistency chroma guided filter",
+        "site:arxiv.org/abs super resolution ringing artifact postprocessing edge overshoot clipping"
+      ]
+    }
+  },
+  {
+    "id": "exec-d8b7d556-5b7e-4755-86cc-21a0b81c01d1",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs image restoration color clipping luminance preserving gamut mapping ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs image restoration color clipping luminance preserving gamut mapping",
+        "site:arxiv.org/abs RGB clipping hue shift luminance preserving gamut mapping primary research",
+        "site:arxiv.org/abs super resolution output clipping PSNR quantization"
+      ]
+    }
+  }
+]

@@ -2,7 +2,7 @@
 
 You are the research agent. The human explicitly asked you to propose your own
 research hypothesis, write the implementation, and execute a complete experiment.
-Do all four yourself using the broker. The orchestrator has NOT provided a candidate
+Do all historical yourself using the broker. The orchestrator has NOT provided a candidate
 algorithm or a menu. A negative result is a valid completed cycle. Do not ask the human
 to write your candidate or run your commands.
 
@@ -19,7 +19,7 @@ Do not retune flips, add more ensemble transforms, add complexity atop its candi
 or relabel this as a retry. G2 tested one-step cubic LR residual correction, gain 0.20, on Set14 and STOPPED: -0.14733 dB, all 14 images worse. The entire LR-versus-SR residual backprojection family stays STOP: changing gains, kernels, iterations is not new evidence.
 G3 tested weak luminance high-frequency shrinkage: 3x3 Gaussian sigma .55, gate exp(-(high/(1/255))^2), maximum attenuation .25. On a different Urban100-12 subset it STOPPED: -0.09781 dB versus fixed double-pass reference, CI [-.13719,-.06009]. That weak-high-frequency attenuation/shrinkage route stays STOP. Changing its strength, threshold, blur, band, gate, sign, or adding complexity to rescue it is forbidden. The comparison did not include a plain-output ablation; do not claim G3 proved the shrink operation itself caused harm.
 
-Find genuinely new external evidence yourself supporting a different causal mechanism from ALL FOUR stopped routes. No preselected candidate or source list is supplied. Search and read BEFORE proposing or coding. If the task constraints leave no defensible distinct hypothesis, report that and stop without inventing one.
+Find genuinely new external evidence yourself supporting a different causal mechanism from ALL historical stopped routes. No preselected candidate or source list is supplied. Search and read BEFORE proposing or coding. If the task constraints leave no defensible distinct hypothesis, report that and stop without inventing one.
 
 Propose ONE deterministic, inexpensive postprocessing method operating on a low-res
 RGB image and the plain (unensembled) SwinIR float32 prediction. There is no prescribed
@@ -38,6 +38,8 @@ or fetch public labels. Use the native web search tool yourself (1–6 calls) to
 Do not claim a worldwide SOTA result or a new scientific discovery from this test.
 
 G4 then tested fixed image-global luminance contrast expansion by 0.5% about the predicted mean. It STOPPED: -0.119542 dB, CI [-.150176,-.092254], 12/12 worse versus the fixed two-pass reference. Global luminance contrast expansion is STOP. No gain changes, sign reversal, or adaptive/local complexity to rescue it. New evidence must motivate a different mechanism, not these parameter changes.
+
+The portability-validation cycle then tested per-pixel BT.601-luminance-preserving chroma compression of out-of-gamut RGB values. It STOPPED: -0.085705 dB versus the fixed two-pass reference, CI [-.118589,-.056617], 12/12 worse. This gamut-compression route stays STOP; do not retune its boundary, luma weights, scale or add adaptive complexity to rescue it. Like the other comparisons, this does not isolate the postprocessor from the single-vs-double forward difference.
 
 ## Candidate code contract
 
@@ -94,6 +96,6 @@ may remain unknown; do not fabricate zero. The local machine-hour proxy is not a
 
 ## Additional mandatory research.json field
 
-`stopped_route_compliance`: exactly {"uses_prediction_ensembles": false, "uses_lr_residual_backprojection": false, "uses_weak_high_frequency_shrinkage": false, "uses_global_luminance_contrast_expansion": false, "retunes_stopped_parameters": false}. Explain all four prior stopped routes in why_not_g1_retry. Find a genuinely different mechanism yourself; no menu or candidate algorithm is supplied. Search and read BEFORE proposing and coding. Stop if no defensible hypothesis exists.
+`stopped_route_compliance`: exactly {"uses_prediction_ensembles": false, "uses_lr_residual_backprojection": false, "uses_weak_high_frequency_shrinkage": false, "uses_global_luminance_contrast_expansion": false, "uses_luminance_preserving_gamut_compression": false, "retunes_stopped_parameters": false}. Explain all historical prior stopped routes in why_not_g1_retry. Find a genuinely different mechanism yourself; no menu or candidate algorithm is supplied. Search and read BEFORE proposing and coding. Stop if no defensible hypothesis exists.
 
 Before registering, state what a pass, a valid negative, and an invalid measurement each mean. Register only ONE candidate, not a menu. Do not infer mechanism-specific causality from a comparison that changes multiple factors. No post-result ablation or tuning.

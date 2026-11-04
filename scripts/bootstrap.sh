@@ -2,15 +2,15 @@
 set -euo pipefail
 if [[ "${1:-}" == "--help" ]]; then
   echo 'Usage: bash scripts/bootstrap.sh [--skip-assets]'
-  echo 'Requires macOS, Python 3.12, git. Override interpreter with PYTHON_BIN.'
+  echo 'Requires Apple Silicon macOS, Python 3.12, git. Override interpreter with PYTHON_BIN.'
   echo 'Installs pinned Python dependencies into .venv-sr; downloads assets unless skipped.'
   exit 0
 fi
 if [[ $# -gt 1 || ($# -eq 1 && "$1" != "--skip-assets") ]]; then
   echo 'Unknown argument. Use --help.' >&2; exit 2
 fi
-if [[ "$(uname -s)" != Darwin ]]; then
-  echo 'Autonomous research currently requires macOS Seatbelt. See README for the portable offline demo.' >&2; exit 1
+if [[ "$(uname -s)" != Darwin || "$(uname -m)" != arm64 ]]; then
+  echo 'Autonomous research currently supports Apple Silicon macOS Seatbelt. See README for the portable offline demo.' >&2; exit 1
 fi
 cd "$(dirname "$0")/.."
 bootstrap_python="${PYTHON_BIN:-python3.12}"
@@ -35,7 +35,7 @@ for name in ('python', 'python3', 'python3.12'):
         os.replace(temporary, alias)
 PYTHON
 .venv-sr/bin/python -m ensurepip --upgrade
-.venv-sr/bin/python -m pip install -r requirements-sr.txt
+.venv-sr/bin/python -m pip install -r requirements-sr.txt -c requirements-sr.lock.txt
 .venv-sr/bin/python -m pip check
 mkdir -p .cache
 .venv-sr/bin/python -m pip freeze > .cache/environment.freeze.txt

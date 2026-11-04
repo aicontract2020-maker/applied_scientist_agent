@@ -115,14 +115,14 @@ def new_study(name, root=ROOT):
     ids = sorted(sorted(pool, key=lambda n: hashlib.sha256((name+':'+n).encode()).hexdigest())[:12])
     policy.update(study_id=name, observation_ids=ids)
     policy['controls'][0] = 'Twelve Urban100 x2 pairs selected by fixed study-id/filename hash excluding historical and local reserved IDs, before search; no image or score selection'
-    task = (template/'TASK.md').read_text()+'\n## Local stopped routes (do not reopen)\n'+json.dumps(prior,indent=2)+'\nCopy stopped_route_compliance EXACTLY from policy.json; it includes all four historical families and any local STOP routes.\n'
+    task = (template/'TASK.md').read_text()+'\n## Local stopped routes (do not reopen)\n'+json.dumps(prior,indent=2)+'\nCopy stopped_route_compliance EXACTLY from policy.json; it includes all historical families and any local STOP routes.\n'
     here.mkdir(parents=True, exist_ok=False)
     (here/'policy.json').write_text(json.dumps(policy,indent=2)+'\n')
     (here/'TASK.md').write_text(task)
     (here/'literature.json').write_text('[]\n')
     shutil.copyfile(template/'labctl.py',here/'labctl.py')
     (here/'selection.json').write_text(json.dumps({'selected_ids':ids,'excluded_ids':sorted(used),'rule':'12 smallest SHA256(study_id:ID), sorted, before search/inference; reservations are not reclaimed automatically'},indent=2)+'\n')
-    files = [* (root/'research_harness').glob('*.py'), root/'requirements-sr.txt', root/WEIGHT,
+    files = [* (root/'research_harness').glob('*.py'), root/'requirements-sr.txt', root/'requirements-sr.lock.txt', root/WEIGHT,
              root/'external/SwinIR/models/network_swinir.py',root/'external/SwinIR/utils/util_calculate_psnr_ssim.py',
              *here.glob('*'), *template.glob('*')]
     if (root/'.cache/environment.freeze.txt').exists(): files.append(root/'.cache/environment.freeze.txt')

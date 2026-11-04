@@ -1,0 +1,35 @@
+{
+  "tested_source_commit": "0847cf8",
+  "clean_checkout": "/private/tmp/research harness handoff 20261104",
+  "same_host_not_second_machine": true,
+  "new_environment_created": true,
+  "asset_dirs_not_copied": true,
+  "bootstrap_initial_exit": 0,
+  "setup_validity_issue": "Initial isolated execution of venv failed via intermediate user-bin symlink; fixed aliases before model call/scoring, bootstrap rerun idempotently",
+  "actual_os_probes": "PASS",
+  "software_tests": 64,
+  "scientific_experiments": 1,
+  "candidate_unchanged": true,
+  "plan_unchanged": true,
+  "frozen_inputs_verified": true,
+  "live_workflow_exit": 0,
+  "raw_events_sha256": "c4761329d2a4b8b4932df9a72ad86f13af5ef561f82e368e26af265b3b89f41f",
+  "raw_events_local_path": "/private/tmp/research harness handoff 20261104/runs/handoff-validation-20261104/agent-events.jsonl",
+  "raw_library_sha256": "b3e280cd514415120a6e0a3b14b0b69b49133f25867e8db2cb84ea50afa68f13",
+  "raw_library_local_path": "/private/tmp/research harness handoff 20261104/runs/handoff-validation-20261104/library.json",
+  "partial_costs": {
+    "resident_env_assets_runs_temp_logical_bytes": 983389214,
+    "coarse_session_residency_byte_hours": 62439165.70875801,
+    "primary_download_bytes": 9923527,
+    "candidate_peak_rss_bytes": 121405440,
+    "reference_peak_rss_bytes": null,
+    "initial_bootstrap_log_wall_seconds_approx": 20.475318908691406,
+    "model_bill_usd": null,
+    "excluded_unpriced": [
+      "setup-fix and audit time",
+      "download HTTP overhead and pip-cache storage",
+      "electricity/depreciation",
+      "long-term retention"
+    ]
+  }
+}

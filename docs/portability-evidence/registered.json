@@ -1,0 +1,154 @@
+{
+  "plan": {
+    "hypothesis": "On the frozen Urban100-12 study, replacing independent RGB clipping of out-of-gamut plain SwinIR pixels with deterministic BT.601-luminance-preserving chroma compression will improve mean paired PSNR-Y by at least 0.05 dB versus the fixed two-pass horizontal-flip reference while keeping the candidate/reference latency ratio at or below 2.5.",
+    "mechanism": "Plain SwinIR can emit float RGB values outside [0,1]. The trusted output path must ultimately represent them in gamut. Independent channel clipping changes BT.601 luminance whenever only some channels overflow. The candidate leaves every already-in-gamut pixel exactly unchanged and, only for an out-of-gamut pixel, scales its RGB displacement from its own BT.601-neutral gray by the largest factor that places all channels in [0,1]. This preserves predicted luminance whenever that luminance is itself representable. The cited papers establish clipping-related color loss/distortion in other imaging settings; applying constant-luminance chroma compression to SwinIR and expecting a PSNR-Y gain is my inference, not their reported result.",
+    "baseline": "Comparator: the existing fixed two-pass horizontal-flip SwinIR-S x2 reference under the frozen official pipeline. Candidate path: one plain, unensembled fixed SwinIR-S x2 prediction followed by the deterministic per-pixel gamut mapping in candidate.py; it invokes no extra model forward.",
+    "why_not_g1_retry": "G1 used prediction averaging across an additional horizontally flipped model forward; this candidate uses one prediction and a per-pixel gamut constraint, so it neither uses nor retunes an ensemble. G2 used an LR-versus-SR residual backprojection family; this candidate does not resize LR, form an LR/SR residual, or impose downsampling consistency. G3 attenuated weak luminance high-frequency content; this candidate performs no spatial filtering, frequency decomposition, gate, or high-frequency sign/strength change. G4 expanded image-global luminance contrast about a predicted mean; this candidate preserves per-pixel luminance when feasible, has no image statistic or contrast gain, and only compresses chroma for out-of-gamut pixels. It adds no complexity atop any stopped candidate and retunes none of their parameters.",
+    "new_evidence": [
+      {
+        "source": "https://arxiv.org/abs/2304.11743",
+        "claim": "Le et al. report that gamut reduction by clipping loses color fidelity and study recovery of clipped wide-gamut color values; their full paper also describes soft clipping as compression into the target gamut.",
+        "why_distinct": "This evidence concerns gamut boundary handling and color loss, not prediction ensembling, LR residual backprojection, frequency shrinkage, or global luminance contrast. The paper does not test SwinIR or the proposed fixed mapping; that transfer is my hypothesis."
+      },
+      {
+        "source": "https://arxiv.org/abs/2409.16032",
+        "claim": "Milidonis et al. report that out-of-gamut tone-mapped pixels can cause chromatic distortions or color-clipping artifacts and motivate chroma compression as gamut management.",
+        "why_distinct": "The causal issue is componentwise gamut clipping and the intervention is chroma compression; it does not modify spatial detail or global luminance. Their HDR learned method and visual/color metrics differ from this deterministic SR PSNR-Y test."
+      }
+    ],
+    "controls": [
+      "Twelve Urban100 x2 pairs selected by fixed study-id/filename hash excluding historical and local reserved IDs, before search; no image or score selection",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "observation_ids": [
+      "img_004",
+      "img_006",
+      "img_022",
+      "img_026",
+      "img_032",
+      "img_040",
+      "img_041",
+      "img_068",
+      "img_070",
+      "img_077",
+      "img_078",
+      "img_087"
+    ],
+    "stop_route": "A valid result below +0.05 dB, or a latency ratio above 2.5, eliminates this fixed luminance-preserving out-of-gamut chroma-compression route for adoption; no strength, alternate color weights, soft boundary, spatial adaptation, or follow-up tuning will be attempted on this holdout.",
+    "parameters": {
+      "luminance_weights": [
+        0.299,
+        0.587,
+        0.114
+      ],
+      "gamut_interval": [
+        0.0,
+        1.0
+      ],
+      "chroma_scale": "Per pixel, the maximum t in [0,1] such that Y+t*(RGB-Y) is in gamut",
+      "in_gamut_behavior": "Identity (t=1)",
+      "unrepresentable_luminance_behavior": "Neutral clip to 0 if Y<0 and to 1 if Y>1",
+      "rationale": "BT.601 weights align with standard PSNR-Y conversion. The maximal feasible scale makes the smallest chroma change that prevents channel clipping while retaining luminance; there is no fitted strength."
+    },
+    "stopped_route_compliance": {
+      "uses_prediction_ensembles": false,
+      "uses_lr_residual_backprojection": false,
+      "uses_weak_high_frequency_shrinkage": false,
+      "retunes_stopped_parameters": false,
+      "uses_global_luminance_contrast_expansion": false
+    },
+    "decision_rules": {
+      "pass": "CONTINUE/adopt only if the measured mean paired PSNR-Y gain is at least +0.05 dB and candidate/reference latency ratio is at most 2.5, with the registered measurement valid.",
+      "valid_negative": "STOP and abandon the fixed route if gain is below +0.05 dB or latency ratio exceeds 2.5; a suggestive smaller gain is still a failure.",
+      "invalid_measurement": "STOP without a scientific efficacy conclusion if the controller reports a validity failure; record the exact cause and do not retry."
+    }
+  },
+  "policy": {
+    "primary_metric": {
+      "name": "Frozen Urban100-12 mean paired PSNR-Y gain versus fixed two-pass reference",
+      "direction": "higher",
+      "unit": "dB"
+    },
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "controls": [
+      "Twelve Urban100 x2 pairs selected by fixed study-id/filename hash excluding historical and local reserved IDs, before search; no image or score selection",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "limits": {
+      "agent_session_seconds": 1200,
+      "reference_seconds": 600,
+      "candidate_seconds": 90,
+      "synthetic_checks": 3,
+      "experiments": 1,
+      "candidate_output_bytes": 268435456
+    },
+    "costs": {
+      "local_proxy_usd_per_machine_hour": 1,
+      "max_session_proxy_usd": 0.5,
+      "actual_model_billing_usd": null,
+      "unpriced": [
+        "setup time",
+        "electricity and depreciation",
+        "long-term artifact retention"
+      ]
+    },
+    "baseline_scope": "Stronger existing inference reference within frozen weights; not an exhaustive global SR SOTA comparison",
+    "dataset": "Urban100",
+    "live_web_search": true,
+    "excluded_evidence_ids": [
+      "1712.06087",
+      "2008.13751",
+      "1811.12866",
+      "1911.07850",
+      "2108.10257",
+      "1702.00783",
+      "1612.07919"
+    ],
+    "stopped_route_compliance": {
+      "uses_prediction_ensembles": false,
+      "uses_lr_residual_backprojection": false,
+      "uses_weak_high_frequency_shrinkage": false,
+      "retunes_stopped_parameters": false,
+      "uses_global_luminance_contrast_expansion": false
+    },
+    "show_progress": true,
+    "study_id": "handoff-validation-20261104",
+    "observation_ids": [
+      "img_004",
+      "img_006",
+      "img_022",
+      "img_026",
+      "img_032",
+      "img_040",
+      "img_041",
+      "img_068",
+      "img_070",
+      "img_077",
+      "img_078",
+      "img_087"
+    ]
+  },
+  "candidate_sha256": "129eef94130a8c3c766cb054a04d62f58dc4ff36c55a483eb17af8564c0298b0",
+  "trusted_inputs_sha256": "dc87b87c3d833c83bfe588f0b15f98a67b8a2f0c3fdff6214e05cff1aa07548e"
+}
