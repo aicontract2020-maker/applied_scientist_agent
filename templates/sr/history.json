@@ -1,0 +1,35 @@
+{
+  "stopped_routes": [
+    "prediction ensembles",
+    "LR-versus-SR residual backprojection",
+    "weak high-frequency attenuation/shrinkage",
+    "global luminance contrast expansion"
+  ],
+  "used_urban100_ids": [
+    "img_001",
+    "img_002",
+    "img_010",
+    "img_014",
+    "img_020",
+    "img_021",
+    "img_028",
+    "img_037",
+    "img_047",
+    "img_048",
+    "img_052",
+    "img_057",
+    "img_062",
+    "img_065",
+    "img_067",
+    "img_076",
+    "img_080",
+    "img_084",
+    "img_088",
+    "img_089",
+    "img_090",
+    "img_093",
+    "img_098",
+    "img_099"
+  ],
+  "note": "Published historical decisions; local studies add exclusions automatically. Different clones have no shared live registry."
+}

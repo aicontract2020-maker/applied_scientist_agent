@@ -1,5 +1,6 @@
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -46,10 +47,26 @@ def main():
     autonomous.add_argument("--out", required=True)
     autonomous.add_argument("--study", help="A separately frozen task directory")
     autonomous.add_argument("--literature", action="store_true", help="Require agent live search and independently fetched primary papers")
+    sub.add_parser("setup-assets", help="Download and verify pinned SR repositories, weights and data")
+    health = sub.add_parser("doctor", help="Check dependencies, login, assets and actual OS isolation; no model call")
+    health.add_argument("--network", action="store_true")
+    research = sub.add_parser("research", help="Prepare fresh SR holdout, run one autonomous cycle, preserve all evidence")
+    research.add_argument("--id", required=True, help="New unique study name; cannot overwrite/retry")
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
-        if args.command == "autonomous":
+        if args.command == "setup-assets":
+            from .portable import setup_assets
+            output = setup_assets()
+        elif args.command == "doctor":
+            from .doctor import doctor
+            output = doctor(args.network)
+            print(json.dumps(output, indent=2, ensure_ascii=False))
+            return 0 if output['ok'] else 1
+        elif args.command == "research":
+            from .onboarding import research
+            output = research(args.id)
+        elif args.command == "autonomous":
             from .autonomy import AutonomousStudy
             if args.literature:
                 if not args.study: raise ValueError("--literature requires --study")
@@ -76,6 +93,6 @@ def main():
         else:
             output = workspace.evaluate(args.id)
         print(json.dumps(output, indent=2, ensure_ascii=False))
-    except (ValueError, OSError, KeyError, TypeError) as exc:
+    except (ValueError, OSError, KeyError, TypeError, subprocess.SubprocessError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         sys.exit(1)

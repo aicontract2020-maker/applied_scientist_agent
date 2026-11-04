@@ -1,0 +1,7 @@
+# Supported autonomous pilot: macOS + Python 3.12. Historical freeze remains unchanged.
+numpy==1.26.4
+opencv-python-headless==4.10.0.84
+pillow==11.3.0
+torch==2.8.0
+torchvision==0.23.0
+timm==0.9.16

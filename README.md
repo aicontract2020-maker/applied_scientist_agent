@@ -1,236 +1,107 @@
 # ResearchHarness
 
-面向 Applied Scientist agent 的研究工作流 MVP。已支持结构化规划接口、人工审查、
-预注册、本地可信命令执行、决策账本与报告。提供 Codex CLI 规划适配器及离线回放。
-已完成真实规划调用，以及一次 agent 自主方案/代码/注册/执行/报告的有界周期。
-新增 macOS 外部隔离及独立评价控制器；普通本地 runner 仍只适用于可信代码。
-当前没有自主联网文献检索、自由训练或部署功能，不声称一般科研可靠性。
+一个可审查的 Applied Scientist agent 研究原型：agent 自己查论文、提出一个可证伪假设、写代码、冻结方案、请求执行一次实验，并按预注册门槛报告 STOP / CONTINUE。负结果是最终输出，不自动调参或换候选补救。
 
-## 快速开始
+当前完整任务是 **固定 SwinIR-S ×2 图像超分的确定性后处理研究**，不是任意领域的通用科学家。基础工作流无需模型；完整研究使用你自己的 Codex 登录与额度。
 
-建议 Python 3.10+（本次真实任务环境为 Python 3.12.14），直接从仓库运行，无需安装依赖：
+## 支持范围
+
+| 部分 | 支持情况 |
+|---|---|
+| 离线工作流、账本、协议与软件测试 | Python 3.10+；不调用模型 |
+| 完整自主超分流程 | macOS，Python 3.12，CPU；实际验证为 Apple Silicon |
+| Windows / Linux 的完整自主研究 | 尚不支持；不会降级成无隔离执行 |
+| 安装方式 | 从源码运行，在仓库根目录执行命令 |
+
+完整流程需要 git、`pdftotext`（poppler）、Codex CLI 和可访问 GitHub/arXiv/模型服务的网络。建议预留数 GB 磁盘；没有 GPU 要求。第一次安装会下载 PyTorch、上游代码、约 16 MB 权重及 Urban100 ×2 数据。第三方材料保留各自使用条款，仓库公开不等于获得数据或权重的商用授权。
+
+## 同事首次安装
+
+先安装 Python 3.12、poppler 与 Codex CLI。例如，已安装 Homebrew 的 Mac：
+
+```sh
+brew install python@3.12 poppler node
+npm install -g @openai/codex
+codex login
+```
+
+使用自己的账号完成浏览器登录，不共享开发者的凭据。安装/登录依据：[OpenAI Codex 官方安装说明](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)、[认证说明](https://developers.openai.com/codex/auth)。本项目验证的 CLI 为 0.144.0；`doctor` 会检查实际所需参数是否存在，而不是假设所有版本都兼容。默认模型由 CLI 选择，当前不能保证跨账户规划结果一致。
+
+```sh
+git clone https://github.com/aicontract2020-maker/applied_scientist_agent.git
+cd applied_scientist_agent
+bash scripts/bootstrap.sh
+.venv-sr/bin/python -m research_harness doctor --network
+```
+
+`bootstrap.sh` 创建仓库自己的 `.venv-sr`，安装 `requirements-sr.txt` 的固定直接依赖，保存实际解析的完整环境列表，下载并核对固定上游提交和权重 SHA-256。不会读取原开发者的环境或复制其数据。已有文件不匹配时拒绝自动重置/覆盖。
+
+找不到 Python 时，可指定解释器，例如 `PYTHON_BIN=/path/to/python3.12 bash scripts/bootstrap.sh`。脚本也支持 `--skip-assets`，但完整研究必须随后运行 `.venv-sr/bin/python -m research_harness setup-assets`。普通终端中 `doctor` 的所有检查都通过才继续。
+
+## 启动一个完整自主周期
+
+```sh
+.venv-sr/bin/python -m research_harness research --id first-study
+```
+
+该命令依次执行：
+
+1. 检查 Python/依赖、Codex 登录和参数、固定资产，以及实际 OS 文件与网络隔离；不通过则不调用模型。
+2. 为新 ID 创建本机预注册任务，按 ID/文件名哈希固定 12 张新 Urban100 留出图；排除仓库历史和本机已预留图像。
+3. 让 agent 实时搜索、读取至少两篇原始论文（至少一篇全文提取），引用至少一篇此前未使用的来源，再独立提出新机制和实现。
+4. 最多三次合成形状检查；冻结方案和代码后执行唯一一次真实实验。
+5. 用独立评价器计算配对指标，保留原始报告、全文来源、数组、账本和流程检查结果。
+
+论文全文提取可能只返回前 40,000 字符，截断会明确记录。模型调用可能消耗你的额度；真实美元账单未知，不会记为零。单次会话上限 20 分钟，参考推理 10 分钟、候选 90 秒；这些不是模型服务的美元消费上限，也不包含首次安装时间。
+
+完成后打开 `runs/first-study/REPORT.md`。科学结果为 STOP 也可正常退出（0），表示完整流程结束；测量无效、缺少 agent 报告或流程不完整则退出 1。不要只看进程退出码判断科学成功。
+
+通过标准固定为 **平均 PSNR-Y 增益 >=0.05 dB、10,000 次原图配对 bootstrap 的 95% 区间下界 >0、候选/参考延迟 <=2.5**。对照是固定双次翻转 SwinIR 参考，不是 bicubic，也不声称全球最强方法。CPU float32 四线程、权重、量化和裁边保持一致。确定性任务不用训练 seed 假装独立重复。
+
+已关闭或已预留 ID 不覆盖、不自动恢复、不自动重跑。下一项研究要换新 ID、提供新外部证据，且不能修改已 STOP 路线的参数来重开。数据用完会拒绝继续，要求获得新数据并审查协议。单写入者：不要同时启动两个 `research` 命令。
+
+## 产物与历史
+
+- `local_studies/ID/`：本机独立任务、冻结输入哈希、图像清单和环境检查。
+- `runs/ID/registered.json`：不可复用到改过代码的冻结协议。
+- `runs/ID/agent-REPORT.md`：agent 原始解释；`REPORT.md` 是控制器结果与成本摘要。
+- `runs/ID/workflow.json`、`ledger.jsonl`、`observations.json`：流程审计、事件与逐图指标。
+- `runs/ID/artifacts/`：下载论文、候选数组、参考日志与时序；不依赖临时目录存活。
+- `.cache/environment.freeze.txt`、`assets/manifest.json`：实际安装环境及资产来源。
+
+这些本地产物、环境、第三方数据默认不提交 Git。日志可能含输入文本；分享时自行选择允许公开的内容。不同同事的 clone 没有共享实时登记中心，跨机器继续同一个研究计划时须先交换已用图像、文献和停止决策；仅换 clone 不能把旧路线当新研究。
+
+历史 G0 复现达到参考容差；G1–G4 候选均 STOP。见[决策账本](tasks/image_super_resolution/DECISIONS.md)、[G3](tasks/image_super_resolution/g3/REPORT.md)、[G4](tasks/image_super_resolution/g4/REPORT.md)。四条停止路线已纳入新任务模板：集成、LR 残差回投、弱高频收缩、全局亮度对比度扩张。本机后续 STOP 和使用过的文献也会带入新任务。历史目录是证据，不能作为可直接重跑的安装模板；不要修改其中旧哈希去迁就新环境。
+
+## 不调用模型的演示与检查
 
 ```sh
 python3 -m research_harness --help
-python3 -m research_harness register examples/protocol.json
-python3 -m research_harness record forecast-pilot examples/result.json
-python3 -m research_harness evaluate forecast-pilot
+python3 examples/local_demo/workflow.py
 python3 -m unittest discover -s tests -v
 ```
 
-示例是合成数据，仅演示协议格式；不代表任何真实研究结果。
-第一次 record 后为 PENDING。完成流程需要提供独立的 seed=22、33 的结果文件，
-不能重复录入 seed=11。真实实验前替换假设、最强基线及版本、控制变量和原始产物位置。
-可通过 `--workspace /path/to/store` 指定实验目录（放在子命令前）。默认 runs/ 不纳入 Git。
+Python >=3.10；纯 Python 环境会跳过三个依赖 torch/numpy/cv2 的合成软件测试。演示只用合成数据和保存的规划响应，不证明研究性能。它的输出目录不能覆盖，重跑请指定新路径：`python3 examples/local_demo/workflow.py --out runs/demo-2`。
 
-## 已完成的真实基线
+完整环境中的软件测试：`.venv-sr/bin/python -m unittest discover -s tests -v`。安装和干净副本验证依据见[可移植性验证协议](docs/PORTABILITY_PROTOCOL.md)及[验证记录](docs/PORTABILITY_VALIDATION.md)。
 
-图像超分 SwinIR-S ×2 / Set5 已完成一次确定性复现：PSNR-Y 38.13941 dB，
-参考 38.14 dB，误差 0.00059 dB，小于预注册的 0.02 dB。
-详见 [基线报告](tasks/image_super_resolution/G0_REPORT.md)。这不是模型改进或 agent 能力验证。
+## 常见问题
 
-## 决策规则 v0.1
+| 提示 | 处理 |
+|---|---|
+| Python/依赖版本不符 | 用 Python 3.12 在本 clone 执行 bootstrap；不要改历史 lock |
+| `codex` 未登录或缺少参数 | 安装兼容 CLI，执行 `codex login`；不需要复制别人的 auth.json |
+| `pdftotext` 缺失 | `brew install poppler` |
+| `sandbox_apply: Operation not permitted` | 在正常 macOS 终端运行；某些容器/受限父进程不能嵌套隔离，不要关闭隔离绕过 |
+| 下载/TLS/代理失败 | 修复网络/企业证书；不要关闭证书验证。中断下载若留下 `.download`，先检查并移走该不完整文件 |
+| 资产提交或校验和不匹配 | 检查本地修改；程序不会 reset 或覆盖用户文件。新 clone 可重新准备 |
+| ID 已存在、实验无效或未完成 | 查看该 ID 的账本、报告和错误；不删除目录来自动重试 |
+| 科学结果 STOP | 接受并保留负结果，不调参救回；新研究须有新外部依据和不同机制 |
 
-- 注册协议后冻结并记录 SHA-256，禁止覆盖；结果附加到 ledger.jsonl。
-- 随机改进研究（默认 paired_improvement）：预注册至少三个唯一 seed，配对运行基线与候选方法。
-- 确定性复现（deterministic_reproduction）：一次执行、seeds=[0]、minimum_effect=0；
-  必须冻结 reference_score、reference_source、reproduction_tolerance，并使用双侧绝对误差门槛。
-  seed=0 是执行编号，不是假装独立训练。
-- 效应使用主要指标的**绝对单位**：higher 为 candidate-baseline，lower 为 baseline-candidate。
-- 随机改进完成所有预定重复后，平均效应 >= 最小有意义效果且每次效应均 > 0 才 CONTINUE。
-- 确定性复现与参考绝对误差 <= 容差才 CONTINUE，分数大幅高于参考也视为复现不符。
-- 报告每次效应、均值、样本标准差；这是一条保守的一致性规则，不是显著性检验或置信区间。
-- 任一有效性检查失败或总美元成本超过预算，立即 STOP。
-- STOP/CONTINUE 均关闭当前实验；CONTINUE 只允许规划下一项预注册研究，不是部署批准。
-- 负结果不能靠增加调参或模型复杂度补救。新协议应明确关联旧实验，记录测量失效
-  或新外部证据，以及为何构成新假设。当前版本由人工审查这项理由。
+## 权限与能力边界
 
-## 成本与证据
+这是本机研究原型，不是多租户执行服务。OS 隔离限制候选文件访问并禁止候选联网；独立控制器持有 HR 和评价逻辑。Actor 为模型与搜索保留网络，**没有域名级硬隔离**，也不是整个主机秘密的完整保密边界。不要部署成允许陌生用户提交任务的公网服务。
 
-每次结果必须包含原始日志/检查点位置、有效性检查以及完整成本字段。
-compute/storage/data/tuning 美元字段应互不重叠，覆盖基线、候选方法、失败尝试和调参。
-compute_seconds 与 storage_byte_hours 累加；latency_ms 是同一测量条件下的单次推理延迟，
-报告均值和最大值，不累加。零成本也必须明确填 0。费用在结果录入后才检查，
-手动 record 模式不能提前终止外部作业，也不自动核验账单或产物。
-run 模式按预注册费率计量，详见下文；它不是实际云账单核验。
+普通 `run` 执行器仅用于可信代码，不提供上述 OS 隔离。`research` 目前只支持源码目录下的固定 SR 任务，不支持自由训练、任意数据/模型切换、Windows/Linux 隔离或自动部署。静态检查、哈希和路线声明不构成形式化安全证明或不可篡改审计。
 
-## 结构与边界
-
-- `research_harness/core.py`：协议校验、结果登记、决策和账本。
-- `research_harness/cli.py`：规划、审查、注册、执行及报告命令。
-- `research_harness/planning.py`：结构化计划校验与 fixture/Codex 适配器。
-- `research_harness/review.py`：与内容摘要绑定的审查记录及报告导出。
-- `research_harness/execution.py`：命令执行、预算预检、超时与日志。
-- `examples/`：合成协议和单次结果格式。
-- `tests/`：停止条件、重复实验、成本和冻结规则的回归测试。
-- `AGENTS.md`：后续研究和开发必须遵守的规则。
-
-本地存储仅支持**单写入者**。哈希能发现意外修改，不能抵抗拥有整个目录写权限的 agent；
-账本也不是不可篡改的审计系统。有效性检查为调用方声明，当前不存在独立测试集隔离。
-研究代码执行、模型提供方和测试集访问应在后续版本通过独立权限边界实现。
-
-## 下一步
-
-1. 人工审查首个真实业务任务、数据、基线、预算和权限（见 REVIEW.md）。
-2. 真实调用规划适配器，检查其缺失信息处理和计划质量。
-3. 接入独立评价权限、受隔离的实验环境、真实费用计量和显式恢复流程。
-4. 在预注册实验支持继续后，再研究更长期的自主循环。
-
-
-## 本地执行器 v0.2
-
-运行一个**合成软件演示**，只验证流程，不作科学结论：
-
-```sh
-mkdir -p runs
-python3 examples/local_demo/prepare.py > runs/demo-protocol.json
-python3 -m research_harness register runs/demo-protocol.json
-python3 -m research_harness run synthetic-execution-demo
-python3 -m research_harness evaluate synthetic-execution-demo
-```
-
-同一实验不会覆盖注册。已关闭的实验再次 run 只返回原决策，不启动新进程。
-
-协议增加 `execution` 对象：
-
-- `cwd`：预先指定的绝对工作目录。
-- `command`：参数数组，无 shell 展开；支持 `{python}`、`{seed}`、`{output}`。
-  每个命令负责同一 seed 的基线和候选评估，并写出结果 JSON。
-- `inputs`：相对于 cwd 的文件路径到 SHA-256 的映射。注册时和每次启动前校验。
-  必须列入实际使用的代码、数据和评价文件；未列入的依赖不会被自动发现或冻结。
-- `timeout_seconds`：每次重复的时间上限；超时终止同一进程组。
-- `compute_usd_per_hour`：整次运行分配资源的合计每小时费率，按墙钟时间计量。
-- `fixed_costs`：每次尝试的 data_usd、storage_usd、tuning_usd，要求非负。
-
-执行前用时间上限和固定费用预留预算。该预检依赖正确费率，进程启动/终止开销
-可能使实际计量略超预留；它不能限制代码自行调用外部服务的支出。软件不会自行
-连接计费服务。硬件、电费等本地成本如需核算，应反映到配置费率。
-
-命令输出结构与手动 result 类似，但由父进程填写 `artifact` 与 `costs`；
-子进程须提供 `seed`、`baseline_score`、`candidate_score`、`validity`，以及：
-
-```json
-{"measurements": {"storage_byte_hours": 1024, "latency_ms": 5}}
-```
-
-每次运行保留 `attempts/seed-N/` 下的 stdout.log、stderr.log、result.json。
-账本记录启动、结束、费用、结果和最终决策。失败、超时、结果缺失或格式错误立即
-STOP，保留已经发生的费用，不自动重试。命令尚未产生有效测量时，STOP 表示执行
-失效，不构成对科学假设的否定。
-
-进程或父程序意外中断会留下未完成尝试；下一次 run 拒绝自动重跑，要求人工核对
-产物、残留进程及成本。当前尚无自动恢复命令，不能通过删除账本绕过这一限制。
-
-### 权限边界
-
-本地执行器只约束启动参数、时长和流程，**不是操作系统隔离环境**。
-工作目录不等于文件访问边界：子进程继承当前用户的文件、网络和环境变量权限。
-不要在此运行不可信生成代码；接入模型自动执行之前，应增加容器或其他操作系统
-权限隔离，并将隐藏测试集和评价器放到独立边界。当前有效性检查仍是执行代码声明。
-输出日志也没有硬性大小配额；超时控制不能替代磁盘配额。
-
-
-## 规划与审查 v0.3
-
-### 离线完整演示
-
-```sh
-python3 examples/local_demo/workflow.py
-```
-
-创建新的 `runs/reviewed-software-demo/`，完成计划回放、模拟人工审查、注册、三次
-合成测量、决策和 Markdown 报告。演示中的审批明确标记为软件测试记录，不是用户
-对真实研究的许可。不要把演示的自动批准逻辑用于模型输出或真实研究。
-
-缺失上下文示例（不调用模型）：
-
-```sh
-python3 -m research_harness plan examples/product-brief.md \
-  --response examples/needs-context-response.json --out proposals/missing-context
-```
-
-fixture 是已保存响应的回放，不会生成研究计划，不是自主规划能力的演示。
-
-### 真实规划接口（需要可用的 Codex 登录和已审查的数据范围）
-
-```sh
-python3 -m research_harness plan path/to/brief.md \
-  --provider codex --timeout 120 --out proposals/first-real-plan
-```
-
-可传 `--model` 明确模型，否则由 CLI 默认决定。使用本机 Codex CLI，要求支持
-`--output-schema`、`--ignore-user-config`、`--ephemeral` 和 `--sandbox read-only`。
-适配器指定只读、无交互提升权限和结构化输出，不加载用户 config.toml 中的 MCP/
-插件配置；这不是模型访问数据的保密边界。只读权限不等于只能读取 brief：不要把它
-当作隔离秘密、整个主机文件系统或防止提示注入的保证。模型服务仍需要网络登录。
-规划提示要求不要调用工具，但当前系统没有强制的工具白名单；需要受限环境才能
-用于敏感数据。仅将允许向模型服务发送的内容放入 brief 和规划运行目录。
-
-命令只生成候选计划，不注册、不执行实验。不自动重试；失败保留 request、prompt、
-原始输出和本地日志。外部模型费用记为未知，不伪装为零，不包含在实验预算中；
-首次真实调用前需确认账户使用方式和费用范围。日志可能包含敏感内容，proposals/
-与 reviews/ 默认不提交 Git。
-
-返回 `needs_context` 时必须先解决问题；不会用虚构的预算或数据自动补全。
-返回 `ready_for_review` 只表示字段齐全，不能证明证据、基线或计划科学有效。
-模型输出禁止包含 execution 配置；实际执行命令由操作者另行提供。
-
-### 真实计划审查流程
-
-```sh
-python3 -m research_harness review proposals/first-real-plan/proposal.json \
-  --execution path/to/execution.json --out reviews/first-real-review
-# 阅读 reviews/first-real-review/REVIEW.md，核实输入、代码、阈值、成本和权限。
-python3 -m research_harness approve reviews/first-real-review/bundle.json \
-  --sha256 EXACT_HASH_FROM_REVIEW --reviewer YOUR_NAME
-python3 -m research_harness register-review reviews/first-real-review/bundle.json
-python3 -m research_harness run EXPERIMENT_ID
-python3 -m research_harness report EXPERIMENT_ID --out runs/REPORT.md
-```
-
-审批绑定完整内容摘要，不能复用到改过的计划、预算或命令。输入文件改变会导致
-审批/注册/执行校验失败。approve 不是身份认证：具有目录写权限的人可修改文件；
-该记录用于本地协作追踪，不是安全或合规审计证明。
-原始 register 命令仍保留，适合人工编写的可信协议，**没有审查来源保证**；不要
-使用它绕过模型计划审查。最终运行的代码、环境及测试集仍需可信与独立权限设计。
-
-Codex 接口依据：[官方非交互模式文档](https://developers.openai.com/codex/noninteractive)。
-本地适配器已对照安装版本的 `codex exec --help`，未进行真实模型调用。
-
-## 确定性图像配对研究
-
-`design=paired_observations` 适用于固定权重、一次冻结推理对照。它要求提前冻结
-至少 10 个原始 observation_ids、bootstrap 的 resamples/seed/confidence、
-minimum_effect 与 max_latency_ratio。一次执行用 seeds=[0] 标识，不伪装成训练重复。
-逐图上报两臂分数和延迟，汇总值必须等于全部原图均值；子集、重复 ID 或虚假汇总会拒绝。
-
-CONTINUE 必须同时满足平均效应达到阈值、原图 bootstrap 区间下界 >0、总延迟比
-不超过门槛。该 bootstrap 描述图像抽样差异，不证明独立训练稳定性，也不能消除
-公开 benchmark 污染和原图相关性带来的限制。
-
-首轮图像研究材料位于 `tasks/image_super_resolution/g1/`。规划是一次真实模型调用，
-从预先提供的两项已知方法中选一个；代码实现与执行检查仍由协作者完成。
-
-
-首轮 G1 已完成，结果为 STOP：平均增益 0.01472 dB，未达预注册的 0.05 dB。
-见 [真实规划与研究负结果](tasks/image_super_resolution/g1/REPORT.md)。系统保留该负结果，
-不会降低阈值或自动切换另一个候选来寻找成功。
-
-
-## 首次完整自主周期 G2
-
-已完成真实 agent 自主方案、代码、合成检查、预注册、实验触发和报告。没有人工代写候选。
-代码运行由 macOS 系统隔离及独立控制器约束。研究结果为 STOP：平均效应 -0.14733 dB。
-见 [完整自主流程报告](tasks/image_super_resolution/g2/REPORT.md) 和
-[agent 原始报告](tasks/image_super_resolution/g2/AGENT_REPORT.md)。
-这证明一次有界流程可完成，不意味着新算法成功或已替代一个职业。
-
-## 自主文献检索周期 G3
-
-已完成 agent 自主实时搜索、原文读取、假设、代码和单次预注册实验。弱高频收缩候选在事先选定的 Urban100-12 上相对固定双次参考为 −0.09781 dB，保持 STOP，没有调参补救。见 [G3 报告](tasks/image_super_resolution/g3/REPORT.md)。
-
-为新任务准备独立冻结目录后，可用 `.venv-sr/bin/python -m research_harness autonomous --study TASK_DIRECTORY --literature --out NEW_RUN_DIRECTORY`。该入口需要 macOS 外部系统隔离及已登录的 Codex CLI；不要复用已评分的 G3 留出集。`--literature` 强制真实搜索、至少两篇原始论文和一次全文提取记录；来源和停止规则由独立控制器检查。
-
-## G4：新的自主假设与最终负结果
-
-Agent 另行搜索并读取两篇此前未使用的论文，自编固定全局亮度对比度扩张候选。全新预选 Urban100-12 相对固定双次参考 −0.11954 dB，95% CI [−0.15018, −0.09225]，保持 STOP，无调参或重跑。见 [G4 报告](tasks/image_super_resolution/g4/REPORT.md)。任务策略现可列出已用证据与额外停止路线声明，防止只重读旧文献就注册下一轮。
+原图 bootstrap 不证明训练稳定性，公开数据也无法排除模型已知信息。一次有界自主流程完成不等于发现新算法、证明商业价值或替代 Applied Scientist 职位。

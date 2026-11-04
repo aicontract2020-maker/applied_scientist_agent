@@ -61,7 +61,7 @@ def candidate_profile(control, snapshot, inputs, output, trusted):
     allow_home = [ROOT / '.venv-sr', PYTHON_BASE]
     allow_control = [snapshot, inputs, output, trusted]
     return '\n'.join(['(version 1)', '(allow default)', '(deny network*)',
-        f'(deny file-read* {excluding("/Users", allow_home)})',
+        f'(deny file-read* {excluding("/Users", allow_home)} {excluding(ROOT, allow_home)})',
         f'(deny file-read* {excluding(control, allow_control)})',
         f'(deny file-write* (require-all (require-not (subpath {quote(output)})) (require-not (subpath "/dev"))))'])
 
@@ -98,7 +98,7 @@ class AutonomousStudy:
         self.study = Path(study or STUDY).resolve()
         self.destination = Path(destination).resolve()
         self.destination.mkdir(parents=True, exist_ok=False)
-        self.session = Path(tempfile.mkdtemp(prefix='research-harness-g2-')).resolve()
+        self.session = Path(tempfile.mkdtemp(prefix='research-harness-')).resolve()
         self.actor = self.session / 'agent'
         self.control = self.session / 'control'
         for p in (self.actor, self.control, self.actor / 'requests', self.actor / 'responses', self.control / 'trusted'):
@@ -360,6 +360,13 @@ class AutonomousStudy:
                         break
                     log.write(chunk)
         self.log('AGENT_FINISHED', exit_code=process.returncode, total_wall_seconds=time.monotonic() - self.start)
+        for name in ('primary-papers', 'reference-logs', 'reference-timings.json', 'candidate-output'):
+            source = self.control / name
+            if source.is_dir():
+                shutil.copytree(source, self.destination / 'artifacts' / name)
+            elif source.is_file():
+                (self.destination / 'artifacts').mkdir(exist_ok=True)
+                shutil.copyfile(source, self.destination / 'artifacts' / name)
         for name in ('candidate.py', 'research.json', 'REPORT.md', 'final.txt'):
             source = self.actor / name
             if source.is_file() and not source.is_symlink() and source.stat().st_size < 200000:
