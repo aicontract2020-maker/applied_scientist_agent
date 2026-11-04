@@ -73,13 +73,13 @@ def linux_actor_command(argv, root, control, actor):
     if not state.is_dir(): raise ValueError('Codex state missing; run codex login with a private CODEX_HOME')
     if state == Path.home() or state == Path('/'): raise ValueError('CODEX_HOME must be a dedicated directory')
     command += ['--dir', '/home/research', '--bind', str(state), '/home/research/.codex',
-                '--bind', str(actor), str(actor), '--ro-bind', str(actor/'responses'), str(actor/'responses'),
+                '--bind', str(actor), str(actor), '--dir', str(actor/'.tmp'), '--ro-bind', str(actor/'responses'), str(actor/'responses'),
                 '--setenv', 'HOME', '/home/research', '--setenv', 'CODEX_HOME', '/home/research/.codex',
-                '--setenv', 'PATH', path, '--setenv', 'TMPDIR', '/tmp', '--unsetenv', 'PYTHONPATH',
+                '--setenv', 'PATH', path, '--setenv', 'TMPDIR', str(actor/'.tmp'), '--unsetenv', 'PYTHONPATH',
                 '--unsetenv', 'LD_PRELOAD', '--chdir', str(actor)]
     for key in ('SSL_CERT_FILE', 'CODEX_CA_CERTIFICATE'):
         if os.environ.get(key): readonly(command, Path(os.environ[key]).resolve())
-    command += ['--remount-ro', str(root), '--remount-ro', '/']
+    command += ['--remount-ro', str(root), '--remount-ro', '/tmp', '--remount-ro', '/run', '--remount-ro', '/proc', '--remount-ro', '/']
     # Probe commands use system Python; actual actor uses the resolved CLI path.
     actual = [executable, *argv[1:]] if argv[0] == 'codex' else list(argv)
     return [*command, '--', *actual]
