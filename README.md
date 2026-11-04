@@ -230,3 +230,7 @@ CONTINUE 必须同时满足平均效应达到阈值、原图 bootstrap 区间下
 已完成 agent 自主实时搜索、原文读取、假设、代码和单次预注册实验。弱高频收缩候选在事先选定的 Urban100-12 上相对固定双次参考为 −0.09781 dB，保持 STOP，没有调参补救。见 [G3 报告](tasks/image_super_resolution/g3/REPORT.md)。
 
 为新任务准备独立冻结目录后，可用 `.venv-sr/bin/python -m research_harness autonomous --study TASK_DIRECTORY --literature --out NEW_RUN_DIRECTORY`。该入口需要 macOS 外部系统隔离及已登录的 Codex CLI；不要复用已评分的 G3 留出集。`--literature` 强制真实搜索、至少两篇原始论文和一次全文提取记录；来源和停止规则由独立控制器检查。
+
+## G4：新的自主假设与最终负结果
+
+Agent 另行搜索并读取两篇此前未使用的论文，自编固定全局亮度对比度扩张候选。全新预选 Urban100-12 相对固定双次参考 −0.11954 dB，95% CI [−0.15018, −0.09225]，保持 STOP，无调参或重跑。见 [G4 报告](tasks/image_super_resolution/g4/REPORT.md)。任务策略现可列出已用证据与额外停止路线声明，防止只重读旧文献就注册下一轮。

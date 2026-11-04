@@ -1,0 +1,27 @@
+{
+  "workflow_completed": true,
+  "scientific_decision": "STOP",
+  "candidate_unchanged": true,
+  "frozen_inputs_verified": true,
+  "operations": [
+    "read",
+    "read",
+    "check",
+    "register",
+    "run"
+  ],
+  "live_search_calls": 2,
+  "search_queries": 6,
+  "primary_reads_attempted": 2,
+  "primary_reads_succeeded": 2,
+  "full_text_reads_succeeded": 1,
+  "full_text_was_truncated": true,
+  "valid_experiments": 1,
+  "no_post_result_tuning": true,
+  "public_benchmark_network_access_observed": false,
+  "network_audit_scope": "Recorded queries and shell commands; actor egress is not domain-hard-isolated",
+  "raw_events_sha256": "f6408075ca728cde31c79a269e40dd020451d1ac04ef910f7c27efb13edaf01d",
+  "raw_events_local_path": "/Users/kaimaplespark/git/applied_scientist_agent/runs/autonomous-g4/agent-events.jsonl",
+  "raw_library_sha256": "fa0d42e28cf96b27cc8e38b049dada497a637dff187c1477f472ccb83724018c",
+  "raw_library_local_path": "/Users/kaimaplespark/git/applied_scientist_agent/runs/autonomous-g4/library.json"
+}

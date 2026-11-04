@@ -1,0 +1,34 @@
+{
+  "dataset": "Urban100",
+  "scale": 2,
+  "selected_ids": [
+    "img_001",
+    "img_002",
+    "img_021",
+    "img_028",
+    "img_037",
+    "img_057",
+    "img_062",
+    "img_067",
+    "img_084",
+    "img_088",
+    "img_089",
+    "img_099"
+  ],
+  "excluded_g3_ids": [
+    "img_010",
+    "img_014",
+    "img_020",
+    "img_047",
+    "img_048",
+    "img_052",
+    "img_065",
+    "img_076",
+    "img_080",
+    "img_090",
+    "img_093",
+    "img_098"
+  ],
+  "selection_rule": "Exclude G3 scored IDs; take 12 smallest SHA256(g4-fixed-urban12:ID), then sort. Frozen before search, without viewing images/scores.",
+  "purpose": "Fresh bounded holdout, not full Urban100."
+}

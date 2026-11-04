@@ -78,10 +78,10 @@ class LiteratureStudy(AutonomousStudy):
             raise ValueError('Read at least two primary papers, at least one with full text')
         plan = json.loads((self.actor/'research.json').read_text())
         sources = [canonical_paper_url(x.get('source')) for x in plan.get('new_evidence', [])]
-        fresh = [url for url in sources if url.rsplit('/', 1)[-1].split('v')[0] not in OLD_SOURCES]
-        if not fresh: raise ValueError('Previously supplied G2 papers do not count as new external evidence')
+        fresh = [url for url in sources if url.rsplit('/', 1)[-1].split('v')[0] not in set(getattr(self, 'policy', {}).get('excluded_evidence_ids', OLD_SOURCES))]
+        if not fresh: raise ValueError('Previously supplied papers do not count as new external evidence')
         compliance = plan.get('stopped_route_compliance')
-        expected = {'uses_prediction_ensembles': False, 'uses_lr_residual_backprojection': False, 'retunes_stopped_parameters': False}
+        expected = getattr(self, 'policy', {}).get('stopped_route_compliance', {'uses_prediction_ensembles': False, 'uses_lr_residual_backprojection': False, 'retunes_stopped_parameters': False})
         if compliance != expected or any(type(v) is not bool for v in compliance.values()):
             raise ValueError('A genuinely distinct mechanism is required; stopped families remain excluded')
         reject_lr_residual_backprojection((self.actor/'candidate.py').read_text())

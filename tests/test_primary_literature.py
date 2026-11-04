@@ -36,3 +36,14 @@ class PrimaryEvidenceTests(unittest.TestCase):
             study.library={'a':{'full_text':'methods'},'b':{'full_text':None}}
             (study.actor/'research.json').write_text(json.dumps({'new_evidence':[{'source':'https://arxiv.org/abs/2008.13751'}]}))
             with self.assertRaisesRegex(ValueError,'Previously supplied'):study.register()
+    def test_study_policy_blocks_g3_evidence_and_requires_g3_stop_declaration(self):
+        import json
+        with tempfile.TemporaryDirectory() as tmp:
+            study=LiteratureStudy.__new__(LiteratureStudy);study.destination=Path(tmp);study.actor=Path(tmp)
+            study.search_records=lambda:[{'type':'web_search'}]
+            study.library={'a':{'full_text':'methods'},'b':{'full_text':None}}
+            study.policy={'excluded_evidence_ids':['2108.10257'],'stopped_route_compliance':{'uses_prediction_ensembles':False,'uses_lr_residual_backprojection':False,'uses_weak_high_frequency_shrinkage':False,'retunes_stopped_parameters':False}}
+            path=study.actor/'research.json';path.write_text(json.dumps({'new_evidence':[{'source':'https://arxiv.org/abs/2108.10257'}]}))
+            with self.assertRaisesRegex(ValueError,'Previously supplied'):study.register()
+            path.write_text(json.dumps({'new_evidence':[{'source':'https://arxiv.org/abs/1234.56789'}],'stopped_route_compliance':{'uses_prediction_ensembles':False,'uses_lr_residual_backprojection':False,'retunes_stopped_parameters':False}}))
+            with self.assertRaisesRegex(ValueError,'distinct mechanism'):study.register()

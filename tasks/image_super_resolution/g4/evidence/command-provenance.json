@@ -1,0 +1,50 @@
+[
+  {
+    "id": "item_2",
+    "command": "/bin/zsh -lc \"pwd && rg --files -g 'TASK.md' -g 'policy.json' -g 'labctl.py' -g 'AGENTS.md' -g '\"'!.*'\"'\"",
+    "exit_code": 0,
+    "status": "completed"
+  },
+  {
+    "id": "item_3",
+    "command": "/bin/zsh -lc \"sed -n '1,240p' TASK.md && sed -n '1,260p' policy.json && sed -n '1,260p' labctl.py\"",
+    "exit_code": 0,
+    "status": "completed"
+  },
+  {
+    "id": "item_7",
+    "command": "/bin/zsh -lc '/usr/bin/python3 labctl.py read --url https://arxiv.org/abs/1702.00783 --full'",
+    "exit_code": 0,
+    "status": "completed"
+  },
+  {
+    "id": "item_8",
+    "command": "/bin/zsh -lc '/usr/bin/python3 labctl.py read --url https://arxiv.org/abs/1612.07919'",
+    "exit_code": 0,
+    "status": "completed"
+  },
+  {
+    "id": "item_11",
+    "command": "/bin/zsh -lc 'jq empty research.json && /usr/bin/python3 labctl.py check'",
+    "exit_code": 0,
+    "status": "completed"
+  },
+  {
+    "id": "item_13",
+    "command": "/bin/zsh -lc '/usr/bin/python3 labctl.py register'",
+    "exit_code": 0,
+    "status": "completed"
+  },
+  {
+    "id": "item_14",
+    "command": "/bin/zsh -lc '/usr/bin/python3 labctl.py run'",
+    "exit_code": 0,
+    "status": "completed"
+  },
+  {
+    "id": "item_18",
+    "command": "/bin/zsh -lc 'test -s REPORT.md && test -s candidate.py && test -s research.json && wc -c REPORT.md candidate.py research.json'",
+    "exit_code": 0,
+    "status": "completed"
+  }
+]

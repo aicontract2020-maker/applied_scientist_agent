@@ -1,0 +1,6 @@
+(version 1)
+(allow default)
+(deny file-read* (subpath "/Users/kaimaplespark/git/applied_scientist_agent") (subpath "/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-g2-hbj3c48w/control"))
+(deny file-write* (subpath "/Users/kaimaplespark/git/applied_scientist_agent") (subpath "/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-g2-hbj3c48w/control"))
+(deny file-write* (subpath "/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-g2-hbj3c48w/agent/responses"))
+(deny file-write* (require-all (require-not (subpath "/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-g2-hbj3c48w/agent")) (require-not (subpath "/Users/kaimaplespark/.codex")) (require-not (subpath "/dev"))))

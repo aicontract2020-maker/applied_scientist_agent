@@ -1,0 +1,28 @@
+[
+  {
+    "id": "exec-2051b676-a3bd-4ff1-876b-fce81d38a37c",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs super-resolution spatial misalignment pixel shift PSNR evaluation ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs super-resolution spatial misalignment pixel shift PSNR evaluation",
+        "site:arxiv.org/abs image super resolution phase shift alignment reconstruction",
+        "site:arxiv.org/abs super-resolution color correction luminance bias calibration"
+      ]
+    }
+  },
+  {
+    "id": "exec-ccb4e170-516f-40b8-84fc-b8d96ff8ee99",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs single image super-resolution pixel alignment shift degradation benchmark ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs single image super-resolution pixel alignment shift degradation benchmark",
+        "site:arxiv.org/abs super resolution spatial shift output correction PSNR",
+        "site:arxiv.org/abs image restoration pixel shift equivariance super resolution"
+      ]
+    }
+  }
+]

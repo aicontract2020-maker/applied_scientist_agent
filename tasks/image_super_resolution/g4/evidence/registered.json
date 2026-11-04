@@ -1,0 +1,146 @@
+{
+  "plan": {
+    "hypothesis": "A fixed 0.5% expansion of plain SwinIR's image-global luminance deviations about its predicted mean will counter conditional-mean contrast attenuation and improve frozen Urban100-12 mean paired PSNR-Y by at least 0.05 dB versus the fixed two-pass horizontal-flip reference, while keeping the candidate/reference latency ratio at or below 2.5.",
+    "mechanism": "Pixelwise distortion regression can average uncertain high-resolution outcomes, attenuating the amplitude of predicted luminance deviations. The candidate computes one global predicted luma mean, expands every pixel's luma deviation from that mean by 1.005, and adds the same scalar correction to R, G, and B so the operation changes luminance without changing chroma differences. This is my inference from the cited papers, not a method or result claimed by them. It is an image-global point transform: it neither filters a spatial band nor compares LR and SR pixels.",
+    "baseline": "Comparator: the existing fixed two-pass horizontal-flip SwinIR-S x2 reference. Candidate path: exactly one plain, unensembled fixed SwinIR-S x2 prediction followed by the deterministic global luminance point transform in candidate.py.",
+    "why_not_g1_retry": "G1 averaged two model predictions related by a horizontal flip; this candidate uses one model prediction and no prediction ensemble or transform averaging. G2 corrected a mismatch between the LR observation and a downsampled SR result; this candidate never resizes or compares LR and SR and performs no residual backprojection. G3 attenuated locally gated high-frequency content; this candidate has no blur, local gate, frequency decomposition, or attenuation and instead applies one global monotone contrast expansion. It does not change any stopped route's transform, gain, kernel, iteration, threshold, blur, band, gate, or sign.",
+    "new_evidence": [
+      {
+        "source": "https://arxiv.org/abs/1702.00783",
+        "claim": "Dahl, Norouzi, and Shlens analyze pixel-independent Gaussian/MSE SR as conditional mean prediction and report that averaging multimodal outcomes produces blurry outputs.",
+        "why_distinct": "This supports conditional-average attenuation as a possible error mechanism, distinct from ensembles, LR residual backprojection, and local high-frequency shrinkage. The global contrast correction is my inference and is not tested or advocated by the paper."
+      },
+      {
+        "source": "https://arxiv.org/abs/1612.07919",
+        "claim": "Sajjadi, Scholkopf, and Hirsch report that optimizing pixel-wise reconstruction measures tends to produce over-smoothed SR images lacking high-frequency textures.",
+        "why_distinct": "This independently supports attenuation under pixel-wise objectives. My proposed image-global amplitude calibration is not their texture-synthesis method and uses no training, adversarial loss, spatial filter, or added model."
+      }
+    ],
+    "controls": [
+      "Twelve fresh Urban100 x2 pairs selected by fixed filename hash excluding G3 scored IDs, before search; no image or score selection",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "observation_ids": [
+      "img_001",
+      "img_002",
+      "img_021",
+      "img_028",
+      "img_037",
+      "img_057",
+      "img_062",
+      "img_067",
+      "img_084",
+      "img_088",
+      "img_089",
+      "img_099"
+    ],
+    "stop_route": "A valid negative eliminates fixed mild image-global luminance contrast expansion of plain SwinIR as a route to beating the fixed two-pass reference under this protocol; it will not be rescued by retuning the gain or adding adaptive/local contrast complexity.",
+    "parameters": {
+      "luma_coefficients": [
+        0.299,
+        0.587,
+        0.114
+      ],
+      "contrast_gain": 1.005,
+      "center": "single arithmetic mean of predicted luma over the complete SR image",
+      "rgb_update": "add 0.005 * (predicted_luma - global_luma_mean) equally to R, G, and B",
+      "clipping": "none in candidate; trusted adapter owns output quantization",
+      "rationale": "A 0.5% gain is deliberately mild because the fixed PSNR-trained model is already strong; equal-channel updates preserve chroma differences and a global center avoids a spatial-frequency filter. Constants are fixed from mechanism reasoning, not holdout measurements."
+    },
+    "stopped_route_compliance": {
+      "uses_prediction_ensembles": false,
+      "uses_lr_residual_backprojection": false,
+      "uses_weak_high_frequency_shrinkage": false,
+      "retunes_stopped_parameters": false
+    },
+    "decision_rules": {
+      "pass": "CONTINUE/adopt this fixed candidate only if the valid measured mean paired PSNR-Y gain is at least +0.05 dB and candidate/reference latency ratio is at most 2.5.",
+      "valid_negative": "STOP this route if the valid gain is below +0.05 dB or latency ratio exceeds 2.5, regardless of a smaller positive effect.",
+      "invalid_measurement": "If a predeclared validity condition fails or the controller reports an operational failure, draw no performance conclusion, report the exact cause, and stop without retry, tuning, or replacement."
+    }
+  },
+  "policy": {
+    "study_id": "autonomous-g4",
+    "observation_ids": [
+      "img_001",
+      "img_002",
+      "img_021",
+      "img_028",
+      "img_037",
+      "img_057",
+      "img_062",
+      "img_067",
+      "img_084",
+      "img_088",
+      "img_089",
+      "img_099"
+    ],
+    "primary_metric": {
+      "name": "Frozen Urban100-12 mean paired PSNR-Y gain versus fixed two-pass reference",
+      "direction": "higher",
+      "unit": "dB"
+    },
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "controls": [
+      "Twelve fresh Urban100 x2 pairs selected by fixed filename hash excluding G3 scored IDs, before search; no image or score selection",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "limits": {
+      "agent_session_seconds": 1200,
+      "reference_seconds": 600,
+      "candidate_seconds": 90,
+      "synthetic_checks": 3,
+      "experiments": 1,
+      "candidate_output_bytes": 268435456
+    },
+    "costs": {
+      "local_proxy_usd_per_machine_hour": 1,
+      "max_session_proxy_usd": 0.5,
+      "actual_model_billing_usd": null,
+      "unpriced": [
+        "setup time",
+        "electricity and depreciation",
+        "long-term artifact retention"
+      ]
+    },
+    "baseline_scope": "Stronger existing inference reference within frozen weights; not an exhaustive global SR SOTA comparison",
+    "dataset": "Urban100",
+    "live_web_search": true,
+    "excluded_evidence_ids": [
+      "1712.06087",
+      "2008.13751",
+      "1811.12866",
+      "1911.07850",
+      "2108.10257"
+    ],
+    "stopped_route_compliance": {
+      "uses_prediction_ensembles": false,
+      "uses_lr_residual_backprojection": false,
+      "uses_weak_high_frequency_shrinkage": false,
+      "retunes_stopped_parameters": false
+    }
+  },
+  "candidate_sha256": "2d35e7d9fb16f38f8262d02023e3a2f07162440d772d261dd7e42cd5ab8c601f",
+  "trusted_inputs_sha256": "cf7a6893521e1ee532ffea7e4b2ed39dc67f9bc01e24e0e6f30352657c60de2a"
+}

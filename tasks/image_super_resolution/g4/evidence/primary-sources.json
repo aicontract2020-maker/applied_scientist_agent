@@ -1,0 +1,33 @@
+[
+  {
+    "url": "https://arxiv.org/abs/1702.00783",
+    "title": "Pixel Recursive Super Resolution",
+    "authors": [
+      "Dahl, Ryan",
+      "Norouzi, Mohammad",
+      "Shlens, Jonathon"
+    ],
+    "date": "2017/02/02",
+    "read_at": "2026-11-04T16:09:56.515745+00:00",
+    "html_sha256": "3474437563dc3541b7f55f48745597f296373a4db2e0d015538830eebd0219b5",
+    "download_bytes": 5513465,
+    "full_text_truncated": true,
+    "pdf_url": "https://arxiv.org/pdf/1702.00783",
+    "pdf_sha256": "80832c4f1eba27f50a5189fb5d3227faac9b97e0c8c4f859a5f8e0e9977c7eb0",
+    "extraction_note": "First 40000 extracted characters; includes methods where available; images are never returned."
+  },
+  {
+    "url": "https://arxiv.org/abs/1612.07919",
+    "title": "EnhanceNet: Single Image Super-Resolution Through Automated Texture Synthesis",
+    "authors": [
+      "Sajjadi, Mehdi S. M.",
+      "Schölkopf, Bernhard",
+      "Hirsch, Michael"
+    ],
+    "date": "2016/12/23",
+    "read_at": "2026-11-04T16:10:00.274137+00:00",
+    "html_sha256": "6ea43565ec714867b0919908ae3c98fa6685b0b6ddcc4d8df101cb49c3d7f01d",
+    "download_bytes": 42202,
+    "full_text_truncated": false
+  }
+]
