@@ -67,6 +67,7 @@ def setup_assets(root=ROOT):
         target.parent.mkdir(parents=True, exist_ok=True)
         partial = target.with_suffix('.download')
         digest = hashlib.sha256(); total = 0
+        if partial.exists(): raise ValueError('Incomplete .download exists; inspect/move it before downloading again')
         try:
             with urllib.request.urlopen(WEIGHT_URL, timeout=60) as response, partial.open('xb') as out:
                 while chunk := response.read(1024*1024):
@@ -106,7 +107,7 @@ def new_study(name, root=ROOT):
         if registration.exists():
             plan = json.loads(registration.read_text())['plan']
             policy['excluded_evidence_ids'] = sorted(set(policy['excluded_evidence_ids']) | {item['source'].rsplit('/',1)[-1].split('v')[0] for item in plan['new_evidence']})
-            if outcome.exists() and json.loads(outcome.read_text()).get('status') == 'STOP':
+            if outcome.exists() and json.loads(outcome.read_text()).get('status') == 'STOP' and json.loads(outcome.read_text()).get('measurement_valid') is True:
                 prior.append({'id': previous['study_id'], 'hypothesis': plan['hypothesis'], 'stop_route': plan['stop_route']})
                 policy['stopped_route_compliance']['reuses_local_route_'+previous['study_id']] = False
     pool = [f'img_{i:03d}' for i in range(1,101) if f'img_{i:03d}' not in used]

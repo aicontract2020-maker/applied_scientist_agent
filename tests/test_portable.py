@@ -39,7 +39,7 @@ class PortableStudyTests(unittest.TestCase):
         first=new_study('first',self.root);policy=json.loads((first/'policy.json').read_text())
         run=self.root/'runs/first';run.mkdir(parents=True)
         (run/'registered.json').write_text(json.dumps({'plan':{'hypothesis':'fixture hypothesis','stop_route':'fixture route','new_evidence':[{'source':'https://arxiv.org/abs/1234.56789v2'}]}}))
-        (run/'result.json').write_text('{"status":"STOP"}')
+        (run/'result.json').write_text('{"status":"STOP","measurement_valid":true}')
         following=new_study('second',self.root);next_policy=json.loads((following/'policy.json').read_text())
         self.assertIn('1234.56789',next_policy['excluded_evidence_ids'])
         self.assertFalse(next_policy['stopped_route_compliance']['reuses_local_route_first'])
