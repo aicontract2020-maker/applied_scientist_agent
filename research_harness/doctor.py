@@ -95,7 +95,7 @@ def doctor(network=False):
     check('codex_login_and_flags',codex,'Install Codex CLI, then run codex login in your own terminal')
     check('assets',lambda:(verify_sources(), 'Pinned repositories, weights and 100 Urban100 pairs verified')[1],'Run python -m research_harness setup-assets; inspect mismatches, never reset blindly')
     if all(x['ok'] for x in checks if x['name'] in ('platform','python_dependencies')):
-        check('actual_os_isolation',isolation_probe,'Use an ordinary macOS terminal; nested restricted runtimes may reject sandbox-exec')
+        check('actual_os_isolation',isolation_probe,'Rerun bootstrap to normalize interpreter aliases; use an ordinary macOS terminal (nested restricted runtimes may reject sandbox-exec)')
     else:
         checks.append({'name':'actual_os_isolation','ok':False,'detail':'Prerequisite failed','fix':'Resolve platform/Python dependencies first'})
     if network:

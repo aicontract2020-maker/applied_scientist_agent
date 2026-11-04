@@ -17,9 +17,23 @@ bootstrap_python="${PYTHON_BIN:-python3.12}"
 if ! command -v "$bootstrap_python" >/dev/null; then
   echo 'Install Python 3.12 (brew install python@3.12), or set PYTHON_BIN to its path.' >&2; exit 1
 fi
+bootstrap_python="$("$bootstrap_python" -c 'import os,sys; print(os.path.realpath(sys.executable))')"
 "$bootstrap_python" -c 'import sys; assert sys.version_info[:2] == (3,12), "Use Python 3.12 for the pinned SR environment"'
 if [[ ! -d .venv-sr ]]; then "$bootstrap_python" -m venv .venv-sr; fi
 .venv-sr/bin/python -c 'import sys; assert sys.version_info[:2] == (3,12), "Existing .venv-sr is not Python 3.12; choose a fresh clone"'
+# Normalize only our venv's interpreter aliases to the same real binary. This avoids
+# an intermediate ~/.local/bin symlink crossing the candidate read boundary.
+"$bootstrap_python" - <<'PYTHON'
+import os
+from pathlib import Path
+for name in ('python', 'python3', 'python3.12'):
+    alias = Path('.venv-sr/bin') / name
+    if alias.is_symlink():
+        target = alias.resolve(strict=True)
+        temporary = alias.with_name(alias.name + '.normalized')
+        temporary.symlink_to(target)
+        os.replace(temporary, alias)
+PYTHON
 .venv-sr/bin/python -m ensurepip --upgrade
 .venv-sr/bin/python -m pip install -r requirements-sr.txt
 .venv-sr/bin/python -m pip check
