@@ -31,13 +31,19 @@ result={}
 for label, path in PATHS.items():
  try:
   pathlib.Path(path).read_bytes(); result[label]='ALLOWED'
- except (PermissionError, FileNotFoundError): result[label]='DENIED'
+ except OSError as exc:
+  if exc.errno not in (1, 2, 13, 30):raise
+  result[label]='DENIED'
 try:
  pathlib.Path(OUTSIDE).write_text('forbidden');result['outside_write']='ALLOWED'
-except (PermissionError, FileNotFoundError):result['outside_write']='DENIED'
+except OSError as exc:
+ if exc.errno not in (1, 2, 13, 30):raise
+ result['outside_write']='DENIED'
 try:
  pathlib.Path(REPLY).write_text('forbidden');result['response_write']='ALLOWED'
-except (PermissionError, FileNotFoundError):result['response_write']='DENIED'
+except OSError as exc:
+ if exc.errno not in (1, 2, 13, 30):raise
+ result['response_write']='DENIED'
 EXTRA
 print(json.dumps(result))
 '''.replace('PATHS',repr({'repo_read':str(private),'control_read':str(control/'secret'),'symlink_escape':str(actor/'escape')})).replace('OUTSIDE',repr(str(base/'outside'))).replace('REPLY',repr(str(actor/'responses/reply')))
@@ -50,7 +56,9 @@ result['imports']='OK'
 assert pathlib.Path(INPUT).read_text()=='input marker'
 try:
  pathlib.Path(INPUT).write_text('forbidden');result['input_write']='ALLOWED'
-except PermissionError:result['input_write']='DENIED'
+except OSError as exc:
+ if exc.errno not in (1, 13, 30):raise
+ result['input_write']='DENIED'
 try:
  socket.socket().connect(('1.1.1.1',443));result['network']='ALLOWED'
 except (PermissionError, OSError) as exc:

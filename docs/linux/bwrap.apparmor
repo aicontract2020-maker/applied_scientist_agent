@@ -1,0 +1,8 @@
+# Optional Ubuntu 24.04 admin-reviewed permission for the distro's root-owned bwrap.
+# Does NOT turn off AppArmor or global unprivileged-userns restrictions.
+# Source: https://documentation.ubuntu.com/release-notes/24.04/
+abi <abi/4.0>,
+include <tunables/global>
+profile research-harness-bwrap /usr/bin/bwrap flags=(unconfined) {
+  userns,
+}
