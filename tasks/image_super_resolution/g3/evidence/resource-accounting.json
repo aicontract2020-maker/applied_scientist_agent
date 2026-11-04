@@ -1,0 +1,31 @@
+{
+  "session_wall_seconds": 204.74300454184413,
+  "session_local_proxy_usd": 0.05687305690979378,
+  "experiment_wall_seconds_subset": 52.98459591716528,
+  "usage": [
+    {
+      "input_tokens": 603690,
+      "cached_input_tokens": 574208,
+      "output_tokens": 7004,
+      "reasoning_output_tokens": 825
+    }
+  ],
+  "actual_model_id": null,
+  "actual_model_billing_usd": null,
+  "shared_environment_assets_and_session_bytes": 1626013292,
+  "coarse_full_session_residency_byte_hours": 92476346.34140415,
+  "candidate_peak_rss_bytes": 135462912,
+  "reference_peak_rss_bytes": null,
+  "successful_primary_download_bytes": 5699936,
+  "failed_pdf_downloads": 2,
+  "failed_pdf_read_cap_bytes_each": 20971520,
+  "failed_download_actual_bytes": "cap+1 bytes read before rejection, plus unmetered HTTP overhead and abstract HTML; files not retained",
+  "data_download_egress_bytes": null,
+  "unpriced": [
+    "setup and audit time",
+    "data preparation transfer",
+    "electricity/depreciation",
+    "long-term retention",
+    "model invoice"
+  ]
+}

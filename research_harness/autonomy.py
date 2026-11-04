@@ -94,7 +94,8 @@ def bounded_process(command, cwd, output, timeout, env=None, quota=256 * 1024 * 
 
 
 class AutonomousStudy:
-    def __init__(self, destination):
+    def __init__(self, destination, study=None):
+        self.study = Path(study or STUDY).resolve()
         self.destination = Path(destination).resolve()
         self.destination.mkdir(parents=True, exist_ok=False)
         self.session = Path(tempfile.mkdtemp(prefix='research-harness-g2-')).resolve()
@@ -108,8 +109,8 @@ class AutonomousStudy:
         self.smoke_count = 0
         self.events = self.destination / 'ledger.jsonl'
         self.start = time.monotonic()
-        self.policy = json.loads((STUDY / 'policy.json').read_text())
-        self.hidden = json.loads((STUDY / 'inputs.lock.json').read_text())
+        self.policy = json.loads((self.study / 'policy.json').read_text())
+        self.hidden = json.loads((self.study / 'inputs.lock.json').read_text())
         self.log('SESSION_CREATED', session=str(self.session), policy_sha256=digest(self.policy),
                  inputs_sha256=digest(self.hidden))
 
@@ -143,6 +144,9 @@ class AutonomousStudy:
         (target / 'candidate.py').write_text(text)
         return target
 
+    def evidence_sources(self):
+        return {s['url'] for s in json.loads((self.study / 'literature.json').read_text())}
+
     def register(self):
         if self.registered or self.closed:
             raise ValueError('Registration is single-use')
@@ -161,7 +165,7 @@ class AutonomousStudy:
         evidence = plan.get('new_evidence')
         if not isinstance(evidence, list) or not evidence:
             raise ValueError('New external evidence is required for a distinct route after G1 STOP')
-        allowed = {s['url'] for s in json.loads((STUDY / 'literature.json').read_text())}
+        allowed = self.evidence_sources()
         for item in evidence:
             if not isinstance(item, dict) or item.get('source') not in allowed or not item.get('claim') or not item.get('why_distinct'):
                 raise ValueError('Cite a supplied newly consulted primary source and explain the distinct hypothesis')
@@ -185,7 +189,7 @@ class AutonomousStudy:
             command.append('--smoke')
         env = {k: v for k, v in os.environ.items() if k in ('PATH', 'LANG', 'LC_ALL', 'SYSTEMROOT')}
         env.update(PYTHONNOUSERSITE='1', PYTHONDONTWRITEBYTECODE='1', OPENBLAS_NUM_THREADS='4', OMP_NUM_THREADS='4')
-        return bounded_process(command, snapshot, output, 20 if smoke else 90, env)
+        return bounded_process(command, snapshot, output, 20 if smoke else self.policy.get('limits', {}).get('candidate_seconds', 90), env)
 
     def smoke(self):
         if self.registered or self.closed or self.smoke_count >= 3:
@@ -208,13 +212,15 @@ class AutonomousStudy:
         if sha(self.actor / 'candidate.py') != self.registered['candidate_sha256']:
             raise ValueError('Candidate changed after registration; experiment cancelled')
         begin = time.monotonic()
-        if begin - self.start > 450:
+        limits = self.policy.get("limits", {})
+        latest = limits.get("agent_session_seconds", 900) - limits.get("reference_seconds", 300) - limits.get("candidate_seconds", 90) - 60
+        if begin - self.start > latest:
             return self.finish_invalid('Insufficient remaining session budget to start the one experiment', begin, {})
         self.log('EXPERIMENT_STARTED', protocol_sha256=digest(self.registered))
         # Trusted reference process owns weights and references. Agent supplies no commands.
         baseline_command = [str(PYTHON), '-B', str(ROOT / 'research_harness/autonomous_reference.py'),
-                            '--control', str(self.control), '--policy', str(STUDY / 'policy.json')]
-        reference = bounded_process(baseline_command, ROOT, self.control / 'reference-logs', 300)
+                            '--control', str(self.control), '--policy', str(self.study / 'policy.json')]
+        reference = bounded_process(baseline_command, ROOT, self.control / 'reference-logs', limits.get('reference_seconds', 300))
         self.log('REFERENCE_FINISHED', **reference)
         if reference['error']:
             return self.finish_invalid('Reference execution failed', begin, reference)
@@ -246,9 +252,10 @@ class AutonomousStudy:
         timings = {r['id']: r for r in json.loads((output / 'timings.json').read_text())}
         baseline = json.loads((self.control / 'reference-timings.json').read_text())
         rows = []
+        dataset = self.policy.get('dataset', 'Set14')
         for name in self.policy['observation_ids']:
             value = np.load(output / f'{name}.npy', allow_pickle=False)
-            gt = cv2.imread(str(ROOT / f'external/SelfExSR/data/Set14/image_SRF_2/{name}_SRF_2_HR.png'), cv2.IMREAD_COLOR)
+            gt = cv2.imread(str(ROOT / f'external/SelfExSR/data/{dataset}/image_SRF_2/{name}_SRF_2_HR.png'), cv2.IMREAD_COLOR)
             ref = cv2.imread(str(self.control / 'reference-png' / f'{name}.png'), cv2.IMREAD_COLOR)
             if value.shape != gt.shape or not np.isfinite(value).all():
                 raise ValueError(f'Invalid candidate shape/value: {name}')
@@ -297,9 +304,9 @@ class AutonomousStudy:
         raise ValueError('Unknown operation')
 
     def launch(self):
-        shutil.copyfile(STUDY / 'labctl.py', self.actor / 'labctl.py')
-        shutil.copyfile(STUDY / 'TASK.md', self.actor / 'TASK.md')
-        shutil.copyfile(STUDY / 'literature.json', self.actor / 'literature.json')
+        shutil.copyfile(self.study / 'labctl.py', self.actor / 'labctl.py')
+        shutil.copyfile(self.study / 'TASK.md', self.actor / 'TASK.md')
+        shutil.copyfile(self.study / 'literature.json', self.actor / 'literature.json')
         atomic_json(self.actor / 'policy.json', self.policy)
         (self.actor / 'AGENTS.md').write_text('Follow TASK.md. Work only here. Use labctl.py for registered experiments. Never inspect hidden data or fetch benchmark labels.\n')
         profile = self.destination / 'actor.sb'; profile.write_text(actor_profile(self.control, self.actor))
@@ -307,6 +314,8 @@ class AutonomousStudy:
                    'exec', '--ignore-user-config', '--ephemeral', '--skip-git-repo-check', '--sandbox', 'danger-full-access',
                    '--json', '--output-last-message', str(self.actor / 'final.txt'),
                    'Read TASK.md and policy.json. Complete the autonomous research task yourself: propose, implement, synthetic-check, preregister, request the experiment, interpret its result, and write REPORT.md. Use the file broker; do not ask the human to do your coding or execution.']
+        if self.policy.get('live_web_search'):
+            command.insert(command.index('codex') + 1, '--search')
         self.log('AGENT_STARTED', command=command, external_profile=str(profile))
         done = set()
         with (self.destination / 'agent-events.jsonl').open('wb') as stdout, (self.destination / 'agent-stderr.log').open('wb') as stderr:
@@ -332,7 +341,7 @@ class AutonomousStudy:
                             response = {'status': 'ERROR', 'error': f'{type(exc).__name__}: {exc}'}
                             self.log('REQUEST_REJECTED', request_id=path.stem, error=response['error'])
                         atomic_json(self.actor / 'responses' / path.name, response)
-                    if time.monotonic() - self.start > 900:
+                    if time.monotonic() - self.start > self.policy.get('limits', {}).get('agent_session_seconds', 900):
                         self.log('AGENT_TIMEOUT'); break
                     time.sleep(.2)
             finally:

@@ -44,12 +44,19 @@ def main():
     export.add_argument("--out", required=True)
     autonomous = sub.add_parser("autonomous", help="Run one externally isolated agent-authored SR research cycle (macOS)")
     autonomous.add_argument("--out", required=True)
+    autonomous.add_argument("--study", help="A separately frozen task directory")
+    autonomous.add_argument("--literature", action="store_true", help="Require agent live search and independently fetched primary papers")
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
         if args.command == "autonomous":
             from .autonomy import AutonomousStudy
-            output = AutonomousStudy(args.out).launch()
+            if args.literature:
+                if not args.study: raise ValueError("--literature requires --study")
+                from .literature_study import LiteratureStudy
+                output = LiteratureStudy(args.out, args.study).launch()
+            else:
+                output = AutonomousStudy(args.out, args.study).launch()
         elif args.command == "register":
             output = {"registered": str(workspace.register(json.loads(Path(args.protocol).read_text())))}
         elif args.command == "record":

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "exec-fb387eed-2c34-422f-9bf5-5c7262c6f44c",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs image super-resolution frequency separation high frequency residual paper post-processing ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs image super-resolution frequency separation high frequency residual paper post-processing",
+        "site:arxiv.org/abs super resolution edge enhancement guided filter ringing sharpening paper"
+      ]
+    }
+  }
+]

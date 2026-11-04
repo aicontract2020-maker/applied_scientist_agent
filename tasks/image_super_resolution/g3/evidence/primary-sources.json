@@ -1,0 +1,36 @@
+[
+  {
+    "url": "https://arxiv.org/abs/1911.07850",
+    "title": "Frequency Separation for Real-World Super-Resolution",
+    "authors": [
+      "Fritsche, Manuel",
+      "Gu, Shuhang",
+      "Timofte, Radu"
+    ],
+    "date": "2019/11/18",
+    "read_at": "2026-11-04T00:06:22.060537+00:00",
+    "html_sha256": "43fca2263b251f4b0f0323276cb4d791907506df5645f53b83c97021c784cb90",
+    "download_bytes": 42522,
+    "full_text_truncated": false
+  },
+  {
+    "url": "https://arxiv.org/abs/2108.10257",
+    "title": "SwinIR: Image Restoration Using Swin Transformer",
+    "authors": [
+      "Liang, Jingyun",
+      "Cao, Jiezhang",
+      "Sun, Guolei",
+      "Zhang, Kai",
+      "Van Gool, Luc",
+      "Timofte, Radu"
+    ],
+    "date": "2021/08/23",
+    "read_at": "2026-11-04T00:06:33.168290+00:00",
+    "html_sha256": "223a4bdd892c4d320c8e924437a6d0c50db5645cec3965e4e83da60cbb70ca39",
+    "download_bytes": 5657414,
+    "full_text_truncated": true,
+    "pdf_url": "https://arxiv.org/pdf/2108.10257",
+    "pdf_sha256": "67876a31b61def0ccd133753a4b252329d5fb944802f70c6a85b685d3de1a641",
+    "extraction_note": "First 40000 extracted characters; includes methods where available; images are never returned."
+  }
+]

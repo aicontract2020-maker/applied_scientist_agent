@@ -1,0 +1,58 @@
+{
+  "study_id": "autonomous-g3",
+  "observation_ids": [
+    "img_010",
+    "img_014",
+    "img_020",
+    "img_047",
+    "img_048",
+    "img_052",
+    "img_065",
+    "img_076",
+    "img_080",
+    "img_090",
+    "img_093",
+    "img_098"
+  ],
+  "primary_metric": {
+    "name": "Frozen Urban100-12 mean paired PSNR-Y gain versus fixed two-pass reference",
+    "direction": "higher",
+    "unit": "dB"
+  },
+  "minimum_effect": 0.05,
+  "max_latency_ratio": 2.5,
+  "bootstrap": {
+    "resamples": 10000,
+    "seed": 20261103,
+    "confidence": 0.95
+  },
+  "controls": [
+    "Twelve Urban100 x2 pairs fixed by predeclared filename hash before literature search; no selection by image content or score",
+    "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+    "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+    "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+    "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+    "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+  ],
+  "limits": {
+    "agent_session_seconds": 1200,
+    "reference_seconds": 600,
+    "candidate_seconds": 90,
+    "synthetic_checks": 3,
+    "experiments": 1,
+    "candidate_output_bytes": 268435456
+  },
+  "costs": {
+    "local_proxy_usd_per_machine_hour": 1,
+    "max_session_proxy_usd": 0.5,
+    "actual_model_billing_usd": null,
+    "unpriced": [
+      "setup time",
+      "electricity and depreciation",
+      "long-term artifact retention"
+    ]
+  },
+  "baseline_scope": "Stronger existing inference reference within frozen weights; not an exhaustive global SR SOTA comparison",
+  "dataset": "Urban100",
+  "live_web_search": true
+}

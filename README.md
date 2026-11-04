@@ -224,3 +224,9 @@ CONTINUE 必须同时满足平均效应达到阈值、原图 bootstrap 区间下
 见 [完整自主流程报告](tasks/image_super_resolution/g2/REPORT.md) 和
 [agent 原始报告](tasks/image_super_resolution/g2/AGENT_REPORT.md)。
 这证明一次有界流程可完成，不意味着新算法成功或已替代一个职业。
+
+## 自主文献检索周期 G3
+
+已完成 agent 自主实时搜索、原文读取、假设、代码和单次预注册实验。弱高频收缩候选在事先选定的 Urban100-12 上相对固定双次参考为 −0.09781 dB，保持 STOP，没有调参补救。见 [G3 报告](tasks/image_super_resolution/g3/REPORT.md)。
+
+为新任务准备独立冻结目录后，可用 `.venv-sr/bin/python -m research_harness autonomous --study TASK_DIRECTORY --literature --out NEW_RUN_DIRECTORY`。该入口需要 macOS 外部系统隔离及已登录的 Codex CLI；不要复用已评分的 G3 留出集。`--literature` 强制真实搜索、至少两篇原始论文和一次全文提取记录；来源和停止规则由独立控制器检查。

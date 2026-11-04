@@ -1,0 +1,20 @@
+{
+  "dataset": "Urban100",
+  "scale": 2,
+  "selected_ids": [
+    "img_010",
+    "img_014",
+    "img_020",
+    "img_047",
+    "img_048",
+    "img_052",
+    "img_065",
+    "img_076",
+    "img_080",
+    "img_090",
+    "img_093",
+    "img_098"
+  ],
+  "selection_rule": "Take 12 smallest SHA-256(g3-fixed-urban12:ID), before inspecting images or scores; sort chosen IDs for execution.",
+  "purpose": "Bounded fresh holdout; no claims about all Urban100."
+}

@@ -1,0 +1,129 @@
+{
+  "plan": {
+    "hypothesis": "On the frozen Urban100-12 x2 set, smoothly attenuating by 25% only plain SwinIR luminance high-pass coefficients below approximately one 8-bit code value will improve mean paired PSNR-Y by at least 0.05 dB versus the fixed two-pass horizontal-flip SwinIR reference while keeping candidate latency at or below 2.5 times reference latency.",
+    "mechanism": "SwinIR explicitly passes shallow low-frequency features toward reconstruction and uses deep features to recover missing high frequencies. My inference is that the weakest output luminance high-pass coefficients are disproportionately likely to be estimation noise or small ringing rather than stable scene structure. The candidate computes a 3x3 Gaussian low-pass (sigma 0.55), forms the SR luminance high-pass, and subtracts 25% of that high-pass under a smooth exp(-(magnitude/(1/255))^2) gate. Thus near-zero coefficients are mildly shrunk, coefficients around strong Urban100 edges are preserved, and the identical scalar correction across RGB avoids hue shifts. LR is deliberately unused: this is output-domain coefficient shrinkage, not degradation consistency or backprojection.",
+    "baseline": "The comparator is the already fixed two-pass SwinIR-S x2 horizontal-flip average, the strongest existing inference reference in scope. The candidate instead receives one plain, unensembled fixed SwinIR float32 prediction and applies one inexpensive deterministic spatial-frequency shrinkage function; it neither invokes nor approximates an additional model forward.",
+    "why_not_g1_retry": "G1 averaged predictions from original and horizontally flipped model forwards and remains STOP; this candidate uses exactly one plain prediction and no transform ensemble, so its causal mechanism is weak-coefficient suppression rather than variance reduction across predictions. G2 corrected SR using a discrepancy between LR and a downsampled SR image; its whole LR-versus-SR residual-backprojection family remains STOP. This candidate never downsamples SR, never compares it with LR, and never feeds an LR residual back to SR. It does not change flip transforms, ensemble weights, backprojection gains, kernels, or iterations.",
+    "new_evidence": [
+      {
+        "source": "https://arxiv.org/abs/2108.10257",
+        "claim": "Liang et al. describe SwinIR's shallow features as mainly containing low frequencies and its deep features as focusing on recovery of lost high frequencies; they report classical SR trained with pixel loss and distinguish test-time self-ensemble as SwinIR+.",
+        "why_distinct": "The paper supports reasoning about the fixed model's frequency roles. The proposed operation is my inference: post-hoc smooth shrinkage of only weak output high-pass coefficients, not a claim established by the paper and not self-ensemble."
+      },
+      {
+        "source": "https://arxiv.org/abs/1911.07850",
+        "claim": "Fritsche, Gu, and Timofte report separating low and high image frequencies and treating them differently in their trained real-world SR pipeline, motivated by low frequencies being better preserved under downsampling.",
+        "why_distinct": "Their method trains frequency-separated GAN/SR components for real-world SR. I use the general band-separation observation only as external motivation for a fixed, training-free weak-high-pass shrinker on classical SwinIR output; it uses neither their models nor LR residual backprojection."
+      }
+    ],
+    "controls": [
+      "Twelve Urban100 x2 pairs fixed by predeclared filename hash before literature search; no selection by image content or score",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "observation_ids": [
+      "img_010",
+      "img_014",
+      "img_020",
+      "img_047",
+      "img_048",
+      "img_052",
+      "img_065",
+      "img_076",
+      "img_080",
+      "img_090",
+      "img_093",
+      "img_098"
+    ],
+    "stop_route": "A valid result with mean paired gain below +0.05 dB, a paired-bootstrap result that does not support that threshold, or latency ratio above 2.5 eliminates this fixed weak-luminance-high-pass shrinkage route (3x3 Gaussian sigma 0.55, threshold 1/255, 25% maximum shrinkage). It will not trigger threshold, strength, scale, kernel, or gate tuning on this holdout. A result meeting the effect threshold and latency guard supports CONTINUE/adoption of exactly this frozen candidate; execution-invalid output supports neither scientific conclusion and causes a stop without retry.",
+    "parameters": {
+      "luminance_weights": [
+        0.299,
+        0.587,
+        0.114
+      ],
+      "lowpass": "OpenCV 3x3 GaussianBlur, sigma 0.55, BORDER_REFLECT_101",
+      "highpass": "luminance minus lowpass",
+      "gate": "exp(-(abs(highpass)/(1/255))^2)",
+      "maximum_shrink_fraction": 0.25,
+      "rgb_application": "add the same gated negative luminance-highpass scalar to all three channels",
+      "lr_usage": "none",
+      "rationale": "A one-code-value scale targets sub-quantization weak detail; sigma 0.55 confines the estimate to an immediate neighborhood; 25% is deliberately mild because SwinIR is already a strong pixel-optimized estimator; the smooth gate avoids a hard threshold discontinuity. All were selected from mechanism and quantization scale before holdout access, with no sweep."
+    },
+    "stopped_route_compliance": {
+      "uses_prediction_ensembles": false,
+      "uses_lr_residual_backprojection": false,
+      "retunes_stopped_parameters": false
+    }
+  },
+  "policy": {
+    "study_id": "autonomous-g3",
+    "observation_ids": [
+      "img_010",
+      "img_014",
+      "img_020",
+      "img_047",
+      "img_048",
+      "img_052",
+      "img_065",
+      "img_076",
+      "img_080",
+      "img_090",
+      "img_093",
+      "img_098"
+    ],
+    "primary_metric": {
+      "name": "Frozen Urban100-12 mean paired PSNR-Y gain versus fixed two-pass reference",
+      "direction": "higher",
+      "unit": "dB"
+    },
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "controls": [
+      "Twelve Urban100 x2 pairs fixed by predeclared filename hash before literature search; no selection by image content or score",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "limits": {
+      "agent_session_seconds": 1200,
+      "reference_seconds": 600,
+      "candidate_seconds": 90,
+      "synthetic_checks": 3,
+      "experiments": 1,
+      "candidate_output_bytes": 268435456
+    },
+    "costs": {
+      "local_proxy_usd_per_machine_hour": 1,
+      "max_session_proxy_usd": 0.5,
+      "actual_model_billing_usd": null,
+      "unpriced": [
+        "setup time",
+        "electricity and depreciation",
+        "long-term artifact retention"
+      ]
+    },
+    "baseline_scope": "Stronger existing inference reference within frozen weights; not an exhaustive global SR SOTA comparison",
+    "dataset": "Urban100",
+    "live_web_search": true
+  },
+  "candidate_sha256": "d31bcbf29b7c3f98d4402998a24dd2620589b6b4c57f7a1d8b41cd5fa21970c5",
+  "trusted_inputs_sha256": "7ab132a95ea55d62e401aaf9d9fcd30e41d08a6c1a5f08a063f9ad550d59f9ac"
+}

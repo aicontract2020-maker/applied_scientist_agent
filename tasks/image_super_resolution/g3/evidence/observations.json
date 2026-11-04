@@ -1,0 +1,86 @@
+[
+  {
+    "id": "img_010",
+    "baseline_score": 37.16088466523952,
+    "candidate_score": 37.06404650350643,
+    "baseline_latency_ms": 2844.8429172858596,
+    "candidate_latency_ms": 1429.7425406984985
+  },
+  {
+    "id": "img_014",
+    "baseline_score": 30.604045814115487,
+    "candidate_score": 30.557643727647175,
+    "baseline_latency_ms": 3663.5925420559943,
+    "candidate_latency_ms": 1828.0265000648797
+  },
+  {
+    "id": "img_020",
+    "baseline_score": 27.05178053285167,
+    "candidate_score": 26.982064724490368,
+    "baseline_latency_ms": 4323.34674987942,
+    "candidate_latency_ms": 2265.3533341363072
+  },
+  {
+    "id": "img_047",
+    "baseline_score": 29.524098903016434,
+    "candidate_score": 29.357486205128673,
+    "baseline_latency_ms": 2157.7899158000946,
+    "candidate_latency_ms": 1115.9347500652075
+  },
+  {
+    "id": "img_048",
+    "baseline_score": 26.251639637640473,
+    "candidate_score": 26.056703889686595,
+    "baseline_latency_ms": 2385.6460000388324,
+    "candidate_latency_ms": 1192.5813755951822
+  },
+  {
+    "id": "img_052",
+    "baseline_score": 35.29957008563234,
+    "candidate_score": 35.190957240738506,
+    "baseline_latency_ms": 2370.0133338570595,
+    "candidate_latency_ms": 1225.0064169056714
+  },
+  {
+    "id": "img_065",
+    "baseline_score": 30.447534816290936,
+    "candidate_score": 30.410083887535006,
+    "baseline_latency_ms": 2413.813583087176,
+    "candidate_latency_ms": 1189.0454995445907
+  },
+  {
+    "id": "img_076",
+    "baseline_score": 27.93609181150867,
+    "candidate_score": 27.895515597380328,
+    "baseline_latency_ms": 2393.1622081436217,
+    "candidate_latency_ms": 1210.388874169439
+  },
+  {
+    "id": "img_080",
+    "baseline_score": 41.0554751160079,
+    "candidate_score": 40.84967655206615,
+    "baseline_latency_ms": 2946.925667114556,
+    "candidate_latency_ms": 1360.811207909137
+  },
+  {
+    "id": "img_090",
+    "baseline_score": 44.108216916125286,
+    "candidate_score": 43.93472465450701,
+    "baseline_latency_ms": 2381.1925002373755,
+    "candidate_latency_ms": 1201.5122501179576
+  },
+  {
+    "id": "img_093",
+    "baseline_score": 36.25449801983799,
+    "candidate_score": 36.267834372089645,
+    "baseline_latency_ms": 2704.02929186821,
+    "candidate_latency_ms": 1397.7208333089948
+  },
+  {
+    "id": "img_098",
+    "baseline_score": 27.370192994185885,
+    "candidate_score": 27.323574709113775,
+    "baseline_latency_ms": 2402.3733329959214,
+    "candidate_latency_ms": 1177.23145801574
+  }
+]

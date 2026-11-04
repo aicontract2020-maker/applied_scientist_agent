@@ -15,6 +15,7 @@ class AutonomousBrokerTest(unittest.TestCase):
         self.root = Path(self.temp.name)
         # Construct a synthetic controller without touching a real research policy.
         self.study = AutonomousStudy.__new__(AutonomousStudy)
+        self.study.study = self.root
         self.study.destination = self.root/'archive'; self.study.destination.mkdir()
         self.study.actor = self.root/'agent'; self.study.actor.mkdir()
         self.study.control = self.root/'control'; self.study.control.mkdir()

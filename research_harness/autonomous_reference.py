@@ -32,6 +32,7 @@ def main():
     parser.add_argument('--policy', type=Path, required=True)
     args = parser.parse_args()
     policy = json.loads(args.policy.read_text())
+    dataset = policy.get('dataset', 'Set14')
     inputs = args.control / 'candidate-inputs'; inputs.mkdir()
     refs = args.control / 'reference-png'; refs.mkdir()
     torch.set_num_threads(4); torch.set_num_interop_threads(1)
@@ -48,7 +49,7 @@ def main():
         z = torch.zeros(1, 3, 64, 64)
         infer(model, z); infer(model, z); infer(model, torch.flip(z, [3]))
         for index, name in enumerate(policy['observation_ids']):
-            low = cv2.imread(str(ROOT / f'external/SelfExSR/data/Set14/image_SRF_2/{name}_SRF_2_LR.png'), cv2.IMREAD_COLOR)
+            low = cv2.imread(str(ROOT / f'external/SelfExSR/data/{dataset}/image_SRF_2/{name}_SRF_2_LR.png'), cv2.IMREAD_COLOR)
             if low is None:
                 raise ValueError('Missing frozen LR input')
             lr = low[:, :, ::-1].astype(np.float32) / 255.
