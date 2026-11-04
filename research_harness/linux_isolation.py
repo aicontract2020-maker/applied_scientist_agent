@@ -21,7 +21,8 @@ def bwrap_base(network):
     if not binary: raise ValueError('Linux isolation requires bubblewrap: sudo apt-get install bubblewrap')
     if os.geteuid() == 0: raise ValueError('Run research as an ordinary Linux user, never root; install OS packages separately')
     command = [binary, '--die-with-parent', '--new-session', '--unshare-user', '--unshare-pid',
-               '--unshare-ipc', '--unshare-uts', '--cap-drop', 'ALL', '--hostname', 'research-sandbox']
+               '--unshare-ipc', '--unshare-uts', '--disable-userns', '--assert-userns-disabled',
+               '--cap-drop', 'ALL', '--hostname', 'research-sandbox']
     if not network: command.append('--unshare-net')
     for name in (*SYSTEM_DIRS, *SYSTEM_FILES, *SYSTEM_CERTS):
         if Path(name).exists(): command += ['--ro-bind', name, name]

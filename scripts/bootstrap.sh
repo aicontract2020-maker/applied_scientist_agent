@@ -42,8 +42,11 @@ PYTHON
 .venv-sr/bin/python -m ensurepip --upgrade
 if [[ "$bootstrap_os" == Linux ]]; then
   # Keep this pilot CPU-only; do not pull multi-GB CUDA dependencies from PyPI.
-  .venv-sr/bin/python -m pip install --no-deps torch==2.8.0+cpu torchvision==0.23.0+cpu --index-url https://download.pytorch.org/whl/cpu
-  .venv-sr/bin/python -m pip install -r requirements-sr.txt -c requirements-sr-linux.lock.txt
+  bootstrap_linux_lock=requirements-sr-linux.lock.txt
+  if [[ "$bootstrap_arch" == aarch64 ]]; then bootstrap_linux_lock=requirements-sr-linux-aarch64.lock.txt; fi
+  # The official 0.23 ARM CPU wheel has no +cpu suffix; x86_64 does.
+  .venv-sr/bin/python -m pip install --no-deps torch==2.8.0+cpu torchvision==0.23.0 --index-url https://download.pytorch.org/whl/cpu
+  .venv-sr/bin/python -m pip install -r requirements-sr.txt -c "$bootstrap_linux_lock"
 else
   .venv-sr/bin/python -m pip install -r requirements-sr.txt -c requirements-sr.lock.txt
 fi

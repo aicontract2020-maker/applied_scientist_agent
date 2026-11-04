@@ -18,6 +18,12 @@ WEIGHT_SHA = '193b229909ca89cd8b55de9c9e7fce146ae759d59dfcd78d8feb9dd1d6fa0fd7'
 WEIGHT_URL = 'https://github.com/JingyunLiang/SwinIR/releases/download/v0.0/' + Path(WEIGHT).name
 
 
+def environment_lock():
+    if sys.platform == "linux":
+        return "requirements-sr-linux-aarch64.lock.txt" if __import__("platform").machine()=="aarch64" else "requirements-sr-linux.lock.txt"
+    return "requirements-sr.lock.txt"
+
+
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -122,7 +128,7 @@ def new_study(name, root=ROOT):
     (here/'literature.json').write_text('[]\n')
     shutil.copyfile(template/'labctl.py',here/'labctl.py')
     (here/'selection.json').write_text(json.dumps({'selected_ids':ids,'excluded_ids':sorted(used),'rule':'12 smallest SHA256(study_id:ID), sorted, before search/inference; reservations are not reclaimed automatically'},indent=2)+'\n')
-    files = [* (root/'research_harness').glob('*.py'), root/'requirements-sr.txt', root/'requirements-sr.lock.txt', root/'requirements-sr-linux.lock.txt', root/WEIGHT,
+    files = [* (root/'research_harness').glob('*.py'), root/'requirements-sr.txt', root/'requirements-sr.lock.txt', root/'requirements-sr-linux.lock.txt', root/'requirements-sr-linux-aarch64.lock.txt', root/WEIGHT,
              root/'external/SwinIR/models/network_swinir.py',root/'external/SwinIR/utils/util_calculate_psnr_ssim.py',
              *here.glob('*'), *template.glob('*')]
     if (root/'.cache/environment.freeze.txt').exists(): files.append(root/'.cache/environment.freeze.txt')

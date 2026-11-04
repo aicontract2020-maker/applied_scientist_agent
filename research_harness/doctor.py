@@ -8,7 +8,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from .portable import ROOT, verify_sources
+from .portable import ROOT, verify_sources, environment_lock
 
 
 def isolation_probe(check_login=True):
@@ -114,7 +114,7 @@ def doctor(network=False):
     check('repo_environment',lambda:require(Path(sys.prefix).resolve()==(ROOT/'.venv-sr').resolve(),'Interpreter must use this clone’s .venv-sr'), 'Use .venv-sr/bin/python after bootstrap')
     def dependencies():
         found={}
-        for line in (ROOT/('requirements-sr-linux.lock.txt' if sys.platform=='linux' else 'requirements-sr.lock.txt')).read_text().splitlines():
+        for line in (ROOT/environment_lock()).read_text().splitlines():
             if not line or line.startswith('#'):continue
             name,expected=line.split('==');actual=importlib.metadata.version(name)
             if actual!=expected:raise ValueError(f'{name}: expected {expected}, installed {actual}')
