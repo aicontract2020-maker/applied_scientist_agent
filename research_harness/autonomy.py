@@ -116,6 +116,11 @@ class AutonomousStudy:
 
     def log(self, event, **fields):
         record = {'timestamp': datetime.now(timezone.utc).isoformat(), 'event': event, **fields}
+        labels = {'PRIMARY_READ_COMPLETED': 'Primary paper retrieved', 'REGISTER': 'Candidate and protocol frozen',
+                  'EXPERIMENT_STARTED': 'One registered experiment started', 'REFERENCE_FINISHED': 'Reference inference finished',
+                  'DECISION': 'Evaluator decision recorded', 'AGENT_FINISHED': 'Agent session finished'}
+        if getattr(self, 'policy', {}).get('show_progress') and event in labels:
+            print(labels[event], file=sys.stderr, flush=True)
         with self.events.open('a') as f:
             f.write(json.dumps(record, ensure_ascii=False, allow_nan=False) + '\n')
 
@@ -367,6 +372,10 @@ class AutonomousStudy:
             elif source.is_file():
                 (self.destination / 'artifacts').mkdir(exist_ok=True)
                 shutil.copyfile(source, self.destination / 'artifacts' / name)
+        sources = self.destination / 'artifacts' / 'trusted-sources'
+        sources.mkdir(parents=True, exist_ok=True)
+        for source in (ROOT / 'research_harness').glob('*.py'):
+            shutil.copyfile(source, sources / source.name)
         for name in ('candidate.py', 'research.json', 'REPORT.md', 'final.txt'):
             source = self.actor / name
             if source.is_file() and not source.is_symlink() and source.stat().st_size < 200000:

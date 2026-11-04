@@ -55,5 +55,6 @@
     "uses_weak_high_frequency_shrinkage": false,
     "retunes_stopped_parameters": false,
     "uses_global_luminance_contrast_expansion": false
-  }
+  },
+  "show_progress": true
 }

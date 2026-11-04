@@ -1,5 +1,6 @@
 """One-command independent research cycle with explicit workflow validation."""
 import json
+import sys
 from pathlib import Path
 
 from .portable import ROOT, new_study, sha
@@ -56,15 +57,18 @@ def validate_workflow(destination):
 def research(name):
     from .doctor import doctor
     from .literature_study import LiteratureStudy
+    print("[1/3] Checking environment and isolation (no model call)...", file=sys.stderr, flush=True)
     health=doctor()
     if not health['ok']:
         failed=[f"{c['name']}: {c['detail']} — {c.get('fix','')}" for c in health['checks'] if not c['ok']]
         raise ValueError('Preflight failed before reserving data or calling a model:\n'+'\n'.join(failed))
     output=ROOT/'runs'/name
     if output.exists():raise ValueError('Run already exists. Read its report; no automatic repeat or overwrite')
+    print("[2/3] Freezing a fresh study and holdout...", file=sys.stderr, flush=True)
     study=new_study(name)
     (study/'preflight.json').write_text(json.dumps(health,indent=2)+'\n')
     # preflight.json is diagnostic, not an experimental input; frozen inputs are explicit.
+    print(f"[3/3] Running one live agent cycle. Evidence: {output}", file=sys.stderr, flush=True)
     result=LiteratureStudy(output,study).launch()
     verdict=validate_workflow(output)
     if not verdict['workflow_completed']:
