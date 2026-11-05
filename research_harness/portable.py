@@ -94,6 +94,13 @@ def setup_assets(root=ROOT):
 
 
 def new_study(name, root=ROOT):
+    from .state_lock import research_lock
+    with research_lock(root):
+        return _new_study(name, root)
+
+
+def _new_study(name, root=ROOT):
+    """Caller holds the checkout research lock for preparation or a full cycle."""
     root = Path(root).resolve()
     if not re.fullmatch(r'[a-z0-9][a-z0-9_-]{0,63}', name):
         raise ValueError('Study id: 1–64 lowercase letters/digits/underscore/hyphen, starting with letter/digit')
@@ -102,20 +109,16 @@ def new_study(name, root=ROOT):
     verify_sources(root)
     template = root/'templates/sr'
     policy = json.loads((template/'policy.json').read_text())
-    history = json.loads((template/'history.json').read_text())
-    used = set(history['used_urban100_ids']) | set(history.get('reserved_urban100_ids', []))
-    prior = []
-    for path in sorted((root/'local_studies').glob('*/policy.json')):
-        previous = json.loads(path.read_text()); used.update(previous['observation_ids'])
-        policy['excluded_evidence_ids'] = sorted(set(policy['excluded_evidence_ids']) | set(previous['excluded_evidence_ids']))
-        registration = root/'runs'/previous['study_id']/'registered.json'
-        outcome = root/'runs'/previous['study_id']/'result.json'
-        if registration.exists():
-            plan = json.loads(registration.read_text())['plan']
-            policy['excluded_evidence_ids'] = sorted(set(policy['excluded_evidence_ids']) | {item['source'].rsplit('/',1)[-1].split('v')[0] for item in plan['new_evidence']})
-            if outcome.exists() and json.loads(outcome.read_text()).get('status') == 'STOP' and json.loads(outcome.read_text()).get('measurement_valid') is True:
-                prior.append({'id': previous['study_id'], 'hypothesis': plan['hypothesis'], 'stop_route': plan['stop_route']})
-                policy['stopped_route_compliance']['reuses_local_route_'+previous['study_id']] = False
+    from .memory import snapshot, review_catalog, envelope
+    memory = snapshot(root)
+    if any(item['id'] == name for item in memory['studies']):
+        raise ValueError('Study id already reserved in shared research memory. Inspect its decision; use a new unique study ID, never reopen it.')
+    used = set(memory['scored_ids']) | set(memory['reserved_ids'])
+    policy['excluded_evidence_ids'] = memory['paper_ids']
+    prior = [{'id': x['label'].removeprefix('study:'), 'mechanism': x['mechanism'],
+              'disposition': x['disposition']} for x in memory['routes'] if x['label'].startswith('study:')]
+    for route in prior:
+        policy['stopped_route_compliance']['reuses_local_route_'+route['id']] = False
     pool = [f'img_{i:03d}' for i in range(1,101) if f'img_{i:03d}' not in used]
     if len(pool) < 12: raise ValueError('Fewer than 12 unused Urban100 images remain. Stop: obtain new data and review a new protocol')
     ids = sorted(sorted(pool, key=lambda n: hashlib.sha256((name+':'+n).encode()).hexdigest())[:12])
@@ -126,8 +129,8 @@ def new_study(name, root=ROOT):
     (here/'policy.json').write_text(json.dumps(policy,indent=2)+'\n')
     (here/'TASK.md').write_text(task)
     (here/'literature.json').write_text('[]\n')
-    from .intervention_review import catalog
-    (here/'intervention-catalog.json').write_text(json.dumps(catalog(root, prior),indent=2)+'\n')
+    (here/'intervention-catalog.json').write_text(json.dumps(review_catalog(memory),indent=2)+'\n')
+    (here/'memory.json').write_text(json.dumps(envelope(memory),indent=2)+'\n')
     shutil.copyfile(template/'labctl.py',here/'labctl.py')
     (here/'selection.json').write_text(json.dumps({'selected_ids':ids,'excluded_ids':sorted(used),'rule':'12 smallest SHA256(study_id:ID), sorted, before search/inference; reservations are not reclaimed automatically'},indent=2)+'\n')
     files = [* (root/'research_harness').glob('*.py'), root/'requirements-sr.txt', root/'requirements-sr.lock.txt', root/'requirements-sr-linux.lock.txt', root/'requirements-sr-linux-aarch64.lock.txt', root/WEIGHT,

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.12.0
+
+- Add offline research-memory status/export/import for transferring conservative SR exclusions, stopped/rejected proposal mechanisms and optional candidate source across checkouts.
+- Bind packets to a versioned task/dataset identity and checksum; reject conflicting study identities, terminal decisions and overlapping independent reservations before atomic import.
+- Freeze merged published/local/imported memory with new studies; retain papers and reservations after rejection/incomplete execution and prevent shared study-ID reuse.
+- Enforce a host-local single-writer lock throughout autonomous research and memory updates; process exit releases the lock but never a reservation.
+- Keep experimental thresholds, scientific history and OS isolation unchanged; migration acceptance uses software fixtures only.
+
 ## 0.11.0
 
 - Require an immutable preregistration intervention review for new autonomous studies: stopped-code fingerprints, isolated synthetic tests after actual output conversion, and an independent isolated mechanism reviewer.

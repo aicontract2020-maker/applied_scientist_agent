@@ -3,7 +3,7 @@ import json
 import sys
 from pathlib import Path
 
-from .portable import ROOT, new_study, sha
+from .portable import ROOT, _new_study, sha
 
 
 def validate_workflow(destination):
@@ -74,6 +74,12 @@ def validate_workflow(destination):
 
 
 def research(name):
+    from .state_lock import research_lock
+    with research_lock(ROOT):
+        return _research_locked(name)
+
+
+def _research_locked(name):
     from .doctor import doctor
     from .literature_study import LiteratureStudy
     print("[1/3] Checking environment and isolation (no model call)...", file=sys.stderr, flush=True)
@@ -84,7 +90,7 @@ def research(name):
     output=ROOT/'runs'/name
     if output.exists():raise ValueError('Run already exists. Read its report; no automatic repeat or overwrite')
     print("[2/3] Freezing a fresh study and holdout...", file=sys.stderr, flush=True)
-    study=new_study(name)
+    study=_new_study(name, ROOT)
     (study/'preflight.json').write_text(json.dumps(health,indent=2)+'\n')
     # preflight.json is diagnostic, not an experimental input; frozen inputs are explicit.
     print(f"[3/3] Running one live agent cycle. Evidence: {output}", file=sys.stderr, flush=True)

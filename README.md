@@ -50,6 +50,21 @@ bash scripts/bootstrap.sh
 
 找不到 Python 时，可指定解释器，例如 `PYTHON_BIN=/path/to/python3.12 bash scripts/bootstrap.sh`。脚本也支持 `--skip-assets`，但完整研究必须随后运行 `.venv-sr/bin/python -m research_harness setup-assets`。普通终端中 `doctor` 的所有检查都通过才继续。
 
+## 与同事交接研究记忆
+
+开始下一轮前可查看剩余数据，或导入同事的记录：
+
+```sh
+python3 -m research_harness memory status
+python3 -m research_harness memory export --out /path/to/handoff.json
+# 同事在自己的 clone 执行：
+python3 -m research_harness memory import /path/to/handoff.json
+```
+
+新任务自动继承共享的已用/预留图像、已读文献和停止实现。导入完整校验后原子保存，冲突拒绝、重复幂等；拒绝/中断的研究不释放图像。包可能含假设和候选源码，分享前审查公司知识产权；不包含论文全文、图片、原始日志或凭据。详见 [研究记忆交接](docs/RESEARCH_MEMORY.md)。
+
+这是离线快照交换；不同服务器没有实时锁。共享留出池时先交接再串行接手，不能让两个旧快照独立分配数据。当前发布历史已用84张Urban100原图，余16张，最多再容纳一轮12张研究；本地预留另扣。
+
 ## 启动一个完整自主周期
 
 ```sh
@@ -59,9 +74,9 @@ bash scripts/bootstrap.sh
 该命令依次执行：
 
 1. 检查 Python/依赖、Codex 登录和参数、固定资产，以及实际 OS 文件与网络隔离；不通过则不调用模型。
-2. 为新 ID 创建本机预注册任务，按 ID/文件名哈希固定 12 张新 Urban100 留出图；排除仓库历史和本机已预留图像。
+2. 为新 ID 创建本机预注册任务，按 ID/文件名哈希固定 12 张新 Urban100 留出图；排除仓库历史、本机及已导入记忆中已用/预留图像。
 3. 让 agent 实时搜索、读取至少两篇原始论文（至少一篇全文提取），引用至少一篇此前未使用的来源，再独立提出新机制和实现。
-4. 最多三次合成形状检查；冻结方案和代码后执行唯一一次真实实验。
+4. 最多三次合成形状检查；冻结方案和代码后进行注册前干预审查，通过才执行唯一一次真实实验；拒绝则记录 REJECTED / NOT_RUN 并结束。
 5. 用独立评价器计算配对指标，保留原始报告、全文来源、数组、账本和流程检查结果。
 
 论文全文提取可能只返回前 40,000 字符，截断会明确记录。模型调用可能消耗你的额度；真实美元账单未知，不会记为零。单次会话上限 20 分钟，参考推理 10 分钟、候选 90 秒；这些不是模型服务的美元消费上限，也不包含首次安装时间。
@@ -70,7 +85,7 @@ bash scripts/bootstrap.sh
 
 通过标准固定为 **平均 PSNR-Y 增益 >=0.05 dB、10,000 次原图配对 bootstrap 的 95% 区间下界 >0、候选/参考延迟 <=2.5**。对照是固定双次翻转 SwinIR 参考，不是 bicubic，也不声称全球最强方法。CPU float32 四线程、权重、量化和裁边保持一致。确定性任务不用训练 seed 假装独立重复。
 
-已关闭或已预留 ID 不覆盖、不自动恢复、不自动重跑。下一项研究要换新 ID、提供新外部证据，且不能修改已 STOP 路线的参数来重开。数据用完会拒绝继续，要求获得新数据并审查协议。单写入者：不要同时启动两个 `research` 命令。
+已关闭或已预留 ID 不覆盖、不自动恢复、不自动重跑。下一项研究要换新 ID、提供新外部证据，且不能修改已 STOP 路线的参数来重开。数据用完会拒绝继续，要求获得新数据并审查协议。同一 clone 的研究、建任务及记忆变更受本地锁保护；并发调用在预留和模型调用前报忙。进程退出释放锁，保留图像预留，不自动恢复研究。
 
 ## 产物与历史
 
@@ -81,9 +96,9 @@ bash scripts/bootstrap.sh
 - `runs/ID/artifacts/`：下载论文、候选数组、参考日志与时序；不依赖临时目录存活。
 - `.cache/environment.freeze.txt`、`assets/manifest.json`：实际安装环境及资产来源。
 
-这些本地产物、环境、第三方数据默认不提交 Git。日志可能含输入文本；分享时自行选择允许公开的内容。不同同事的 clone 没有共享实时登记中心，跨机器继续同一个研究计划时须先交换已用图像、文献和停止决策；仅换 clone 不能把旧路线当新研究。
+这些本地产物、环境、第三方数据默认不提交 Git。日志可能含输入文本；分享时自行选择允许公开的内容。不同同事的 clone 没有共享实时登记中心；跨机器接手前须使用 memory export/import 交接保守记忆。仅换 clone 不能把旧路线当新研究。
 
-历史 G0 复现达到参考容差；G1–G4 候选均 STOP。见[决策账本](tasks/image_super_resolution/DECISIONS.md)、[G3](tasks/image_super_resolution/g3/REPORT.md)、[G4](tasks/image_super_resolution/g4/REPORT.md)。七条停止路线已纳入新任务模板：集成、LR 残差回投、弱高频收缩、全局亮度对比度扩张、Mac 验证中未通过的保亮度色域压缩，Linux 验证中未通过的 2×2 相位偏置校正，以及 G5 未通过的 RGB 格点舍入。本机后续 STOP 和使用过的文献也会带入新任务。历史目录是证据，不能作为可直接重跑的安装模板；不要修改其中旧哈希去迁就新环境。
+历史 G0 复现达到参考容差；G1–G4 候选均 STOP。见[决策账本](tasks/image_super_resolution/DECISIONS.md)、[G3](tasks/image_super_resolution/g3/REPORT.md)、[G4](tasks/image_super_resolution/g4/REPORT.md)。已纳入新任务模板的历史停止路线包括：集成、LR 残差回投、弱高频收缩、全局亮度对比度扩张、Mac 验证中未通过的保亮度色域压缩，Linux 验证中未通过的 2×2 相位偏置校正，以及 G5 未通过的 RGB 格点舍入。本机后续 STOP 和使用过的文献也会带入新任务。G7 的全图相位相关几何校正也已停止，合计八条科学停止路线；G6 空提案单独记录。历史目录是证据，不能作为可直接重跑的安装模板；不要修改其中旧哈希去迁就新环境。
 
 ## 不调用模型的演示与检查
 
@@ -93,7 +108,7 @@ python3 examples/local_demo/workflow.py
 python3 -m unittest discover -s tests -v
 ```
 
-Python >=3.10；纯 Python 环境会跳过三个依赖 torch/numpy/cv2 的合成软件测试。演示只用合成数据和保存的规划响应，不证明研究性能。它的输出目录不能覆盖，重跑请指定新路径：`python3 examples/local_demo/workflow.py --out runs/demo-2`。
+Python >=3.10；纯 Python 环境会跳过依赖 torch/numpy/cv2 的合成软件测试。演示只用合成数据和保存的规划响应，不证明研究性能。它的输出目录不能覆盖，重跑请指定新路径：`python3 examples/local_demo/workflow.py --out runs/demo-2`。
 
 完整环境中的软件测试：`.venv-sr/bin/python -m unittest discover -s tests -v`。安装和干净副本验证依据见[可移植性验证协议](docs/PORTABILITY_PROTOCOL.md)及[验证记录](docs/PORTABILITY_VALIDATION.md)。
 
@@ -122,4 +137,4 @@ Linux 的 namespace/PID/只读输入/私有网络探针纳入了 [持续检查](
 
 G5 已在 Linux 完成独立的新文献/假设/代码/单次实验周期：−0.10021 dB，保持 STOP，无调参或重跑。见 [G5 报告](tasks/image_super_resolution/g5/REPORT.md)，含原始 agent 报告中门槛摘要遗漏的审阅说明。
 
-G6 在 Linux 执行后发现 agent 的 clip-only 候选重复了评价器已有步骤，**未满足新的实际干预要求，按方案失败停止**，未换候选或重跑。原始数值与自动流程记录保留，操作者审阅单列；见 [G6 失败报告](tasks/image_super_resolution/g6/REPORT.md)。未来提示明确原有裁剪/量化公式，拒绝此类空提案。累计72张 Urban100 图已评分。
+G6 在 Linux 执行后发现 agent 的 clip-only 候选重复了评价器已有步骤，**未满足新的实际干预要求，按方案失败停止**，未换候选或重跑。原始数值与自动流程记录保留，操作者审阅单列；见 [G6 失败报告](tasks/image_super_resolution/g6/REPORT.md)。未来提示明确原有裁剪/量化公式，拒绝此类空提案。G6结束时累计72张已评分；G7之后累计84张，后续请以 memory status 的合并记录为准。

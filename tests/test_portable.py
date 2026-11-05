@@ -59,7 +59,7 @@ class PortableStudyTests(unittest.TestCase):
         self.assertIn('(deny network*)',policy)
 
     def test_preflight_failure_prevents_reservation_or_model_call(self):
-        with patch('research_harness.doctor.doctor',return_value={'ok':False,'checks':[{'name':'fixture','ok':False,'detail':'missing dependency'}]}),patch('research_harness.onboarding.new_study') as prepare,patch('research_harness.literature_study.LiteratureStudy') as agent:
+        with patch('research_harness.doctor.doctor',return_value={'ok':False,'checks':[{'name':'fixture','ok':False,'detail':'missing dependency'}]}),patch('research_harness.onboarding._new_study') as prepare,patch('research_harness.literature_study.LiteratureStudy') as agent:
             with self.assertRaisesRegex(ValueError,'Preflight failed'):research('blocked')
             prepare.assert_not_called();agent.assert_not_called()
 

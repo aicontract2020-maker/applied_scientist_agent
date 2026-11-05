@@ -52,10 +52,28 @@ def main():
     health.add_argument("--network", action="store_true")
     research = sub.add_parser("research", help="Prepare fresh SR holdout, run one autonomous cycle, preserve all evidence")
     research.add_argument("--id", required=True, help="New unique study name; cannot overwrite/retry")
+    memory = sub.add_parser("memory", help="Exchange conservative research history without models or images")
+    memory.add_argument("--root", help="Source checkout whose history to manage (default: this checkout)")
+    memory_commands = memory.add_subparsers(dest="memory_command", required=True)
+    memory_commands.add_parser("status", help="Show scored/reserved holdout availability and retained decisions")
+    memory_export = memory_commands.add_parser("export", help="Export shareable STOP/proposal text, source and exclusions")
+    memory_export.add_argument("--out", required=True)
+    memory_import = memory_commands.add_parser("import", help="Trust and merge a colleague's checked snapshot; never reclaim data")
+    memory_import.add_argument("packet")
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
-        if args.command == "setup-assets":
+        if args.command == "memory":
+            from .portable import ROOT
+            from .memory import status, export_memory, import_memory
+            root = Path(args.root).resolve() if args.root else ROOT
+            if args.memory_command == "status":
+                output = status(root)
+            elif args.memory_command == "export":
+                output = export_memory(root, args.out)
+            else:
+                output = import_memory(root, args.packet)
+        elif args.command == "setup-assets":
             from .portable import setup_assets
             output = setup_assets()
         elif args.command == "doctor":
