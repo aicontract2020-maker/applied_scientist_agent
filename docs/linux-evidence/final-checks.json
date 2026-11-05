@@ -1,0 +1,11 @@
+{
+  "source_commit": "5aba8084c8156ff96daec99a6d41a66461efdcda",
+  "blocked_namespace_exit": 1,
+  "blocked_before_reservation_or_agent": true,
+  "duplicate_id_exit": 1,
+  "original_ledger_unchanged": true,
+  "global_userns_restriction": "1",
+  "no_additional_agent_or_scientific_experiment": true,
+  "namespace_permission_restored": true,
+  "final_doctor_ok": true
+}

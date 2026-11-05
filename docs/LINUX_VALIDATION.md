@@ -2,7 +2,7 @@
 
 日期：2026-11-04（America/Toronto；原始 UTC 日志已跨到 11-05）。协议先于模型调用记录于 [LINUX_VALIDATION_PROTOCOL.md](LINUX_VALIDATION_PROTOCOL.md)。
 
-结论：**Ubuntu 24.04 ARM64 的独立安装、实际隔离和一次完整自主研究流程通过。** x86_64 Ubuntu CI 通过 CPU 安装、68 项软件测试、实际 namespace/文件/网络探针及离线流程；CI 不使用真实登录、不调用研究模型，不能冒称 x86 上也完成了同一次真实研究。
+结论：**Ubuntu 24.04 ARM64 的独立安装、实际隔离和一次完整自主研究流程通过。** x86_64 Ubuntu CI 通过 CPU 安装、最终 70 项软件测试、实际 namespace/文件/网络探针及离线流程；CI 不使用真实登录、不调用研究模型，不能冒称 x86 上也完成了同一次真实研究。
 
 ## 环境与边界
 
@@ -17,6 +17,8 @@
 3. Doctor 将 Linux EROFS 识别为真实只读拒绝；同时禁止 actor 在私有 `/tmp` 额外写入，把临时文件置于任务目录。
 
 探针实际确认：repo/控制文件和符号链接逃逸不可读；响应、候选输入和外部文件不可写；候选可导入 numpy/cv2，但与主机网络命名空间不同且不能连接外网；两角色看不到主机控制器 PID；禁建嵌套 userns；隔离内 CLI 与登录可用。不是仅检验命令包含了 bwrap 字符串。Actor 为模型/检索仍共享网络，不是域名级出口过滤。
+
+最终 Linux 版本还复验了安装幂等性、70 项软件测试、隔离内 CLI 和全部探针。暂时撤销本任务添加的 bwrap profile 后，`research` 在预留图像或启动 agent 之前返回 1；恢复许可后重复已关闭 ID 也返回 1，原账本摘要不变。没有第二次 agent/实验。见 final-checks.json、final-doctor.json；无凭据独立探针见 no-auth-probes.json。
 
 ## 完整自主周期
 
@@ -47,7 +49,7 @@
 
 Git 仅保存 [linux-evidence](linux-evidence/) 的协议、候选、逐图分数、原始 agent 报告、来源/原始大日志哈希、运行时版本和隔离策略。原始 PDF/数组/大日志另有本机私有镜像，不发布全文或大图像。临时 VM 凭据不在导出范围内；验证后删除临时凭据并停止 VM。
 
-x86 CI：[成功运行](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/41938851273)，结构化状态及探针摘录已归档；没有冒用模型登录或把 CI 合成检查当科学证据。macOS Seatbelt 的真实读写/网络探针及 67 项软件回归也通过。
+x86 CI：[成功运行](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/41940003397)，结构化状态及探针摘录已归档；没有冒用模型登录或把 CI 合成检查当科学证据。macOS Seatbelt 的真实读写/网络探针及 67 项软件回归也通过。
 
 ## 适用范围
 

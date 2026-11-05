@@ -1,0 +1,6 @@
+linux-x86_64	Software tests (synthetic only)	2026-11-05T00:16:39.1979968Z Ran 70 tests in 4.667s
+linux-x86_64	Actual kernel boundary probes (no credentials or model calls)	2026-11-05T00:16:39.8689608Z   "kernel_probes_passed": true,
+linux-x86_64	Actual kernel boundary probes (no credentials or model calls)	2026-11-05T00:16:39.8695107Z       "host_pid_hidden": true
+linux-x86_64	Actual kernel boundary probes (no credentials or model calls)	2026-11-05T00:16:39.8700058Z       "network_namespace_isolated": true,
+linux-x86_64	Actual kernel boundary probes (no credentials or model calls)	2026-11-05T00:16:39.8700497Z       "host_pid_hidden": true
+linux-x86_64	Actual kernel boundary probes (no credentials or model calls)	2026-11-05T00:16:39.8701170Z     "actor_cli": "codex-cli 0.144.0"
