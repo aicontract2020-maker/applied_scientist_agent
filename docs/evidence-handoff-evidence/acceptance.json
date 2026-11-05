@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-05",
+  "implementation_commit": "d79291d",
+  "scope": "Software acceptance and historical evidence transfer only",
+  "software_tests": {
+    "macos_research_environment": {
+      "run": 109,
+      "skipped": 0,
+      "passed": true
+    },
+    "macos_base_python": {
+      "run": 109,
+      "skipped": 4,
+      "passed": true
+    },
+    "linux_arm64_research_environment": {
+      "run": 109,
+      "skipped": 0,
+      "passed": true
+    }
+  },
+  "handoff": {
+    "source": "macOS historical G7 run",
+    "recipient": "Ubuntu 24.04 ARM64 clean source archive, system Python 3.12",
+    "source_and_returned_envelopes_equal": true,
+    "payload_sha256": "748f6035b65ffe8694b903588faee5f45ff5ff7691e0896bdd6acae6a8c3e798",
+    "file_count": 13,
+    "verify_audit_ok": true,
+    "unpacked_audit_ok": true,
+    "scientific_status": "STOP",
+    "measurement_valid": true,
+    "recipient_optional_packages": {
+      "numpy": false,
+      "cv2": false,
+      "torch": false
+    },
+    "model_login_present": false,
+    "authenticity": "UNVERIFIED"
+  },
+  "new_scientific_experiments": 0,
+  "new_research_model_calls": 0,
+  "new_image_scoring": 0,
+  "validation_vm_stopped": true
+}
