@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.14.0
+
+- Add offline study evidence export, verification and review-only unpacking using a versioned JSON envelope and flat filename allowlist.
+- Check per-file/envelope hashes and independently rerun the existing audit before exporting or unpacking; do not trust a sender's audit flag.
+- Refuse inconsistent, incomplete, linked, changing or oversized evidence and existing destinations; keep review copies separate from research memory and execution.
+- Publish unpacked run directories only after staging selected files; exclude raw model logs, papers, arrays and auth files from automatic collection. Text still requires review before sharing.
+
 ## 0.13.0
 
 - Add read-only `study list`, `study status --run` and `study audit --run` without model or image access.

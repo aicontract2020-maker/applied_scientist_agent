@@ -60,20 +60,38 @@ def main():
     memory_export.add_argument("--out", required=True)
     memory_import = memory_commands.add_parser("import", help="Trust and merge a colleague's checked snapshot; never reclaim data")
     memory_import.add_argument("packet")
-    study = sub.add_parser("study", help="Read-only autonomous run status and artifact audit")
+    study = sub.add_parser("study", help="Inspect and exchange autonomous research evidence")
     study_commands = study.add_subparsers(dest="study_command", required=True)
     study_list = study_commands.add_parser("list", help="List local autonomous runs and reservations")
     study_list.add_argument("--root", help="Source checkout (default: this checkout)")
     for name in ("status", "audit"):
         command = study_commands.add_parser(name, help="Inspect an existing run directory without modifying it")
         command.add_argument("--run", required=True)
+    study_export = study_commands.add_parser("export", help="Export audited allowlisted run evidence; review text before sharing")
+    study_export.add_argument("--run", required=True)
+    study_export.add_argument("--out", required=True)
+    study_verify = study_commands.add_parser("verify", help="Verify and independently audit an evidence packet offline")
+    study_verify.add_argument("packet")
+    study_unpack = study_commands.add_parser("unpack", help="Create a new review-only container from verified evidence")
+    study_unpack.add_argument("packet")
+    study_unpack.add_argument("--out", required=True)
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
         if args.command == "study":
             from .study_inspection import list_studies, run_status, audit_run
             from .portable import ROOT
-            if args.study_command == "list":
+            if args.study_command in ("export", "verify", "unpack"):
+                from .evidence_bundle import export_bundle, verify_bundle, unpack_bundle
+                if args.study_command == "export":
+                    output = export_bundle(args.run, args.out)
+                elif args.study_command == "unpack":
+                    output = unpack_bundle(args.packet, args.out)
+                else:
+                    output = verify_bundle(args.packet)
+                    print(json.dumps(output, indent=2, ensure_ascii=False))
+                    return 0 if output['audit_ok'] else 1
+            elif args.study_command == "list":
                 output = list_studies(Path(args.root).resolve() if args.root else ROOT)
             elif args.study_command == "status":
                 output = run_status(args.run)

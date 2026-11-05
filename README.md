@@ -97,6 +97,18 @@ python3 -m research_harness study audit --run runs/first-study
 
 状态只显示已记录阶段，不猜测进程存活，也不恢复或重跑任务。审计核对冻结代码/方案、账本顺序和审查绑定，并从已存逐图分数重算统计量、核对全部采用门槛；不调用模型或重新评分图像。新 `research` 完成检查强制执行该审计，不一致就不能声称流程完成。`audit_ok` 表示产物一致，不代表科研成功；完整的拒绝/无效/负结果都应保留。详见 [状态与审计](docs/STUDY_INSPECTION.md)。
 
+## 交给同事独立审查
+
+```sh
+python3 -m research_harness study export --run runs/first-study --out /existing/path/first-study.evidence.json
+# 接收方，无需模型登录或研究依赖：
+python3 -m research_harness study verify /path/to/first-study.evidence.json
+python3 -m research_harness study unpack /path/to/first-study.evidence.json --out /existing/path/review-copy
+python3 -m research_harness study audit --run /existing/path/review-copy/run
+```
+
+证据包携带白名单内的方案、源码、报告、账本和逐图数值；接收方重新审计，不能只信旧的成功标志。它不导入研究记忆，不执行源码、不恢复实验。不会自动收集原始模型日志、论文、图片数组或登录文件；文本仍需检查公司知识与敏感信息，哈希不认证发送者。详见 [审查证据交接](docs/EVIDENCE_HANDOFF.md)。
+
 ## 产物与历史
 
 - `local_studies/ID/`：本机独立任务、冻结输入哈希、图像清单和环境检查。
