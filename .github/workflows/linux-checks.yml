@@ -51,3 +51,7 @@ jobs:
         run: |
           python -m research_harness task list
           python -m examples.tabular_demo.workflow --out runs/ci-tabular
+      - name: Independent tabular environment and actual isolated synthetic baseline
+        run: |
+          bash scripts/bootstrap-tabular.sh
+          .venv-tabular/bin/python scripts/check-tabular-isolation.py

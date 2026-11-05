@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.16.0
+
+- Prepare a pinned, licensed UCI Abalone baseline-qualification review with feature-hash train/validation/holdout splits; do not fit or score real data during preparation.
+- Bind review/approval to data, fixed recipe, source and environment requirements. Execute a single reviewed attempt with a built-in worker, private validation labels and untouched final holdout; refuse stale approval and retries.
+- Add a separate pinned CPU environment, fixed median/Ridge/HGB baselines, exact model/seed/output validation, repeatability and qualification gates, measured resources and explicitly unknown local monetary costs.
+- Validate task isolation and the complete baseline path using synthetic records on macOS and in Linux CI. Keep the general regression task evaluation-only: this does not enable autonomous candidate research, shared task memory or generalized study auditing.
+- Publish a concrete second-task review request; real Abalone baseline fitting/scoring remains pending user review.
+
 ## 0.15.0
 
 - Add a closed, versioned task catalog and `task list/show`; bind new SR policies to the task contract digest. Reject unknown and evaluation-only tasks before autonomous setup, reservation or model calls.

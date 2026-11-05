@@ -14,6 +14,8 @@ python3 -m examples.tabular_demo.workflow --out runs/tabular-software-demo
 
 演示先冻结方案和输入哈希，再评价并写入 STOP 账本；所有数据、时延和成本都是软件 fixture。`research --task tabular-regression` 会在环境检查和数据预留前拒绝，不会退回无隔离执行。
 
+0.16.0 已准备第二任务的[基线资格审查方案](docs/TABULAR_BASELINE_REVIEW.md)：固定 UCI Abalone 数据、独立 CPU 环境、隔离的基线 worker 和绑定内容的人工审查入口。真实基线尚未训练/评分，最终留出集未使用；该入口只支持一次基线资格检查，不开放第二任务自主研究。
+
 最近一轮 [G7 Linux研究与审查记录](tasks/image_super_resolution/g7/REPORT.md)：新机制审查通过，几何校正候选有效负结果，按规则 STOP；未调参重跑。
 
 ## 注册前干预审查

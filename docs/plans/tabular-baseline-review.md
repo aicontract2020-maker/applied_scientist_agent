@@ -1,0 +1,11 @@
+# C2a: concrete baseline qualification for review
+
+Prepare a content-bound Abalone baseline-qualification proposal and all execution code before asking the user to choose the second task. No actual fitting/scoring of Abalone until that review. Dataset download, structural checks, software fixtures and real sandbox probes are authorized preparation.
+
+Data: UCI Abalone, pinned raw SHA-256, CC BY 4.0 attribution. Predict rings, not clinical age or commercial value. Split by feature-vector hash before inspecting outcomes; identical features stay together. Source has no grouping/site identifiers, so row independence cannot be certified. Reserve final holdout; this phase never mounts its features or labels into the worker or scores it.
+
+Proposed qualification: compare fixed train-median, standardized Ridge(alpha=1) and HistGradientBoostingRegressor(absolute_error, 100 iterations, all features, no early stopping). Three fixed seeds check repeatability, not independent training evidence. On validation only, choose the lower mean-MAE learned baseline (fixed tie-break); require >=0.05 ring improvement over median for every seed and prediction range <=1e-8. These are proposed engineering qualification criteria, not an established business effect threshold or a published-score reproduction. Failure closes this attempt; no tuning/retry. Passing permits drafting a separate candidate research protocol only.
+
+Execution: local CPU, no model/network, independent environment, existing Linux Bubblewrap semantics plus a matching macOS profile; fixed built-in worker only. Pin code/environment/data in review envelope, explicit content-hash approval, single-use attempt, measured timing/retained bytes, unknown real money costs remain null. Preserve output/errors on invalidity. Existing SR and regression-v1 capabilities/history remain unchanged.
+
+Acceptance before human review: strict bundle tamper/unknown-field/approval refusal tests; synthetic baseline worker and controller pipeline, actual Linux namespace probes including hidden labels and network; full tests, SR historical audit and CI. Create a concrete review packet with counts/hashes/recipe/limits and REVIEW.md; stop for the user's task/criterion decision before real Abalone training. This review is the user's requested checkpoint, not a general approval requirement for reversible coding.

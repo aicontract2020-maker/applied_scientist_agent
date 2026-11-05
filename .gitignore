@@ -14,5 +14,6 @@ external/
 assets/
 .cache/
 .venv-sr/
+.venv-tabular/
 local_studies/
 .research-memory/

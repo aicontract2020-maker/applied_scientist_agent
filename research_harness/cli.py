@@ -58,6 +58,20 @@ def main():
     task_commands.add_parser("list")
     task_show = task_commands.add_parser("show")
     task_show.add_argument("id")
+    tabular = sub.add_parser("tabular", help="Prepare/review one isolated baseline qualification; no autonomous research")
+    tabular_commands = tabular.add_subparsers(dest="tabular_command", required=True)
+    tabular_fetch = tabular_commands.add_parser("fetch", help="Download pinned public UCI data only; no scoring")
+    tabular_fetch.add_argument("--out", required=True)
+    tabular_prepare = tabular_commands.add_parser("prepare", help="Prepare pinned UCI data and a review packet; no training")
+    tabular_prepare.add_argument("--data", required=True)
+    tabular_prepare.add_argument("--out", required=True)
+    for name in ("verify", "approve", "baseline"):
+        command = tabular_commands.add_parser(name)
+        command.add_argument("--review", required=True)
+        if name == "approve":
+            command.add_argument("--sha256", required=True)
+            command.add_argument("--reviewer", required=True)
+    tabular_commands.add_parser("probe", help="Test actual task isolation using synthetic secrets only")
     memory = sub.add_parser("memory", help="Exchange conservative research history without models or images")
     memory.add_argument("--root", help="Source checkout whose history to manage (default: this checkout)")
     memory_commands = memory.add_subparsers(dest="memory_command", required=True)
@@ -84,7 +98,28 @@ def main():
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
-        if args.command == "task":
+        if args.command == "tabular":
+            from .tabular_baseline import prepare, load_review, approve as approve_baseline, execute as execute_baseline
+            if args.tabular_command == "fetch":
+                from .tabular_data import fetch_abalone
+                output = fetch_abalone(args.out)
+            elif args.tabular_command == "prepare":
+                output = prepare(args.data, args.out)
+            elif args.tabular_command == "verify":
+                packet, _ = load_review(args.review)
+                output = {'review_integrity_ok': True, 'sha256': packet['sha256'], 'counts': packet['content']['counts'],
+                          'note': 'Content integrity only; not approval, execution success or scientific validity'}
+            elif args.tabular_command == "approve":
+                output = approve_baseline(args.review, args.sha256, args.reviewer)
+            elif args.tabular_command == "probe":
+                from .tabular_sandbox import isolation_probe
+                from .portable import ROOT
+                output = isolation_probe(ROOT, ROOT/'.venv-tabular/bin/python')
+            else:
+                output = execute_baseline(args.review)
+                print(json.dumps(output, indent=2, ensure_ascii=False))
+                return 0 if output['measurement_valid'] else 1
+        elif args.command == "task":
             from .task_contracts import list_tasks, contract, binding
             output = list_tasks() if args.task_command == "list" else dict(contract(args.id), binding=binding(args.id))
         elif args.command == "study":
