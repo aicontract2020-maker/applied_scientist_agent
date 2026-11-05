@@ -54,7 +54,9 @@
     "2008.13751",
     "2011.04212",
     "2108.10257",
+    "2109.12530",
     "2304.11743",
+    "2307.09582",
     "2409.16032"
   ],
   "stopped_route_compliance": {
@@ -66,7 +68,8 @@
     "uses_luminance_preserving_gamut_compression": false,
     "uses_phase_locked_luminance_offset_correction": false,
     "uses_luminance_preserving_rgb_lattice_selection": false,
-    "uses_clip_only_noop": false
+    "uses_clip_only_noop": false,
+    "uses_global_subpixel_geometric_registration": false
   },
   "show_progress": true,
   "intervention_review": {

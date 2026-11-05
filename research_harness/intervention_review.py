@@ -51,6 +51,17 @@ def catalog(root, local_routes):
         file=root/path
         if file.is_file():
             result.append({'id':key,'mechanism':mechanism,'source':file.read_text(),'sha256':sha(file)})
+    # New published valid STOPs must enter future reviews without editing this list.
+    for folder in sorted((root/'tasks/image_super_resolution').glob('g*')):
+        outcome=folder/'evidence/result.json'; source=folder/'candidate.py'; plan=folder/'research.json'
+        key=folder.name.upper()
+        if any(x['id']==key for x in result) or not all(p.is_file() for p in (outcome,source,plan)):
+            continue
+        value=json.loads(outcome.read_text())
+        if value.get('status')=='STOP' and value.get('measurement_valid') is True:
+            proposal=json.loads(plan.read_text())
+            result.append({'id':key,'mechanism':proposal['hypothesis']+'; '+proposal['stop_route'],
+                           'source':source.read_text(),'sha256':sha(source)})
     history=root/'templates/sr/history.json'
     if history.exists():
         for index, mechanism in enumerate(json.loads(history.read_text()).get('stopped_routes',[])):

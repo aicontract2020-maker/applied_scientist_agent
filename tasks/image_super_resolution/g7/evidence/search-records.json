@@ -1,0 +1,41 @@
+[
+  {
+    "id": "exec-d74d9e77-2d8c-4b5f-bbfa-607abadf4a46",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs image super-resolution post-processing color artifacts chrominance primary paper ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs image super-resolution post-processing color artifacts chrominance primary paper",
+        "site:arxiv.org/abs super resolution color correction chroma luminance artifact paper",
+        "site:arxiv.org/abs single image super resolution ringing artifact post processing median filter"
+      ]
+    }
+  },
+  {
+    "id": "exec-37e205d4-d32d-489e-9359-1b89d4d45936",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs chroma upsampling super resolution luminance chrominance reconstruction paper ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs chroma upsampling super resolution luminance chrominance reconstruction paper",
+        "site:arxiv.org/abs joint chroma upsampling luma guided image reconstruction",
+        "site:arxiv.org/abs color image super-resolution chrominance interpolation PSNR"
+      ]
+    }
+  },
+  {
+    "id": "exec-3545e601-fe74-40ce-95a9-12029ce07ae1",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs image super-resolution misalignment subpixel shift reconstruction primary ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs image super-resolution misalignment subpixel shift reconstruction primary",
+        "site:arxiv.org/abs single image super resolution spatial misalignment PSNR alignment",
+        "site:arxiv.org/abs super-resolution alignment errors pixel shift evaluation"
+      ]
+    }
+  }
+]

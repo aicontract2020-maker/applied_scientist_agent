@@ -1,0 +1,21 @@
+{
+  "decision": "STOP",
+  "review_before_registration": true,
+  "new_observable_intervention_review": "PASS (bounded synthetic probes plus independent semantic review, not proof)",
+  "candidate_unchanged": true,
+  "plan_unchanged": true,
+  "single_registration_and_experiment": true,
+  "measurement_valid": true,
+  "tuning_retry_or_posthoc_ablation": false,
+  "holdout_disjoint_from_prior_72": true,
+  "used_originals_total": 84,
+  "input_files_verified_in_linux": 60,
+  "runtime_source_commit": "6eeb2c3",
+  "raw_events_sha256": "cdc7c17978429507828a00c939ccb08519d41a6c84a0a4c968ae862bb1dbe868",
+  "reviewer_events_sha256": "99156109fe71ce01cc2da67c733a196517bc38a625e8168d28350ad4a15cc25a",
+  "raw_library_sha256": "25922904a1f7e99da88a52ce154e70dec937f0b521f570d014f8191e61a91ca8",
+  "private_archive_sha256": "333e4bf89f62eac1f711a3d6580cedc6a8d8327a0f7b88cb4898c15c14dfae75",
+  "private_mirror": "/Users/kaimaplespark/git/applied_scientist_agent/runs/linux-g7-export",
+  "paper_reading_note": "2109.12530 PDF extraction is truncated at 40000 characters; 2307.09582 abstract only. Agent read broker-provided text, not an assertion of complete-paper coverage.",
+  "causal_limit": "One-forward plus warp vs fixed two-forward reference; no isolated warp attribution or post-result ablation."
+}

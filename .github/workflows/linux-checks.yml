@@ -43,5 +43,7 @@ jobs:
         run: .venv-sr/bin/python -m unittest discover -s tests -v
       - name: Actual kernel boundary probes (no credentials or model calls)
         run: .venv-sr/bin/python scripts/check-linux-isolation.py
+      - name: Actual preregistration rejection probes (no images or model calls)
+        run: .venv-sr/bin/python scripts/check-intervention-review.py
       - name: Offline reviewed workflow
         run: .venv-sr/bin/python examples/local_demo/workflow.py --out runs/ci-offline

@@ -31,7 +31,8 @@ def validate_workflow(destination):
         if protocol.get('policy',{}).get('intervention_review',{}).get('required'):
             review_path=destination/'intervention-review.json'
             review=json.loads(review_path.read_text()) if review_path.exists() else {}
-            if review.get('decision')!='PASS' or review.get('candidate_sha256')!=protocol['candidate_sha256']:
+            from .core import digest
+            if review.get('decision')!='PASS' or review.get('candidate_sha256')!=protocol['candidate_sha256'] or review.get('plan_sha256')!=digest(protocol['plan']):
                 errors.append('Missing or mismatched intervention review PASS')
         if not (destination/'agent-candidate.py').exists() or sha(destination/'agent-candidate.py')!=protocol['candidate_sha256']:
             errors.append('Final agent code differs from preregistered code')

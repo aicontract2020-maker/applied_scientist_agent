@@ -129,3 +129,5 @@ it does not change the metric or adoption thresholds.
 
 ## Mandatory intervention review before registration
 Registration freezes your first submitted candidate for a single review attempt. The controller checks fixed synthetic inputs after the ACTUAL float32/clipping/uint8 conversion, fingerprints stopped implementations (including numeric retunes), then asks an independent isolated reviewer to assess the causal mechanism against EVERY stopped route. Explain in research.json how your intervention observably changes the final output and why it is mechanistically different from each forbidden family. Comments or declarations do not establish novelty. If rejected, write REPORT.md with REJECTED / NOT_RUN and stop immediately. Never revise, register again, or request run. A rejection is a proposal failure, not an SR result. Uncertain novelty fails closed. No holdout scores are used in review.
+
+G7 is also STOP: one-shot image-global phase-correlation registration of plain SR to LR geometry. Do not change its guard, motion cap, window, interpolation or estimator, or add local/adaptive registration to rescue it.

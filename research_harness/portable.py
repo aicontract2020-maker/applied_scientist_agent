@@ -103,7 +103,7 @@ def new_study(name, root=ROOT):
     template = root/'templates/sr'
     policy = json.loads((template/'policy.json').read_text())
     history = json.loads((template/'history.json').read_text())
-    used = set(history['used_urban100_ids'])
+    used = set(history['used_urban100_ids']) | set(history.get('reserved_urban100_ids', []))
     prior = []
     for path in sorted((root/'local_studies').glob('*/policy.json')):
         previous = json.loads(path.read_text()); used.update(previous['observation_ids'])

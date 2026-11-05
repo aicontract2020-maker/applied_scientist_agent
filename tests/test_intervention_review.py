@@ -7,12 +7,22 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from research_harness.intervention_review import fingerprint, validate_semantic, review_intervention
-from test_autonomy import AutonomousBrokerTest
+from research_harness.intervention_review import fingerprint, validate_semantic, review_intervention, catalog
+import test_autonomy as fixtures
 
 ROOT=Path(__file__).resolve().parents[1]
 
 class InterventionReviewTests(unittest.TestCase):
+    def test_new_published_stop_is_automatically_included(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);folder=root/'tasks/image_super_resolution/g99';(folder/'evidence').mkdir(parents=True)
+            (folder/'evidence/result.json').write_text('{"status":"STOP","measurement_valid":true}')
+            (folder/'candidate.py').write_text('def enhance(lr,sr): return sr*.99')
+            (folder/'research.json').write_text('{"hypothesis":"fixture","stop_route":"fixture route"}')
+            routes=catalog(root,[])
+            self.assertEqual([r['id'] for r in routes],['G99'])
+            self.assertIn('fixture route',routes[0]['mechanism'])
+
     def test_numeric_retune_and_rename_match_stopped_implementation(self):
         source=(ROOT/'tasks/image_super_resolution/g4/candidate.py').read_text()
         changed=source.replace('0.005','0.012').replace('center','renamed_center').replace('delta','correction')
@@ -35,7 +45,10 @@ class InterventionReviewTests(unittest.TestCase):
         for changed in ({'candidate_sha256':'wrong'},{'routes':[]},{'distinct_mechanism':False},{'routes':[{'id':'old','reuses_route':True,'reason':'same cause'}]}):
             with self.assertRaises(ValueError):validate_semantic({**value,**changed},'code','plan',[{'id':'old'}])
 
-class MandatoryGateTests(AutonomousBrokerTest):
+class MandatoryGateTests(unittest.TestCase):
+    setUp = fixtures.AutonomousBrokerTest.setUp
+    write_plan = fixtures.AutonomousBrokerTest.write_plan
+
     def test_rejection_prevents_registration_experiment_and_retry(self):
         self.write_plan();self.study.policy['intervention_review']={'required':True}
         with patch('research_harness.intervention_review.review_intervention',return_value={'decision':'REJECT','reason':'no observable change'}):

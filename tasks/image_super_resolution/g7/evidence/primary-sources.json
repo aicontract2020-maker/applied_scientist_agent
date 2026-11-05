@@ -1,0 +1,36 @@
+[
+  {
+    "url": "https://arxiv.org/abs/2109.12530",
+    "title": "Structure-Preserving Image Super-Resolution",
+    "authors": [
+      "Ma, Cheng",
+      "Rao, Yongming",
+      "Lu, Jiwen",
+      "Zhou, Jie"
+    ],
+    "date": "2021/09/26",
+    "read_at": "2026-11-05T01:54:55.959366+00:00",
+    "html_sha256": "5bac0d1ea734aaa2e07ae7a017aaa52954ee3215e61eb01dc1b95d686beb7ff6",
+    "download_bytes": 14306756,
+    "full_text_truncated": true,
+    "pdf_url": "https://arxiv.org/pdf/2109.12530",
+    "pdf_sha256": "c09945479cc5caff5c9556cef0196149ac8c5c03070efac615e5932a438d1945",
+    "extraction_note": "First 40000 extracted characters; includes methods where available; images are never returned."
+  },
+  {
+    "url": "https://arxiv.org/abs/2307.09582",
+    "title": "Guided Linear Upsampling",
+    "authors": [
+      "Song, Shuangbing",
+      "Zhong, Fan",
+      "Wang, Tianju",
+      "Qin, Xueying",
+      "Tu, Changhe"
+    ],
+    "date": "2023/07/13",
+    "read_at": "2026-11-05T01:54:56.894399+00:00",
+    "html_sha256": "cd7c0bea38a074b68d5bad1bbb8c807b4c25c7e246a9133657f18452fff7dac1",
+    "download_bytes": 40304,
+    "full_text_truncated": false
+  }
+]

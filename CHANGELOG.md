@@ -4,6 +4,7 @@
 
 - Require an immutable preregistration intervention review for new autonomous studies: stopped-code fingerprints, isolated synthetic tests after actual output conversion, and an independent isolated mechanism reviewer.
 - Close a rejected proposal before registration, inference or scoring; keep NOT_RUN separate from scientific STOP.
+- Validate one Linux autonomous cycle with review PASS followed by a valid negative geometric-registration result; stop the route and exclude its 12 fresh holdout originals.
 - Preserve review artifacts and separate reviewer token usage; model charges remain unknown. Finite probes and model review are conservative checks, not equivalence proofs.
 
 ## 0.10.0

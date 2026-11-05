@@ -94,3 +94,18 @@ class WorkflowAuditTests(unittest.TestCase):
         (self.root/'agent-REPORT.md').unlink()
         verdict=validate_workflow(self.root)
         self.assertFalse(verdict['workflow_completed']);self.assertEqual(len(verdict['errors']),2)
+
+    def test_preregistration_rejection_is_completed_without_scientific_measurement(self):
+        (self.root/'registered.json').unlink()
+        (self.root/'result.json').write_text(json.dumps({'status':'REJECTED','scientific_status':'NOT_RUN','measurement_valid':None,'experiment_started':False}))
+        (self.root/'agent-REPORT.md').write_text('REJECTED / NOT_RUN; no replacement candidate')
+        events=[{'event':'PRIMARY_READ_COMPLETED','full':True},{'event':'PRIMARY_READ_COMPLETED','full':False},
+                {'event':'AGENT_REQUEST','operation':'register'},{'event':'REGISTRATION_REJECTED'},
+                {'event':'AGENT_FINISHED','exit_code':0}]
+        (self.root/'ledger.jsonl').write_text('\n'.join(map(json.dumps,events)))
+        verdict=validate_workflow(self.root)
+        self.assertTrue(verdict['workflow_completed']);self.assertFalse(verdict['experiment_started'])
+        self.assertEqual(verdict['scientific_status'],'NOT_RUN')
+        events.insert(4,{'event':'EXPERIMENT_STARTED'})
+        (self.root/'ledger.jsonl').write_text('\n'.join(map(json.dumps,events)))
+        self.assertFalse(validate_workflow(self.root)['workflow_completed'])
