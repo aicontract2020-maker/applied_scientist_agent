@@ -1,0 +1,152 @@
+{
+  "plan": {
+    "hypothesis": "Choosing, for every plain SwinIR pixel, the corner of its enclosing 8-bit RGB lattice cell whose BT.601 luminance is closest to the continuous prediction will improve frozen Urban100-12 mean paired PSNR-Y by at least 0.05 dB versus the fixed two-pass horizontal-flip reference while keeping latency at or below 2.5 times the reference.",
+    "mechanism": "Independent per-channel rounding need not be the enclosing RGB lattice corner that best preserves the continuous model's luminance. The candidate evaluates all eight floor/ceiling corners and deterministically selects the one minimizing absolute BT.601-luminance displacement, with RGB squared displacement as a tie-break. My inference is that if the float prediction is locally informative about target luminance, reducing output-quantization displacement can preserve that information. The method does not estimate or feed back an LR residual and does not spatially filter or rescale the prediction.",
+    "baseline": "Comparator is the existing fixed two-pass SwinIR-S x2 horizontal-flip ensemble reference. The distinct candidate path uses exactly one plain, unensembled SwinIR-S x2 prediction followed only by per-pixel RGB lattice selection before the trusted adapter's output handling.",
+    "why_not_g1_retry": "This performs no prediction ensemble, transform, or extra model forward, so it does not retry G1. It does not form an LR-versus-SR residual or backproject, unlike G2; attenuate or amplify spatial frequency content, unlike the forbidden G3 shrinkage family; expand, reverse, or locally adapt luminance contrast, unlike G4; compress chroma to enforce an RGB gamut boundary; estimate or remove phase-locked 2x2 bias; or retune/add complexity to any stopped route. It instead changes the discrete RGB lattice representative of each continuous plain-model pixel to minimize luminance quantization displacement.",
+    "new_evidence": [
+      {
+        "source": "https://arxiv.org/abs/1508.05046",
+        "claim": "Mei et al. formulate digital pixel values as discrete and report that incorporating a soft-rounding intensity prior can improve PSNR/SSIM in restoration, including an experiment on natural images; they also warn that naive post-rounding can harm restored structure.",
+        "why_distinct": "This motivates treating output discretization explicitly. The paper does not test SwinIR or the proposed RGB-corner rule; applying its quantization insight to luminance-preserving lattice selection is my inference, and involves no stopped spatial or ensemble mechanism."
+      },
+      {
+        "source": "https://arxiv.org/abs/2011.04212",
+        "claim": "Li et al. report that quantization range handling materially affects SR reconstruction quality and that their trained PAMS quantization scheme can retain competitive PSNR in quantized SR networks.",
+        "why_distinct": "Their work concerns trained weight/activation quantization, not output postprocessing, so it supplies only primary evidence that SR is quantization-sensitive. My candidate is a training-free output lattice choice and does not reuse a stopped route."
+      }
+    ],
+    "controls": [
+      "Twelve Urban100 x2 pairs selected by fixed study-id/filename hash excluding historical and local reserved IDs, before search; no image or score selection",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "observation_ids": [
+      "img_005",
+      "img_017",
+      "img_019",
+      "img_031",
+      "img_033",
+      "img_036",
+      "img_042",
+      "img_046",
+      "img_058",
+      "img_091",
+      "img_094",
+      "img_095"
+    ],
+    "stop_route": "A valid negative eliminates fixed per-pixel selection among the eight enclosing 8-bit RGB lattice corners by minimum BT.601-luminance displacement, with RGB-distance tie-breaking; it does not justify retuning weights, enlarging the lattice neighborhood, or adding adaptive complexity.",
+    "parameters": {
+      "input_clamp": "clip each plain float RGB component to [0,1]",
+      "lattice": "8-bit levels k/255",
+      "candidate_set": "all eight Cartesian floor/ceiling corners of the enclosing RGB lattice cell",
+      "primary_selection": "minimum absolute luminance displacement using fixed BT.601 weights R=0.299, G=0.587, B=0.114",
+      "tie_break": "minimum squared RGB displacement; remaining exact ties retain fixed mask enumeration order 0 through 7",
+      "rationale": "BT.601 matches the stated Y-channel evaluation convention; floor/ceiling corners are the nearest enclosing representable choices and eight-way enumeration is deterministic and inexpensive."
+    },
+    "stopped_route_compliance": {
+      "uses_prediction_ensembles": false,
+      "uses_lr_residual_backprojection": false,
+      "uses_weak_high_frequency_shrinkage": false,
+      "retunes_stopped_parameters": false,
+      "uses_global_luminance_contrast_expansion": false,
+      "uses_luminance_preserving_gamut_compression": false,
+      "uses_phase_locked_luminance_offset_correction": false,
+      "reuses_local_route_linux-validation-20261104": false
+    }
+  },
+  "policy": {
+    "primary_metric": {
+      "name": "Frozen Urban100-12 mean paired PSNR-Y gain versus fixed two-pass reference",
+      "direction": "higher",
+      "unit": "dB"
+    },
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "controls": [
+      "Twelve Urban100 x2 pairs selected by fixed study-id/filename hash excluding historical and local reserved IDs, before search; no image or score selection",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "limits": {
+      "agent_session_seconds": 1200,
+      "reference_seconds": 600,
+      "candidate_seconds": 90,
+      "synthetic_checks": 3,
+      "experiments": 1,
+      "candidate_output_bytes": 268435456
+    },
+    "costs": {
+      "local_proxy_usd_per_machine_hour": 1,
+      "max_session_proxy_usd": 0.5,
+      "actual_model_billing_usd": null,
+      "unpriced": [
+        "setup time",
+        "electricity and depreciation",
+        "long-term artifact retention"
+      ]
+    },
+    "baseline_scope": "Stronger existing inference reference within frozen weights; not an exhaustive global SR SOTA comparison",
+    "dataset": "Urban100",
+    "live_web_search": true,
+    "excluded_evidence_ids": [
+      "1612.07919",
+      "1702.00783",
+      "1707.02937",
+      "1712.06087",
+      "1806.02658",
+      "1811.12866",
+      "1911.07850",
+      "2008.13751",
+      "2108.10257",
+      "2304.11743",
+      "2409.16032"
+    ],
+    "stopped_route_compliance": {
+      "uses_prediction_ensembles": false,
+      "uses_lr_residual_backprojection": false,
+      "uses_weak_high_frequency_shrinkage": false,
+      "retunes_stopped_parameters": false,
+      "uses_global_luminance_contrast_expansion": false,
+      "uses_luminance_preserving_gamut_compression": false,
+      "uses_phase_locked_luminance_offset_correction": false,
+      "reuses_local_route_linux-validation-20261104": false
+    },
+    "show_progress": true,
+    "study_id": "linux-g5-20261104",
+    "observation_ids": [
+      "img_005",
+      "img_017",
+      "img_019",
+      "img_031",
+      "img_033",
+      "img_036",
+      "img_042",
+      "img_046",
+      "img_058",
+      "img_091",
+      "img_094",
+      "img_095"
+    ]
+  },
+  "candidate_sha256": "8708733bbd97e4329394e27c4ff25223b49b61f12d011b462243f63638692d17",
+  "trusted_inputs_sha256": "0f677f34790afda2700a52f113dd07c94c9e9c2e5f7fa6af94bdd50c43b5e541"
+}

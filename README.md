@@ -75,7 +75,7 @@ bash scripts/bootstrap.sh
 
 这些本地产物、环境、第三方数据默认不提交 Git。日志可能含输入文本；分享时自行选择允许公开的内容。不同同事的 clone 没有共享实时登记中心，跨机器继续同一个研究计划时须先交换已用图像、文献和停止决策；仅换 clone 不能把旧路线当新研究。
 
-历史 G0 复现达到参考容差；G1–G4 候选均 STOP。见[决策账本](tasks/image_super_resolution/DECISIONS.md)、[G3](tasks/image_super_resolution/g3/REPORT.md)、[G4](tasks/image_super_resolution/g4/REPORT.md)。六条停止路线已纳入新任务模板：集成、LR 残差回投、弱高频收缩、全局亮度对比度扩张、Mac 验证中未通过的保亮度色域压缩，以及 Linux 验证中未通过的 2×2 相位偏置校正。本机后续 STOP 和使用过的文献也会带入新任务。历史目录是证据，不能作为可直接重跑的安装模板；不要修改其中旧哈希去迁就新环境。
+历史 G0 复现达到参考容差；G1–G4 候选均 STOP。见[决策账本](tasks/image_super_resolution/DECISIONS.md)、[G3](tasks/image_super_resolution/g3/REPORT.md)、[G4](tasks/image_super_resolution/g4/REPORT.md)。七条停止路线已纳入新任务模板：集成、LR 残差回投、弱高频收缩、全局亮度对比度扩张、Mac 验证中未通过的保亮度色域压缩，Linux 验证中未通过的 2×2 相位偏置校正，以及 G5 未通过的 RGB 格点舍入。本机后续 STOP 和使用过的文献也会带入新任务。历史目录是证据，不能作为可直接重跑的安装模板；不要修改其中旧哈希去迁就新环境。
 
 ## 不调用模型的演示与检查
 
@@ -111,3 +111,5 @@ Linux 的 namespace/PID/只读输入/私有网络探针纳入了 [持续检查](
 普通 `run` 执行器仅用于可信代码，不提供上述 OS 隔离。`research` 目前只支持源码目录下的固定 SR 任务，不支持自由训练、任意数据/模型切换、Windows 隔离或自动部署。静态检查、哈希和路线声明不构成形式化安全证明或不可篡改审计。
 
 原图 bootstrap 不证明训练稳定性，公开数据也无法排除模型已知信息。一次有界自主流程完成不等于发现新算法、证明商业价值或替代 Applied Scientist 职位。
+
+G5 已在 Linux 完成独立的新文献/假设/代码/单次实验周期：−0.10021 dB，保持 STOP，无调参或重跑。见 [G5 报告](tasks/image_super_resolution/g5/REPORT.md)，含原始 agent 报告中门槛摘要遗漏的审阅说明。

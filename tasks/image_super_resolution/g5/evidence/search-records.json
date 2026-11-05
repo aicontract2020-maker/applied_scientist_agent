@@ -1,0 +1,28 @@
+[
+  {
+    "id": "exec-ec096d0b-72e6-4d67-aee4-c412598cf61b",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs super resolution chroma color artifacts luminance chrominance post processing paper ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs super resolution chroma color artifacts luminance chrominance post processing paper",
+        "site:arxiv.org/abs image super resolution YCbCr chrominance smoothing paper",
+        "site:arxiv.org/abs deep image super resolution color shift correction paper"
+      ]
+    }
+  },
+  {
+    "id": "exec-66060645-46e2-474e-9bbb-96fbd4932b45",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs image restoration quantization aware rounding RGB PSNR paper ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs image restoration quantization aware rounding RGB PSNR paper",
+        "site:arxiv.org/abs super resolution output quantization rounding PSNR",
+        "site:arxiv.org/abs image super resolution quantization error output pixel rounding"
+      ]
+    }
+  }
+]

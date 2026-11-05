@@ -1,0 +1,17 @@
+{
+  "workflow_completed": true,
+  "single_agent_registration_and_run": true,
+  "candidate_hash_unchanged": true,
+  "plan_unchanged": true,
+  "frozen_inputs_verified_on_linux_before_export": true,
+  "fresh_holdout_disjoint_from_previous_48": true,
+  "post_result_tuning_or_ablation": false,
+  "public_benchmark_label_fetch_observed": false,
+  "network_audit_scope": "Recorded search queries and shell commands; actor egress is not domain-hard-isolated",
+  "raw_events_sha256": "1bf0379cf70806e4a44109ff889bfeb1890bb4a26e61fa3beac8e0d5d3bc8c91",
+  "raw_events_local_mirror": "/Users/kaimaplespark/git/applied_scientist_agent/runs/linux-g5-export/runs/linux-g5-20261104/agent-events.jsonl",
+  "raw_library_sha256": "2cc65bb8a736e0ae62e350f5f7f35a392fca456fc3c4805e55ab946c54fd078c",
+  "private_archive_sha256": "d9bdc8e4ff450886cfc986919f27a1b66decbd9efd9f6b13d20328170d53f8a2",
+  "agent_report_pass_summary_omits_bootstrap_gate": true,
+  "operative_frozen_policy_and_evaluator_unchanged": true
+}

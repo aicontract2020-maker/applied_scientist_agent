@@ -1,0 +1,23 @@
+{
+  "source_commit": "548e78db5b72dabdd3493f8b3501fa194b71d7e8",
+  "kernel": "6.8.0-106-generic",
+  "architecture": "aarch64",
+  "python": "3.12.3",
+  "bwrap": "bubblewrap 0.9.0",
+  "uid": 501,
+  "global_apparmor_userns_restriction": "1",
+  "vm": "4 vCPU / 12GiB RAM / 24GiB virtual disk; no host directory mounts",
+  "logical_environment_assets_run_and_temp_bytes": 982259090,
+  "coarse_full_session_residency_byte_hours": 49754139.68243714,
+  "candidate_peak_rss_bytes": 96710656,
+  "reference_peak_rss_bytes": null,
+  "primary_download_bytes": 4192295,
+  "actual_model_id": null,
+  "actual_model_bill_usd": null,
+  "unpriced": [
+    "VM boot/setup and audit time",
+    "HTTP and cache/storage overhead",
+    "electricity/depreciation",
+    "long-term evidence retention"
+  ]
+}

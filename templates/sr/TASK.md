@@ -43,6 +43,8 @@ The portability-validation cycle then tested per-pixel BT.601-luminance-preservi
 
 The Linux validation cycle then tested constant 2x2 phase-locked luminance offset correction, using centered phase medians from the plain SR output. It STOPPED: -0.121580 dB versus the two-pass reference, CI [-.169112,-.082569], 12/12 worse. This phase-bias removal route stays STOP; do not retune phase estimators, grid, gains or add adaptive complexity to rescue it. This comparison did not isolate the postprocessor from the single-versus-double forward difference.
 
+G5 on Linux tested fixed per-pixel selection among eight floor/ceiling RGB lattice corners to minimize BT.601 luminance displacement from the continuous prediction (RGB-distance tie-break). It STOPPED: -0.100211 dB versus the fixed two-pass reference, CI [-.128332,-.075891], 12/12 worse. This output-lattice selection route stays STOP; do not retune luminance weights, lattice neighborhood, softness or adaptive logic to rescue it. As before, the comparison does not isolate postprocessor causality from single-vs-double forwards.
+
 ## Candidate code contract
 
 One file candidate.py, <=100 KB, imports limited to numpy, cv2, math. No file IO, dynamic
@@ -98,6 +100,6 @@ may remain unknown; do not fabricate zero. The local machine-hour proxy is not a
 
 ## Additional mandatory research.json field
 
-`stopped_route_compliance`: exactly {"uses_prediction_ensembles": false, "uses_lr_residual_backprojection": false, "uses_weak_high_frequency_shrinkage": false, "uses_global_luminance_contrast_expansion": false, "uses_luminance_preserving_gamut_compression": false, "uses_phase_locked_luminance_offset_correction": false, "retunes_stopped_parameters": false}. Explain all historical prior stopped routes in why_not_g1_retry. Find a genuinely different mechanism yourself; no menu or candidate algorithm is supplied. Search and read BEFORE proposing and coding. Stop if no defensible hypothesis exists.
+`stopped_route_compliance`: exactly {"uses_prediction_ensembles": false, "uses_lr_residual_backprojection": false, "uses_weak_high_frequency_shrinkage": false, "uses_global_luminance_contrast_expansion": false, "uses_luminance_preserving_gamut_compression": false, "uses_phase_locked_luminance_offset_correction": false, "uses_luminance_preserving_rgb_lattice_selection": false, "retunes_stopped_parameters": false}. Explain all historical prior stopped routes in why_not_g1_retry. Find a genuinely different mechanism yourself; no menu or candidate algorithm is supplied. Search and read BEFORE proposing and coding. Stop if no defensible hypothesis exists.
 
 Before registering, state what a pass, a valid negative, and an invalid measurement each mean. Register only ONE candidate, not a menu. Do not infer mechanism-specific causality from a comparison that changes multiple factors. No post-result ablation or tuning.

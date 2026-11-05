@@ -1,0 +1,39 @@
+[
+  {
+    "url": "https://arxiv.org/abs/1508.05046",
+    "title": "Improving Image Restoration with Soft-Rounding",
+    "authors": [
+      "Mei, Xing",
+      "Qi, Honggang",
+      "Hu, Bao-Gang",
+      "Lyu, Siwei"
+    ],
+    "date": "2015/08/20",
+    "read_at": "2026-11-05T00:48:55.475426+00:00",
+    "html_sha256": "f292decbc18f4faba757e217444b4c7a5d675df3d3ef978867c7a35becebfd96",
+    "download_bytes": 4150614,
+    "full_text_truncated": true,
+    "pdf_url": "https://arxiv.org/pdf/1508.05046",
+    "pdf_sha256": "fa1db66fb9233942cf6e5286db7771a5a1047714de1fe9971615145690deb333",
+    "extraction_note": "First 40000 extracted characters; includes methods where available; images are never returned."
+  },
+  {
+    "url": "https://arxiv.org/abs/2011.04212",
+    "title": "PAMS: Quantized Super-Resolution via Parameterized Max Scale",
+    "authors": [
+      "Li, Huixia",
+      "Yan, Chenqian",
+      "Lin, Shaohui",
+      "Zheng, Xiawu",
+      "Li, Yuchao",
+      "Zhang, Baochang",
+      "Yang, Fan",
+      "Ji, Rongrong"
+    ],
+    "date": "2020/11/09",
+    "read_at": "2026-11-05T00:48:55.909960+00:00",
+    "html_sha256": "411ed50018e47b7ffc2db81e2baef3d8fc4995b952c93a6b50300a78303b551d",
+    "download_bytes": 41681,
+    "full_text_truncated": false
+  }
+]
