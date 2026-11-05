@@ -100,7 +100,7 @@ may remain unknown; do not fabricate zero. The local machine-hour proxy is not a
 
 ## Additional mandatory research.json field
 
-`stopped_route_compliance`: exactly {"uses_prediction_ensembles": false, "uses_lr_residual_backprojection": false, "uses_weak_high_frequency_shrinkage": false, "uses_global_luminance_contrast_expansion": false, "uses_luminance_preserving_gamut_compression": false, "uses_phase_locked_luminance_offset_correction": false, "uses_luminance_preserving_rgb_lattice_selection": false, "retunes_stopped_parameters": false}. Explain all historical prior stopped routes in why_not_g1_retry. Find a genuinely different mechanism yourself; no menu or candidate algorithm is supplied. Search and read BEFORE proposing and coding. Stop if no defensible hypothesis exists.
+`stopped_route_compliance`: exactly {"uses_prediction_ensembles": false, "uses_lr_residual_backprojection": false, "uses_weak_high_frequency_shrinkage": false, "uses_global_luminance_contrast_expansion": false, "uses_luminance_preserving_gamut_compression": false, "uses_phase_locked_luminance_offset_correction": false, "uses_luminance_preserving_rgb_lattice_selection": false, "uses_clip_only_noop": false, "retunes_stopped_parameters": false}. Explain all historical prior stopped routes in why_not_g1_retry. Find a genuinely different mechanism yourself; no menu or candidate algorithm is supplied. Search and read BEFORE proposing and coding. Stop if no defensible hypothesis exists.
 
 Before registering, state what a pass, a valid negative, and an invalid measurement each mean. Register only ONE candidate, not a menu. Do not infer mechanism-specific causality from a comparison that changes multiple factors. No post-result ablation or tuning.
 
@@ -112,3 +112,17 @@ confidence bound > 0 AND candidate/reference latency <= policy.max_latency_ratio
 Do not summarize pass/fail with only effect and latency. This restates the existing
 frozen evaluator rule; it does not change thresholds. A valid failure of ANY gate
 means STOP, without tuning/retry; an invalid measurement is not scientific evidence.
+
+## Existing output handling: reject redundant proposals BEFORE registration
+
+The trusted evaluator already performs per-channel C(x)=clip(x,0,1), RGB-to-BGR
+reordering, and Q(x)=uint8(round(255*C(x))). These operations are frozen for both
+paths. G6 incorrectly proposed only C(sr); since C is idempotent, Q(C(sr))=Q(sr)
+for the finite float32 contract. It was a proposal failure, not a new clipping
+comparison. Do not repeat this no-op or change its bounds/softness to rescue it.
+Normal clipping may occur within a genuinely different algorithm, but clipping
+alone is already included and cannot be the intervention. Before registration,
+explain how your fixed candidate can change observable output after Q. If it is
+algebraically absorbed by Q, stop without a real experiment rather than force a
+newly worded hypothesis. This clarifies the existing new-intervention requirement;
+it does not change the metric or adoption thresholds.

@@ -113,3 +113,5 @@ Linux 的 namespace/PID/只读输入/私有网络探针纳入了 [持续检查](
 原图 bootstrap 不证明训练稳定性，公开数据也无法排除模型已知信息。一次有界自主流程完成不等于发现新算法、证明商业价值或替代 Applied Scientist 职位。
 
 G5 已在 Linux 完成独立的新文献/假设/代码/单次实验周期：−0.10021 dB，保持 STOP，无调参或重跑。见 [G5 报告](tasks/image_super_resolution/g5/REPORT.md)，含原始 agent 报告中门槛摘要遗漏的审阅说明。
+
+G6 在 Linux 执行后发现 agent 的 clip-only 候选重复了评价器已有步骤，**未满足新的实际干预要求，按方案失败停止**，未换候选或重跑。原始数值与自动流程记录保留，操作者审阅单列；见 [G6 失败报告](tasks/image_super_resolution/g6/REPORT.md)。未来提示明确原有裁剪/量化公式，拒绝此类空提案。累计72张 Urban100 图已评分。

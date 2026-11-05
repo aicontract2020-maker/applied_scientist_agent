@@ -1,0 +1,157 @@
+{
+  "plan": {
+    "hypothesis": "Projecting every channel of the plain SwinIR float32 prediction onto the closed valid RGB interval [0,1] will improve frozen Urban100-12 mean paired PSNR-Y by at least 0.05 dB versus the fixed two-pass horizontal-flip reference while keeping candidate/reference latency at or below 2.5 times.",
+    "mechanism": "The candidate applies the Euclidean projection onto the valid normalized RGB box independently at every sample. If the unknown reference RGB lies in [0,1]^3, replacing an out-of-range prediction by its nearest point in that convex box cannot increase continuous RGB squared distance to that reference; in-range predictions are unchanged. I infer that eliminating network overshoot may improve the evaluator's quantized luminance error, but the cited papers do not establish that it will beat the stronger two-pass reference, and the RGB projection argument does not itself guarantee PSNR-Y improvement after quantization.",
+    "baseline": "Comparator: the existing fixed two-pass SwinIR-S x2 horizontal-flip ensemble reference. Candidate path: one plain, unensembled fixed SwinIR-S x2 prediction followed only by per-channel clipping to [0,1]. The candidate neither calls the model nor obtains a second prediction.",
+    "why_not_g1_retry": "This is not a G1 retry: it uses one prediction and a convex range projection, not flip averaging or any prediction ensemble. It also does not use LR-versus-SR residual backprojection (G2); spatial-frequency attenuation, shrinkage, blur, or gating (G3); global luminance contrast expansion or its reversal (G4); luminance-preserving chroma gamut compression; phase-locked offset estimation/correction; or selection among 8-bit RGB lattice corners (G5). It does not retune or add complexity to any stopped route, including the local linux-g5-20261104 and linux-validation-20261104 routes.",
+    "new_evidence": [
+      {
+        "source": "https://arxiv.org/abs/1907.13357",
+        "claim": "Takeyama, Ono, and Kumazawa formulate image restoration with a hard image dynamic-range constraint and implement that constraint through metric projection, explicitly giving componentwise clipping to the allowed interval.",
+        "why_distinct": "This primary paper, outside the excluded evidence list, motivates feasible-set projection rather than ensembling, observation-residual correction, frequency shrinkage, contrast manipulation, chroma-only gamut compression, phase correction, or quantization-lattice selection. Applying that general constraint to RGB SISR is my inference, not a result claimed by the paper."
+      },
+      {
+        "source": "https://arxiv.org/abs/1707.02921",
+        "claim": "Lim et al. report that direct RGB residual-network reconstruction is an effective formulation for single-image super-resolution and evaluate it on standard SR benchmarks.",
+        "why_distinct": "This primary SR paper establishes the relevant direct-RGB prediction setting; it does not claim that post-hoc clipping beats an ensemble. The proposed feasible-range projection and its expected benefit are my inference."
+      }
+    ],
+    "controls": [
+      "Twelve Urban100 x2 pairs selected by fixed study-id/filename hash excluding historical and local reserved IDs, before search; no image or score selection",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "observation_ids": [
+      "img_012",
+      "img_016",
+      "img_024",
+      "img_029",
+      "img_030",
+      "img_034",
+      "img_039",
+      "img_053",
+      "img_061",
+      "img_073",
+      "img_074",
+      "img_082"
+    ],
+    "stop_route": "A valid negative eliminates fixed componentwise projection of plain SwinIR RGB output onto [0,1] as a route to beating the fixed two-pass reference under these gates; it does not isolate clipping causality from the single-versus-double-forward difference and will not justify changing bounds, using soft/adaptive clipping, or adding rescue complexity.",
+    "parameters": {
+      "lower_bound": 0.0,
+      "upper_bound": 1.0,
+      "projection": "componentwise np.clip on all RGB samples",
+      "output_dtype": "float32",
+      "rationale": "The bounds are the declared normalized valid RGB domain, so they require no fitted strength or holdout-dependent choice; exact metric projection is deterministic and parameter-free."
+    },
+    "stopped_route_compliance": {
+      "uses_prediction_ensembles": false,
+      "uses_lr_residual_backprojection": false,
+      "uses_weak_high_frequency_shrinkage": false,
+      "retunes_stopped_parameters": false,
+      "uses_global_luminance_contrast_expansion": false,
+      "uses_luminance_preserving_gamut_compression": false,
+      "uses_phase_locked_luminance_offset_correction": false,
+      "uses_luminance_preserving_rgb_lattice_selection": false,
+      "reuses_local_route_linux-g5-20261104": false,
+      "reuses_local_route_linux-validation-20261104": false
+    }
+  },
+  "policy": {
+    "primary_metric": {
+      "name": "Frozen Urban100-12 mean paired PSNR-Y gain versus fixed two-pass reference",
+      "direction": "higher",
+      "unit": "dB"
+    },
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "controls": [
+      "Twelve Urban100 x2 pairs selected by fixed study-id/filename hash excluding historical and local reserved IDs, before search; no image or score selection",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "limits": {
+      "agent_session_seconds": 1200,
+      "reference_seconds": 600,
+      "candidate_seconds": 90,
+      "synthetic_checks": 3,
+      "experiments": 1,
+      "candidate_output_bytes": 268435456
+    },
+    "costs": {
+      "local_proxy_usd_per_machine_hour": 1,
+      "max_session_proxy_usd": 0.5,
+      "actual_model_billing_usd": null,
+      "unpriced": [
+        "setup time",
+        "electricity and depreciation",
+        "long-term artifact retention"
+      ]
+    },
+    "baseline_scope": "Stronger existing inference reference within frozen weights; not an exhaustive global SR SOTA comparison",
+    "dataset": "Urban100",
+    "live_web_search": true,
+    "excluded_evidence_ids": [
+      "1508.05046",
+      "1612.07919",
+      "1702.00783",
+      "1707.02937",
+      "1712.06087",
+      "1806.02658",
+      "1811.12866",
+      "1911.07850",
+      "2008.13751",
+      "2011.04212",
+      "2108.10257",
+      "2304.11743",
+      "2409.16032"
+    ],
+    "stopped_route_compliance": {
+      "uses_prediction_ensembles": false,
+      "uses_lr_residual_backprojection": false,
+      "uses_weak_high_frequency_shrinkage": false,
+      "retunes_stopped_parameters": false,
+      "uses_global_luminance_contrast_expansion": false,
+      "uses_luminance_preserving_gamut_compression": false,
+      "uses_phase_locked_luminance_offset_correction": false,
+      "uses_luminance_preserving_rgb_lattice_selection": false,
+      "reuses_local_route_linux-g5-20261104": false,
+      "reuses_local_route_linux-validation-20261104": false
+    },
+    "show_progress": true,
+    "study_id": "linux-g6-20261104",
+    "observation_ids": [
+      "img_012",
+      "img_016",
+      "img_024",
+      "img_029",
+      "img_030",
+      "img_034",
+      "img_039",
+      "img_053",
+      "img_061",
+      "img_073",
+      "img_074",
+      "img_082"
+    ]
+  },
+  "candidate_sha256": "c43cad18770d9da7de4455c3574527812052682bc6223001744f281e9cfe27cf",
+  "trusted_inputs_sha256": "af49ac908bff2d5527f7d450018c302b3f77c43b3b36a416581abc578d68a38c"
+}

@@ -1,0 +1,20 @@
+{
+  "decision": "STOP / PROPOSAL_FAILURE",
+  "controller_workflow_completed": true,
+  "numeric_measurement_valid": true,
+  "scientific_new_intervention_requirement_met": false,
+  "reason": "Clip-only candidate duplicates mandatory evaluator clipping, so Q(C(x))=Q(x) for the finite float32 input contract. Only plain-single versus fixed-two-pass predictions were compared.",
+  "proof_type": "Source inspection and algebraic idempotence, no new data analysis or inference",
+  "original_result_or_plan_rewritten": false,
+  "single_registration_and_experiment": true,
+  "candidate_unchanged": true,
+  "plan_unchanged": true,
+  "frozen_inputs_verified_on_linux_before_export": true,
+  "fresh_holdout_disjoint_from_prior_60": true,
+  "post_result_tuning_ablation_or_new_candidate": false,
+  "raw_events_sha256": "36822e4a48abb03ca3db8953a2335fa925e0d24d6740aaf76a4c50cd100084b0",
+  "raw_events_local_mirror": "/Users/kaimaplespark/git/applied_scientist_agent/runs/linux-g6-export/runs/linux-g6-20261104/agent-events.jsonl",
+  "raw_library_sha256": "70a94f53c408efb167b2060c2c6bc204b59d31ff235c78fe0c2c220dd56d9522",
+  "private_archive_sha256": "b01ece4c99674e4da096674c66a4347492f4b5c9fa3fae7b3395b8bbeac756ec",
+  "network_scope": "Candidate net namespace isolated; actor egress not domain-hard-isolated; no label fetch observed in recorded commands/queries"
+}

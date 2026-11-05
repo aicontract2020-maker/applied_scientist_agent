@@ -1,0 +1,35 @@
+[
+  {
+    "url": "https://arxiv.org/abs/1707.02921",
+    "title": "Enhanced Deep Residual Networks for Single Image Super-Resolution",
+    "authors": [
+      "Lim, Bee",
+      "Son, Sanghyun",
+      "Kim, Heewon",
+      "Nah, Seungjun",
+      "Lee, Kyoung Mu"
+    ],
+    "date": "2017/07/10",
+    "read_at": "2026-11-05T01:27:29.994541+00:00",
+    "html_sha256": "59d8b18ce4c595669b3c05cf20a46b5340dcadda71868767c3abd3724c7db6aa",
+    "download_bytes": 42020,
+    "full_text_truncated": false
+  },
+  {
+    "url": "https://arxiv.org/abs/1907.13357",
+    "title": "A Constrained Convex Optimization Approach to Hyperspectral Image Restoration with Hybrid Spatio-Spectral Regularization",
+    "authors": [
+      "Takeyama, Saori",
+      "Ono, Shunsuke",
+      "Kumazawa, Itsuo"
+    ],
+    "date": "2019/07/31",
+    "read_at": "2026-11-05T01:27:30.094105+00:00",
+    "html_sha256": "7e357436c55c63693812916716cf2ed724a2391719a8b3f3a2101d75627e6473",
+    "download_bytes": 8478519,
+    "full_text_truncated": true,
+    "pdf_url": "https://arxiv.org/pdf/1907.13357",
+    "pdf_sha256": "0baf9a25ef14f455bb130f59e0504027eb024fde7d2d12af847106878211ab65",
+    "extraction_note": "First 40000 extracted characters; includes methods where available; images are never returned."
+  }
+]

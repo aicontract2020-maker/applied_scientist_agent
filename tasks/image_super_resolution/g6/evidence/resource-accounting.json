@@ -1,0 +1,25 @@
+{
+  "operator_research_requirement_met": false,
+  "operator_issue": "clip-only candidate is absorbed by the evaluator, Q(C(x))=Q(x); numerical measurement remains valid; no retry",
+  "source_commit": "b45a5cb468ed5d2122fa68fa08eb8cf231c1c326",
+  "kernel": "6.8.0-106-generic",
+  "architecture": "aarch64",
+  "python": "3.12.3",
+  "bwrap": "bubblewrap 0.9.0",
+  "uid": 501,
+  "global_apparmor_userns_restriction": "1",
+  "vm": "4 vCPU / 12GiB RAM / 24GiB virtual disk; no host directory mounts",
+  "logical_environment_assets_run_and_temp_bytes": 997189717,
+  "coarse_full_session_residency_byte_hours": 48344513.81033474,
+  "candidate_peak_rss_bytes": 80326656,
+  "reference_peak_rss_bytes": null,
+  "primary_download_bytes": 8520539,
+  "actual_model_id": null,
+  "actual_model_bill_usd": null,
+  "unpriced": [
+    "VM boot/setup and audit time",
+    "HTTP and cache/storage overhead",
+    "electricity/depreciation",
+    "long-term evidence retention"
+  ]
+}

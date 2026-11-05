@@ -1,0 +1,28 @@
+[
+  {
+    "id": "exec-f32d42e1-40cb-4da3-8dc7-7c04f0c594f5",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs image super-resolution color artifacts post-processing valid range clipping overshoot ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs image super-resolution color artifacts post-processing valid range clipping overshoot",
+        "site:arxiv.org/abs single image super-resolution ringing artifacts edge postprocessing",
+        "site:arxiv.org/abs super resolution output projection pixel range clipping"
+      ]
+    }
+  },
+  {
+    "id": "exec-f10338a8-b3e9-42ae-905e-9189126a56fb",
+    "type": "web_search",
+    "query": "site:arxiv.org/abs image restoration projection pixel values [0,1] convex constraint ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org/abs image restoration projection pixel values [0,1] convex constraint",
+        "site:arxiv.org/abs super-resolution box constraint pixel intensity projection",
+        "site:arxiv.org/abs deep image restoration output clipping 0 1 PSNR"
+      ]
+    }
+  }
+]
