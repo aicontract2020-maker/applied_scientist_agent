@@ -37,7 +37,7 @@ def validate_workflow(destination):
     raw_events=[json.loads(s) for s in (destination/'agent-events.jsonl').read_text().splitlines()]
     usage=[e['usage'] for e in raw_events if e.get('type')=='turn.completed']
     verdict={'workflow_completed':not errors,'errors':errors,'scientific_status':result.get('status'),
-             'measurement_valid':result.get('measurement_valid',False),'operations':operations,
+             'measurement_valid':result.get('measurement_valid',False),'operations':operations,'isolation_backend':session.get('isolation_backend','historical-unspecified'),
              'primary_reads_completed':len(completed),'full_text_extractions':sum(e['full'] for e in completed),
              'session_seconds':session['total_wall_seconds'],'session_machine_hour_proxy_usd':session['local_proxy_usd'],
              'model_usage':usage,'actual_model_billing_usd':None,

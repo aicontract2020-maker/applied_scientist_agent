@@ -389,6 +389,12 @@ class AutonomousStudy:
             elif source.is_file():
                 (self.destination / 'artifacts').mkdir(exist_ok=True)
                 shutil.copyfile(source, self.destination / 'artifacts' / name)
+        isolation = self.destination / 'artifacts' / 'isolation'
+        isolation.mkdir(parents=True, exist_ok=True)
+        for name in ('candidate-output', 'smoke-output-1', 'smoke-output-2', 'smoke-output-3'):
+            for suffix in ('.json', '.sb'):
+                source = self.control / (name+suffix)
+                if source.is_file(): shutil.copyfile(source, isolation / source.name)
         sources = self.destination / 'artifacts' / 'trusted-sources'
         sources.mkdir(parents=True, exist_ok=True)
         for source in (ROOT / 'research_harness').glob('*.py'):
