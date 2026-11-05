@@ -9,13 +9,17 @@
 | 部分 | 支持情况 |
 |---|---|
 | 离线工作流、账本、协议与软件测试 | Python 3.10+；不调用模型 |
-| 完整自主超分流程 | Apple Silicon macOS，Python 3.12，CPU；Intel Mac 未验证 |
-| Windows / Linux 的完整自主研究 | 尚不支持；不会降级成无隔离执行 |
+| 完整自主超分流程 | Apple Silicon macOS，或 Linux x86_64/aarch64 + Bubblewrap；Python 3.12、CPU |
+| Windows / Intel Mac 的完整自主研究 | 尚未验证支持；不会降级成无隔离执行 |
 | 安装方式 | 从源码运行，在仓库根目录执行命令 |
 
 完整流程需要 git、`pdftotext`（poppler）、Codex CLI 和可访问 GitHub/arXiv/模型服务的网络。建议预留数 GB 磁盘；没有 GPU 要求。第一次安装会下载 PyTorch、上游代码、约 16 MB 权重及 Urban100 ×2 数据。第三方材料保留各自使用条款，仓库公开不等于获得数据或权重的商用授权。
 
-## 同事首次安装
+## Linux 服务器
+
+Ubuntu 24.04 的完整安装、无桌面登录、Bubblewrap/AppArmor 管理员配置见 [Linux 指南](docs/LINUX.md)。Linux ARM64 已完成一次真实自主检索/编码/预注册/实验/STOP 报告；x86_64 CI 已验证 CPU 安装、软件测试和实际内核隔离，不含真实模型登录/研究调用。见 [Linux 验证记录](docs/LINUX_VALIDATION.md)。两平台共用预注册与停止逻辑，无不隔离回退。
+
+## Mac 同事首次安装
 
 先安装 Python 3.12、poppler 与 Codex CLI。例如，已安装 Homebrew 的 Mac：
 
@@ -34,7 +38,7 @@ bash scripts/bootstrap.sh
 .venv-sr/bin/python -m research_harness doctor --network
 ```
 
-`bootstrap.sh` 创建仓库自己的 `.venv-sr`，安装 `requirements-sr.txt` 的直接依赖与 `requirements-sr.lock.txt` 的完整版本约束，保存实际解析的完整环境列表，下载并核对固定上游提交和权重 SHA-256。不会读取原开发者的环境或复制其数据。已有文件不匹配时拒绝自动重置/覆盖。
+`bootstrap.sh` 创建仓库自己的 `.venv-sr`，安装 `requirements-sr.txt` 的直接依赖与对应平台 lock 的完整版本约束（macOS 为 `requirements-sr.lock.txt`），保存实际解析的完整环境列表，下载并核对固定上游提交和权重 SHA-256。不会读取原开发者的环境或复制其数据。已有文件不匹配时拒绝自动重置/覆盖。
 
 找不到 Python 时，可指定解释器，例如 `PYTHON_BIN=/path/to/python3.12 bash scripts/bootstrap.sh`。脚本也支持 `--skip-assets`，但完整研究必须随后运行 `.venv-sr/bin/python -m research_harness setup-assets`。普通终端中 `doctor` 的所有检查都通过才继续。
 
@@ -71,7 +75,7 @@ bash scripts/bootstrap.sh
 
 这些本地产物、环境、第三方数据默认不提交 Git。日志可能含输入文本；分享时自行选择允许公开的内容。不同同事的 clone 没有共享实时登记中心，跨机器继续同一个研究计划时须先交换已用图像、文献和停止决策；仅换 clone 不能把旧路线当新研究。
 
-历史 G0 复现达到参考容差；G1–G4 候选均 STOP。见[决策账本](tasks/image_super_resolution/DECISIONS.md)、[G3](tasks/image_super_resolution/g3/REPORT.md)、[G4](tasks/image_super_resolution/g4/REPORT.md)。五条停止路线已纳入新任务模板：集成、LR 残差回投、弱高频收缩、全局亮度对比度扩张、此次安装验证中未通过的保亮度色域压缩。本机后续 STOP 和使用过的文献也会带入新任务。历史目录是证据，不能作为可直接重跑的安装模板；不要修改其中旧哈希去迁就新环境。
+历史 G0 复现达到参考容差；G1–G4 候选均 STOP。见[决策账本](tasks/image_super_resolution/DECISIONS.md)、[G3](tasks/image_super_resolution/g3/REPORT.md)、[G4](tasks/image_super_resolution/g4/REPORT.md)。六条停止路线已纳入新任务模板：集成、LR 残差回投、弱高频收缩、全局亮度对比度扩张、Mac 验证中未通过的保亮度色域压缩，以及 Linux 验证中未通过的 2×2 相位偏置校正。本机后续 STOP 和使用过的文献也会带入新任务。历史目录是证据，不能作为可直接重跑的安装模板；不要修改其中旧哈希去迁就新环境。
 
 ## 不调用模型的演示与检查
 
@@ -98,10 +102,12 @@ Python >=3.10；纯 Python 环境会跳过三个依赖 torch/numpy/cv2 的合成
 | ID 已存在、实验无效或未完成 | 查看该 ID 的账本、报告和错误；不删除目录来自动重试 |
 | 科学结果 STOP | 接受并保留负结果，不调参救回；新研究须有新外部依据和不同机制 |
 
+Linux 的 namespace/PID/只读输入/私有网络探针纳入了 [持续检查](.github/workflows/linux-checks.yml)。这不是研究模型能力评测，也不需要账号凭据。
+
 ## 权限与能力边界
 
 这是本机研究原型，不是多租户执行服务。OS 隔离限制候选文件访问并禁止候选联网；独立控制器持有 HR 和评价逻辑。Actor 为模型与搜索保留网络，**没有域名级硬隔离**，也不是整个主机秘密的完整保密边界。不要部署成允许陌生用户提交任务的公网服务。
 
-普通 `run` 执行器仅用于可信代码，不提供上述 OS 隔离。`research` 目前只支持源码目录下的固定 SR 任务，不支持自由训练、任意数据/模型切换、Windows/Linux 隔离或自动部署。静态检查、哈希和路线声明不构成形式化安全证明或不可篡改审计。
+普通 `run` 执行器仅用于可信代码，不提供上述 OS 隔离。`research` 目前只支持源码目录下的固定 SR 任务，不支持自由训练、任意数据/模型切换、Windows 隔离或自动部署。静态检查、哈希和路线声明不构成形式化安全证明或不可篡改审计。
 
 原图 bootstrap 不证明训练稳定性，公开数据也无法排除模型已知信息。一次有界自主流程完成不等于发现新算法、证明商业价值或替代 Applied Scientist 职位。

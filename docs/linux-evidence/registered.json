@@ -1,0 +1,158 @@
+{
+  "plan": {
+    "hypothesis": "Removing the robustly estimated constant 2x2 phase-locked luminance bias from each plain SwinIR prediction will improve frozen Urban100-12 mean paired PSNR-Y by at least 0.05 dB versus the fixed two-pass horizontal-flip reference while keeping latency at or below 2.5 times the reference.",
+    "mechanism": "For x2 sub-pixel upsampling, four independently learned output-phase filter groups can leave a small additive phase-locked checkerboard component. The candidate computes BT.601 luminance, forms non-overlapping 2x2 cells aligned to the output origin, estimates each phase's constant bias as the median of its residual from its cell mean, centers the four estimates to zero sum, and subtracts the corresponding scalar from all three RGB channels. This is my inference from the cited architectural evidence; the papers do not test this postprocessor or SwinIR. Median aggregation is intended to make genuine edges and textures less influential than a constant image-wide phase bias.",
+    "baseline": "Comparator is the existing fixed two-pass horizontal-flip SwinIR-S x2 reference. The candidate instead receives only one plain, unensembled fixed SwinIR-S x2 float32 prediction and applies one deterministic array-only phase-bias correction; it performs no additional model forward.",
+    "why_not_g1_retry": "This does not average or transform predictions and therefore does not retry G1. It does not use LR-versus-SR residual correction/backprojection (G2), attenuate or reverse-sign modify a high-frequency band (G3), expand or reverse global luminance contrast (G4), or perform luminance-preserving gamut compression (portability cycle). It estimates and removes only a zero-sum, output-lattice-phase additive luminance offset; no stopped parameter or family is retuned.",
+    "new_evidence": [
+      {
+        "source": "https://arxiv.org/abs/1707.02937",
+        "claim": "Aitken et al. show that sub-pixel convolution rearranges independently filtered low-resolution output groups into distinct high-resolution phases, and explain that independently initialized phase filter sets can produce checkerboard artifacts in super-resolution.",
+        "why_distinct": "This supports a periodic output-phase mechanism, not prediction ensembling, LR consistency, frequency shrinkage, global contrast, or gamut handling. Inferring that a trained SwinIR output may retain a correctable constant phase bias is my hypothesis, not the paper's claim."
+      },
+      {
+        "source": "https://arxiv.org/abs/1806.02658",
+        "claim": "Sugawara et al. report that CNN super-resolution can generate checkerboard artifacts and derive architectural conditions that avoid them under MSE and perceptual losses.",
+        "why_distinct": "The external result identifies lattice-periodic synthesis artifacts as an SR-specific failure mode. My inexpensive output correction is a separate inference and does not modify architecture or training."
+      }
+    ],
+    "controls": [
+      "Twelve Urban100 x2 pairs selected by fixed study-id/filename hash excluding historical and local reserved IDs, before search; no image or score selection",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "observation_ids": [
+      "img_008",
+      "img_015",
+      "img_050",
+      "img_059",
+      "img_064",
+      "img_069",
+      "img_071",
+      "img_075",
+      "img_081",
+      "img_096",
+      "img_097",
+      "img_100"
+    ],
+    "stop_route": "A valid negative eliminates fixed, image-global median estimation and full removal of zero-sum additive 2x2 luminance phase bias from plain SwinIR output; it will not justify tuning estimator, strength, alignment, channels, or adding adaptive complexity in this cycle.",
+    "parameters": {
+      "luminance_weights": [
+        0.299,
+        0.587,
+        0.114
+      ],
+      "phase_period": [
+        2,
+        2
+      ],
+      "cell_origin": [
+        0,
+        0
+      ],
+      "phase_statistic": "median of phase luminance minus non-overlapping 2x2 cell mean",
+      "centering": "subtract unweighted mean of four phase estimates",
+      "correction_gain": 1.0,
+      "rgb_application": "subtract identical scalar phase offset from R, G, and B",
+      "rationale": "The period follows the fixed x2 output lattice; BT.601 targets measured Y; median resists scene structure; zero-sum centering avoids brightness shift; gain 1 exactly removes the additive component under the hypothesized model."
+    },
+    "stopped_route_compliance": {
+      "uses_prediction_ensembles": false,
+      "uses_lr_residual_backprojection": false,
+      "uses_weak_high_frequency_shrinkage": false,
+      "retunes_stopped_parameters": false,
+      "uses_global_luminance_contrast_expansion": false,
+      "uses_luminance_preserving_gamut_compression": false
+    }
+  },
+  "policy": {
+    "primary_metric": {
+      "name": "Frozen Urban100-12 mean paired PSNR-Y gain versus fixed two-pass reference",
+      "direction": "higher",
+      "unit": "dB"
+    },
+    "minimum_effect": 0.05,
+    "max_latency_ratio": 2.5,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261103,
+      "confidence": 0.95
+    },
+    "controls": [
+      "Twelve Urban100 x2 pairs selected by fixed study-id/filename hash excluding historical and local reserved IDs, before search; no image or score selection",
+      "Candidate: plain fixed SwinIR-S x2 prediction followed by one agent-authored deterministic array function",
+      "Comparator: existing fixed two-pass horizontal-flip SwinIR-S x2 reference; no optimization or reopening G1",
+      "CPU float32, four reference threads, same weights, official padding, RGB/uint8 conversion, Y metric, border crop 2",
+      "No training, extra weights, model forwards in candidate code, parameter sweeps, repeated holdout access, or automatic retries",
+      "All constants frozen in candidate.py and research.json before registration; synthetic checks only before registration"
+    ],
+    "limits": {
+      "agent_session_seconds": 1200,
+      "reference_seconds": 600,
+      "candidate_seconds": 90,
+      "synthetic_checks": 3,
+      "experiments": 1,
+      "candidate_output_bytes": 268435456
+    },
+    "costs": {
+      "local_proxy_usd_per_machine_hour": 1,
+      "max_session_proxy_usd": 0.5,
+      "actual_model_billing_usd": null,
+      "unpriced": [
+        "setup time",
+        "electricity and depreciation",
+        "long-term artifact retention"
+      ]
+    },
+    "baseline_scope": "Stronger existing inference reference within frozen weights; not an exhaustive global SR SOTA comparison",
+    "dataset": "Urban100",
+    "live_web_search": true,
+    "excluded_evidence_ids": [
+      "1612.07919",
+      "1702.00783",
+      "1712.06087",
+      "1811.12866",
+      "1911.07850",
+      "2008.13751",
+      "2108.10257",
+      "2304.11743",
+      "2409.16032"
+    ],
+    "stopped_route_compliance": {
+      "uses_prediction_ensembles": false,
+      "uses_lr_residual_backprojection": false,
+      "uses_weak_high_frequency_shrinkage": false,
+      "retunes_stopped_parameters": false,
+      "uses_global_luminance_contrast_expansion": false,
+      "uses_luminance_preserving_gamut_compression": false
+    },
+    "show_progress": true,
+    "study_id": "linux-validation-20261104",
+    "observation_ids": [
+      "img_008",
+      "img_015",
+      "img_050",
+      "img_059",
+      "img_064",
+      "img_069",
+      "img_071",
+      "img_075",
+      "img_081",
+      "img_096",
+      "img_097",
+      "img_100"
+    ]
+  },
+  "candidate_sha256": "14c0122f920e20b6ce6e58a5e438ad857f1c8f8a3072f63de682dc1d5f688c92",
+  "trusted_inputs_sha256": "01370461e76ae7d2250562636d7716831e523d7c0e0593021abf3a4c00f401d0"
+}

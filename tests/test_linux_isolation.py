@@ -59,3 +59,16 @@ class LinuxBoundaryCommands(unittest.TestCase):
             self.assertEqual(environment_lock(),'requirements-sr-linux.lock.txt')
         with patch('sys.platform','darwin'):
             self.assertEqual(environment_lock(),'requirements-sr.lock.txt')
+
+    def test_credential_mount_cannot_alias_hidden_checkout_or_responses(self):
+        with patch('research_harness.linux_isolation.codex_runtime',return_value=('/usr/bin/codex','/usr/bin')):
+            for state in (self.root,self.actor,self.base):
+                with patch.dict(os.environ,{'CODEX_HOME':str(state)}):
+                    with self.assertRaisesRegex(ValueError,'must be separate'):
+                        linux_actor_command(['codex','--version'],self.root,self.base/'control',self.actor)
+
+    def test_custom_certificate_cannot_unmask_hidden_data(self):
+        secret=self.root/'secret';secret.write_text('fixture')
+        with patch('research_harness.linux_isolation.codex_runtime',return_value=('/usr/bin/codex','/usr/bin')),patch.dict(os.environ,{'CODEX_HOME':str(self.state),'SSL_CERT_FILE':str(secret)}):
+            with self.assertRaisesRegex(ValueError,'certificate must be outside'):
+                linux_actor_command(['codex','--version'],self.root,self.base/'control',self.actor)

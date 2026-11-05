@@ -1,0 +1,15 @@
+[
+  {
+    "id": "exec-bdd74a54-3d78-4e44-bd64-21a25191b722",
+    "type": "web_search",
+    "query": "site:arxiv.org sub-pixel convolution checkerboard artifacts super resolution phase artifacts paper ...",
+    "action": {
+      "type": "search",
+      "queries": [
+        "site:arxiv.org sub-pixel convolution checkerboard artifacts super resolution phase artifacts paper",
+        "site:arxiv.org checkerboard artifacts image super-resolution pixel shuffle paper",
+        "site:arxiv.org periodic artifacts super resolution subpixel convolution post processing"
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "workflow_completed": true,
+  "live_exit": 0,
+  "single_registered_experiment": true,
+  "candidate_unchanged": true,
+  "plan_unchanged": true,
+  "actor_network": "Shared network for model/search, not domain-hard-isolated",
+  "candidate_network": "Separate net namespace and no route",
+  "raw_events_sha256": "750ef3650f6a02a10d3f9f465876818cc7aed7ef0fe92f1ac1418b2dc2a008d5",
+  "raw_events_local_mirror": "/Users/kaimaplespark/git/applied_scientist_agent/runs/linux-validation-export/runs/linux-validation-20261104/agent-events.jsonl",
+  "raw_library_sha256": "5e8697e120026bc49575fa4c87ffb9c891bb1d29acb8eaba1a67f1ca4823be7b",
+  "private_archive_sha256": "a740bf80769a05c076ae3ee29d5c91f97de0b9ad820159083203fcbd7d1b2444",
+  "cpu_reference_timeout_seconds": 600,
+  "primary_download_bytes": 3425707,
+  "actual_model_id": null,
+  "actual_model_bill_usd": null,
+  "setup_validity_repairs": [
+    "ARM torchvision 0.23.0 official CPU wheel has no local +cpu suffix",
+    "Ubuntu restricted user namespaces required a per-bwrap AppArmor userns permission; global restriction stayed 1",
+    "Doctor recognized Linux EROFS and actor tmpfs was made read-only before model call"
+  ],
+  "unpriced": [
+    "VM image and setup/audit time",
+    "OS/npm/pip transfer/cache overhead",
+    "electricity/depreciation",
+    "CI runner billing",
+    "long-term evidence retention"
+  ]
+}

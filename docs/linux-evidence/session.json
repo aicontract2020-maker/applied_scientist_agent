@@ -1,0 +1,11 @@
+{
+  "actor_directory": "/tmp/research-harness-oxbnmjj7/agent",
+  "control_directory": "/tmp/research-harness-oxbnmjj7/control",
+  "total_wall_seconds": 173.64951167599997,
+  "local_proxy_usd": 0.048235975708611094,
+  "billing_usd": null,
+  "actual_model_id": null,
+  "candidate_execution_network": "DENIED",
+  "isolation_backend": "linux-bubblewrap",
+  "agent_network": "Model service connectivity allowed; task prohibits external benchmark access; not a fully closed egress environment"
+}

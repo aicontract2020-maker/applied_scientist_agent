@@ -1,0 +1,29 @@
+{
+  "workflow_completed": true,
+  "errors": [],
+  "scientific_status": "STOP",
+  "measurement_valid": true,
+  "operations": [
+    "read",
+    "read",
+    "check",
+    "register",
+    "run"
+  ],
+  "isolation_backend": "linux-bubblewrap",
+  "primary_reads_completed": 2,
+  "full_text_extractions": 1,
+  "session_seconds": 173.64951167599997,
+  "session_machine_hour_proxy_usd": 0.048235975708611094,
+  "model_usage": [
+    {
+      "input_tokens": 429729,
+      "cached_input_tokens": 404352,
+      "output_tokens": 5458,
+      "reasoning_output_tokens": 734
+    }
+  ],
+  "actual_model_billing_usd": null,
+  "network_scope": "Candidate network denied; actor egress is not domain-hard-isolated",
+  "interpretation": "One bounded feasibility cycle, not scientific reliability or commercial validation"
+}

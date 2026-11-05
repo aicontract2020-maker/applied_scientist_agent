@@ -43,7 +43,9 @@
   "excluded_evidence_ids": [
     "1612.07919",
     "1702.00783",
+    "1707.02937",
     "1712.06087",
+    "1806.02658",
     "1811.12866",
     "1911.07850",
     "2008.13751",
@@ -57,7 +59,8 @@
     "uses_weak_high_frequency_shrinkage": false,
     "retunes_stopped_parameters": false,
     "uses_global_luminance_contrast_expansion": false,
-    "uses_luminance_preserving_gamut_compression": false
+    "uses_luminance_preserving_gamut_compression": false,
+    "uses_phase_locked_luminance_offset_correction": false
   },
   "show_progress": true
 }

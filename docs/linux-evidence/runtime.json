@@ -1,0 +1,14 @@
+{
+  "kernel": "6.8.0-106-generic",
+  "architecture": "aarch64",
+  "python": "3.12.3",
+  "uid": 501,
+  "bwrap": "bubblewrap 0.9.0",
+  "node": "v18.19.1",
+  "source_commit": "c003af67001bc1f3332290ad4b449976a9b68d45",
+  "root_folder": "/home/kaimaplespark.guest/research harness",
+  "vm_resources": "4 vCPU, 12GiB RAM, 24GiB virtual disk, no host folder mounts",
+  "logical_resident_env_assets_run_temp_bytes": 989033207,
+  "source_bundle_sha256": "2deceb518cb972d8f8ecb9a9592556f925ff5ead85382ac11258fa992ec61569",
+  "global_apparmor_restriction": "1"
+}

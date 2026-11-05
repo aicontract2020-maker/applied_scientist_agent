@@ -1,0 +1,36 @@
+[
+  {
+    "url": "https://arxiv.org/abs/1707.02937",
+    "title": "Checkerboard artifact free sub-pixel convolution: A note on sub-pixel convolution, resize convolution and convolution resize",
+    "authors": [
+      "Aitken, Andrew",
+      "Ledig, Christian",
+      "Theis, Lucas",
+      "Caballero, Jose",
+      "Wang, Zehan",
+      "Shi, Wenzhe"
+    ],
+    "date": "2017/07/10",
+    "read_at": "2026-11-05T00:00:30.251986+00:00",
+    "html_sha256": "21b66e6a2a94c9911edfc8ced27820dd9dde43361f2bf9e4ae88c4f3f4555aab",
+    "download_bytes": 3385368,
+    "full_text_truncated": false,
+    "pdf_url": "https://arxiv.org/pdf/1707.02937",
+    "pdf_sha256": "b10d05045b8d78d04c8106ad29f3a43c0ecdb604fb6e75c2e414719e3d417550",
+    "extraction_note": "First 40000 extracted characters; includes methods where available; images are never returned."
+  },
+  {
+    "url": "https://arxiv.org/abs/1806.02658",
+    "title": "Super-Resolution using Convolutional Neural Networks without Any Checkerboard Artifacts",
+    "authors": [
+      "Sugawara, Yusuke",
+      "Shiota, Sayaka",
+      "Kiya, Hitoshi"
+    ],
+    "date": "2018/06/07",
+    "read_at": "2026-11-05T00:00:35.200845+00:00",
+    "html_sha256": "cc0f092197256693d560f4fe00efd0d34b319ddf6b0a36dbb9e331c925c49f5f",
+    "download_bytes": 40339,
+    "full_text_truncated": false
+  }
+]

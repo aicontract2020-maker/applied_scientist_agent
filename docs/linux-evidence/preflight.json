@@ -1,0 +1,114 @@
+{
+  "ok": true,
+  "isolation_backend": "linux-bubblewrap",
+  "checks": [
+    {
+      "name": "platform",
+      "ok": true,
+      "detail": "Supported: Apple Silicon macOS or Linux x86_64/aarch64 with rootless Bubblewrap"
+    },
+    {
+      "name": "python",
+      "ok": true,
+      "detail": "Python 3.12.3 (required 3.12)"
+    },
+    {
+      "name": "repo_environment",
+      "ok": true,
+      "detail": "Interpreter must use this clone\u2019s .venv-sr"
+    },
+    {
+      "name": "python_dependencies",
+      "ok": true,
+      "detail": {
+        "anyio": "4.16.0",
+        "click": "8.5.0",
+        "filelock": "4.2.8",
+        "fsspec": "2026.9.0",
+        "h11": "0.16.0",
+        "hf-xet": "1.8.0",
+        "httpcore2": "2.16.0",
+        "httpx2": "2.16.0",
+        "huggingface_hub": "2.4.0",
+        "idna": "3.20",
+        "Jinja2": "3.1.6",
+        "MarkupSafe": "3.0.4",
+        "mpmath": "1.3.0",
+        "networkx": "3.7",
+        "numpy": "1.26.4",
+        "opencv-python-headless": "4.10.0.84",
+        "packaging": "26.3",
+        "pillow": "11.3.0",
+        "PyYAML": "6.0.3",
+        "safetensors": "0.8.0",
+        "setuptools": "84.2.1",
+        "sympy": "1.14.0",
+        "timm": "0.9.16",
+        "torch": "2.8.0+cpu",
+        "torchvision": "0.23.0",
+        "tqdm": "4.70.1",
+        "truststore": "0.10.5",
+        "typing_extensions": "4.16.0"
+      }
+    },
+    {
+      "name": "git",
+      "ok": true,
+      "detail": "git available"
+    },
+    {
+      "name": "pdftotext",
+      "ok": true,
+      "detail": "pdftotext available"
+    },
+    {
+      "name": "codex_login_and_flags",
+      "ok": true,
+      "detail": "codex-cli 0.144.0"
+    },
+    {
+      "name": "assets",
+      "ok": true,
+      "detail": "Pinned repositories, weights and 100 Urban100 pairs verified"
+    },
+    {
+      "name": "non_root_user",
+      "ok": true,
+      "detail": "Linux research must run as a non-root user"
+    },
+    {
+      "name": "bubblewrap",
+      "ok": true,
+      "detail": "bubblewrap must be installed"
+    },
+    {
+      "name": "actual_os_isolation",
+      "ok": true,
+      "detail": {
+        "actor": {
+          "repo_read": "DENIED",
+          "control_read": "DENIED",
+          "symlink_escape": "DENIED",
+          "outside_write": "DENIED",
+          "response_write": "DENIED",
+          "host_pid_hidden": true
+        },
+        "candidate": {
+          "repo_read": "DENIED",
+          "control_read": "DENIED",
+          "symlink_escape": "DENIED",
+          "outside_write": "DENIED",
+          "response_write": "DENIED",
+          "imports": "OK",
+          "input_write": "DENIED",
+          "network": "DENIED",
+          "network_namespace_isolated": true,
+          "host_pid_hidden": true
+        },
+        "actor_login": "AVAILABLE"
+      }
+    }
+  ],
+  "model_call_made": false,
+  "scope": "Local prototype checks; not multi-tenant security certification"
+}
