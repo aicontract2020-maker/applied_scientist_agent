@@ -1,0 +1,47 @@
+name: Linux CPU and isolation checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  linux-x86_64:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: OS tools and tested Codex CLI (no login)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y bubblewrap poppler-utils
+          npm install -g @openai/codex@0.144.0
+      - name: Check rootless namespaces; configure only bwrap if needed
+        shell: bash
+        run: |
+          probe() {
+            python - <<'PY'
+          import subprocess
+          from research_harness.linux_isolation import bwrap_base
+          subprocess.run([*bwrap_base(False), '--remount-ro', '/', '--', '/usr/bin/true'], check=True)
+          PY
+          }
+          if ! probe; then
+            # Dedicated ephemeral CI runner only. No global AppArmor/sysctl disable.
+            sudo install -m 644 docs/linux/bwrap.apparmor /etc/apparmor.d/research-harness-bwrap
+            sudo apparmor_parser -r /etc/apparmor.d/research-harness-bwrap
+            probe
+          fi
+      - name: Fresh CPU-only Python environment
+        run: bash scripts/bootstrap.sh --skip-assets
+      - name: Software tests (synthetic only)
+        run: .venv-sr/bin/python -m unittest discover -s tests -v
+      - name: Actual kernel boundary probes (no credentials or model calls)
+        run: .venv-sr/bin/python scripts/check-linux-isolation.py
+      - name: Offline reviewed workflow
+        run: .venv-sr/bin/python examples/local_demo/workflow.py --out runs/ci-offline

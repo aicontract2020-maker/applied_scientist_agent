@@ -94,6 +94,10 @@ except (PermissionError, OSError) as exc:
                     subprocess.run(pid_argv,capture_output=True,text=True,timeout=30,check=True)
                     value['host_pid_hidden']=True
                 results[kind]=value
+            if sys.platform=='linux':
+                version=linux_actor_command(['codex','--version'],ROOT,control,actor)
+                checked=subprocess.run(version,capture_output=True,text=True,timeout=30,check=True)
+                results['actor_cli']=checked.stdout.strip()
             if sys.platform=='linux' and check_login:
                 login=linux_actor_command(['codex','login','status'],ROOT,control,actor)
                 checked=subprocess.run(login,capture_output=True,text=True,timeout=30)

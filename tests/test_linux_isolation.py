@@ -31,7 +31,7 @@ class LinuxBoundaryCommands(unittest.TestCase):
 
     def test_candidate_cannot_receive_host_root_or_network_or_secrets(self):
         argv=linux_candidate_command([sys.executable,'-B','runner.py'],self.root,Path(sys.executable),self.snapshot,self.inputs,self.output,self.trusted)
-        for flag in ['--unshare-user','--unshare-pid','--unshare-net','--cap-drop','--die-with-parent','--new-session','--clearenv']:
+        for flag in ['--unshare-user','--unshare-pid','--disable-userns','--assert-userns-disabled','--unshare-net','--cap-drop','--die-with-parent','--new-session','--clearenv']:
             self.assertIn(flag,argv)
         binds=[argv[i+1:i+3] for i,x in enumerate(argv) if x=='--bind']
         self.assertEqual(binds,[[str(self.output),str(self.output)]])
@@ -50,3 +50,12 @@ class LinuxBoundaryCommands(unittest.TestCase):
         self.assertEqual(argv[index-1],'--ro-bind')
         self.assertGreater(argv.index('--tmpfs'),argv.index('--ro-bind'))
         self.assertEqual(argv[-3:],['/usr/bin/codex','exec','a single prompt'])
+
+    def test_platform_lock_selection_keeps_cpu_wheel_labels_separate(self):
+        from research_harness.portable import environment_lock
+        with patch('sys.platform','linux'),patch('platform.machine',return_value='aarch64'):
+            self.assertEqual(environment_lock(),'requirements-sr-linux-aarch64.lock.txt')
+        with patch('sys.platform','linux'),patch('platform.machine',return_value='x86_64'):
+            self.assertEqual(environment_lock(),'requirements-sr-linux.lock.txt')
+        with patch('sys.platform','darwin'):
+            self.assertEqual(environment_lock(),'requirements-sr.lock.txt')
