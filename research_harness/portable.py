@@ -109,6 +109,8 @@ def _new_study(name, root=ROOT):
     verify_sources(root)
     template = root/'templates/sr'
     policy = json.loads((template/'policy.json').read_text())
+    from .task_contracts import binding, SR_TASK
+    policy['task'] = binding(SR_TASK)
     from .memory import snapshot, review_catalog, envelope
     memory = snapshot(root)
     if any(item['id'] == name for item in memory['studies']):

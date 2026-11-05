@@ -4,6 +4,16 @@
 
 当前完整任务是 **固定 SwinIR-S ×2 图像超分的确定性后处理研究**，不是任意领域的通用科学家。基础工作流无需模型；完整研究使用你自己的 Codex 登录与额度。
 
+0.15.0 开始分离任务接口：超分保留完整自主流程；新增的表格回归仅支持固定预测的可信数值评价和合成演示，尚不能自主查文献、训练或运行候选。查看 [研发路线图](docs/ROADMAP.md) 和 [任务接口](docs/TASK_CONTRACTS.md)。
+
+```sh
+python3 -m research_harness task list
+python3 -m research_harness task show tabular-regression
+python3 -m examples.tabular_demo.workflow --out runs/tabular-software-demo
+```
+
+演示先冻结方案和输入哈希，再评价并写入 STOP 账本；所有数据、时延和成本都是软件 fixture。`research --task tabular-regression` 会在环境检查和数据预留前拒绝，不会退回无隔离执行。
+
 最近一轮 [G7 Linux研究与审查记录](tasks/image_super_resolution/g7/REPORT.md)：新机制审查通过，几何校正候选有效负结果，按规则 STOP；未调参重跑。
 
 ## 注册前干预审查

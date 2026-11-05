@@ -128,12 +128,15 @@ def report(workspace, experiment_id, output):
             r = e['result']
             lines.append(f'| {r["seed"]} | {r["baseline_score"]} | {r["candidate_score"]} | {sign * (r["candidate_score"] - r["baseline_score"]):.6g} | {r["artifact"]} |')
     if decision.get('design') == 'paired_observations' and 'observation_count' in decision:
-        lines += ['', f'图像配对数：{decision["observation_count"]}',
-                  f'图像效应标准差：{decision["observation_effect_std"]}',
+        unit = '观测行' if 'task' in p else '图像'
+        scope = ('该区间假定观测行独立，不证明独立性、无数据泄漏或训练稳定性。' if 'task' in p else
+                 '该区间描述原图之间的抽样差异，不代表训练重复或全新数据上的泛化保证。')
+        lines += ['', f'{unit}配对数：{decision["observation_count"]}',
+                  f'{unit}效应标准差：{decision["observation_effect_std"]}',
                   f'Bootstrap 区间：{decision["bootstrap_interval"]}；置信度 {decision["bootstrap_confidence"]}',
                   f'候选/基线延迟比：{decision["latency_ratio"]}；阈值 {p["max_latency_ratio"]}',
-                  '该区间描述原图之间的抽样差异，不代表训练重复或全新数据上的泛化保证。', '',
-                  '| 图像 | 基线 | 候选 | 基线延迟 ms | 候选延迟 ms |', '|---|---:|---:|---:|---:|']
+                  scope, '',
+                  f'| {unit} | 基线 | 候选 | 基线延迟 ms | 候选延迟 ms |', '|---|---:|---:|---:|---:|']
         for event in events:
             if event['event'] == 'RESULT':
                 for row in event['result']['observations']:

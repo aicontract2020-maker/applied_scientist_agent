@@ -33,6 +33,8 @@ class PortableStudyTests(unittest.TestCase):
         self.assertTrue(set(a['observation_ids']).isdisjoint(b['observation_ids']))
         self.assertTrue(set(a['observation_ids']).isdisjoint(historical))
         self.assertEqual(a['minimum_effect'],.05);self.assertEqual(a['max_latency_ratio'],2.5)
+        from research_harness.task_contracts import binding, SR_TASK
+        self.assertEqual(a['task'], binding(SR_TASK))
         with self.assertRaisesRegex(ValueError,'already reserved'):new_study('first',self.root)
         with self.assertRaisesRegex(ValueError,'Study id'):new_study('../escape',self.root)
 

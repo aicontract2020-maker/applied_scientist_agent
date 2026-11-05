@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.15.0
+
+- Add a closed, versioned task catalog and `task list/show`; bind new SR policies to the task contract digest. Reject unknown and evaluation-only tasks before autonomous setup, reservation or model calls.
+- Extract existing SR scoring into a task evaluator and share the frozen effect/interval/latency gate across Workspace, autonomous evaluation and read-only audit; keep historical SR formats and decisions.
+- Add an evaluation-only deterministic tabular regression contract: fixed target/baseline/candidate content hashes, exact row identities, finite predictions, lower-is-better MAE and independent-row bootstrap.
+- Run a synthetic second-task registration/evaluation/STOP/report demo through the existing ledger; no candidate execution, training, live research, generalized memory/audit or scientific performance claim.
+- Publish a unified roadmap with explicit completion gates for the remaining second-task autonomous runner and research-quality evaluation.
+
 ## 0.14.0
 
 - Add offline study evidence export, verification and review-only unpacking using a versioned JSON envelope and flat filename allowlist.

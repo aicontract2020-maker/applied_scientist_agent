@@ -52,6 +52,12 @@ def main():
     health.add_argument("--network", action="store_true")
     research = sub.add_parser("research", help="Prepare fresh SR holdout, run one autonomous cycle, preserve all evidence")
     research.add_argument("--id", required=True, help="New unique study name; cannot overwrite/retry")
+    research.add_argument("--task", default="swinir-s-x2", help="Built-in task; evaluation-only tasks cannot start research")
+    task = sub.add_parser("task", help="Inspect built-in task contracts and supported capabilities (no execution)")
+    task_commands = task.add_subparsers(dest="task_command", required=True)
+    task_commands.add_parser("list")
+    task_show = task_commands.add_parser("show")
+    task_show.add_argument("id")
     memory = sub.add_parser("memory", help="Exchange conservative research history without models or images")
     memory.add_argument("--root", help="Source checkout whose history to manage (default: this checkout)")
     memory_commands = memory.add_subparsers(dest="memory_command", required=True)
@@ -78,7 +84,10 @@ def main():
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
-        if args.command == "study":
+        if args.command == "task":
+            from .task_contracts import list_tasks, contract, binding
+            output = list_tasks() if args.task_command == "list" else dict(contract(args.id), binding=binding(args.id))
+        elif args.command == "study":
             from .study_inspection import list_studies, run_status, audit_run
             from .portable import ROOT
             if args.study_command in ("export", "verify", "unpack"):
@@ -119,7 +128,7 @@ def main():
             return 0 if output['ok'] else 1
         elif args.command == "research":
             from .onboarding import research
-            output = research(args.id)
+            output = research(args.id, task=args.task)
         elif args.command == "autonomous":
             from .autonomy import AutonomousStudy
             if args.literature:

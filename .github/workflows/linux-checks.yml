@@ -47,3 +47,7 @@ jobs:
         run: .venv-sr/bin/python scripts/check-intervention-review.py
       - name: Offline reviewed workflow
         run: .venv-sr/bin/python examples/local_demo/workflow.py --out runs/ci-offline
+      - name: Task catalog and second-domain software fixture (no model or assets)
+        run: |
+          python -m research_harness task list
+          python -m examples.tabular_demo.workflow --out runs/ci-tabular

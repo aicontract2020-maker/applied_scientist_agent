@@ -8,7 +8,6 @@ This is a local research prototype, not a hardened multi-tenant security product
 """
 import ast
 import hashlib
-import importlib.util
 import json
 import os
 import shutil
@@ -21,7 +20,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .core import digest
-from .observations import summarize
 
 ROOT = Path(__file__).resolve().parents[1]
 PYTHON = ROOT / '.venv-sr/bin/python'
@@ -96,6 +94,9 @@ def bounded_process(command, cwd, output, timeout, env=None, quota=256 * 1024 * 
 class AutonomousStudy:
     def __init__(self, destination, study=None):
         self.study = Path(study or STUDY).resolve()
+        self.policy = json.loads((self.study / 'policy.json').read_text())
+        from .task_contracts import validate_sr_policy
+        validate_sr_policy(self.policy)
         self.destination = Path(destination).resolve()
         self.destination.mkdir(parents=True, exist_ok=False)
         self.session = Path(tempfile.mkdtemp(prefix='research-harness-')).resolve()
@@ -109,7 +110,6 @@ class AutonomousStudy:
         self.smoke_count = 0
         self.events = self.destination / 'ledger.jsonl'
         self.start = time.monotonic()
-        self.policy = json.loads((self.study / 'policy.json').read_text())
         self.hidden = json.loads((self.study / 'inputs.lock.json').read_text())
         self.log('SESSION_CREATED', session=str(self.session), policy_sha256=digest(self.policy),
                  inputs_sha256=digest(self.hidden))
@@ -279,41 +279,10 @@ class AutonomousStudy:
         return result
 
     def evaluate(self):
-        import cv2
-        import numpy as np
-        spec = importlib.util.spec_from_file_location('fixed_metrics', ROOT / 'external/SwinIR/utils/util_calculate_psnr_ssim.py')
-        metric = importlib.util.module_from_spec(spec); spec.loader.exec_module(metric)
-        output = self.control / 'candidate-output'
-        expected = set(self.policy['observation_ids'])
-        files = list(output.glob('*.npy'))
-        if {x.stem for x in files} != expected or any(x.is_symlink() or x.stat().st_nlink != 1 for x in files):
-            raise ValueError('Candidate output identities or file types changed')
-        timings = {r['id']: r for r in json.loads((output / 'timings.json').read_text())}
-        baseline = json.loads((self.control / 'reference-timings.json').read_text())
-        rows = []
-        dataset = self.policy.get('dataset', 'Set14')
-        for name in self.policy['observation_ids']:
-            value = np.load(output / f'{name}.npy', allow_pickle=False)
-            gt = cv2.imread(str(ROOT / f'external/SelfExSR/data/{dataset}/image_SRF_2/{name}_SRF_2_HR.png'), cv2.IMREAD_COLOR)
-            ref = cv2.imread(str(self.control / 'reference-png' / f'{name}.png'), cv2.IMREAD_COLOR)
-            if value.shape != gt.shape or not np.isfinite(value).all():
-                raise ValueError(f'Invalid candidate shape/value: {name}')
-            pred = (np.clip(value[:, :, ::-1], 0, 1) * 255.).round().astype(np.uint8)
-            rows.append({'id': name,
-                         'baseline_score': metric.calculate_psnr(ref, gt, crop_border=2, test_y_channel=True),
-                         'candidate_score': metric.calculate_psnr(pred, gt, crop_border=2, test_y_channel=True),
-                         'baseline_latency_ms': baseline[name]['strong_baseline_seconds'] * 1000,
-                         'candidate_latency_ms': (baseline[name]['plain_seconds'] + timings[name]['postprocess_seconds']) * 1000})
-        summary = summarize(self.policy, rows)
-        mean = sum(r['candidate_score'] - r['baseline_score'] for r in rows) / len(rows)
-        passed = mean >= self.policy['minimum_effect'] and summary['bootstrap_interval'][0] > 0 and summary['latency_ratio'] <= self.policy['max_latency_ratio']
-        result = {'status': 'CONTINUE' if passed else 'STOP', 'measurement_valid': True, 'mean_gain_db': mean,
-                  'baseline_psnr_y': sum(r['baseline_score'] for r in rows) / len(rows),
-                  'candidate_psnr_y': sum(r['candidate_score'] for r in rows) / len(rows),
-                  'reason': 'All frozen thresholds met.' if passed else 'Effect, interval, or latency did not meet the frozen adoption threshold.',
-                  **summary}
+        from .sr_evaluation import evaluate_sr
+        result, rows = evaluate_sr(ROOT, self.control, self.policy)
         atomic_json(self.destination / 'observations.json', rows)
-        atomic_json(self.destination / 'candidate-resources.json', json.loads((output / 'resources.json').read_text()))
+        atomic_json(self.destination / 'candidate-resources.json', json.loads((self.control / 'candidate-output/resources.json').read_text()))
         return result
 
     def finish_invalid(self, reason, begin, details):

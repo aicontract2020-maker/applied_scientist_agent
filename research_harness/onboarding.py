@@ -78,7 +78,9 @@ def validate_workflow(destination, *, require_integrity=False):
     return verdict
 
 
-def research(name):
+def research(name, task='swinir-s-x2'):
+    from .task_contracts import require_autonomous
+    require_autonomous(task)
     from .state_lock import research_lock
     with research_lock(ROOT):
         return _research_locked(name)

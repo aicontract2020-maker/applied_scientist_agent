@@ -44,6 +44,9 @@ def validate_protocol(p, check_inputs=True):
     if not isinstance(metric, dict) or not metric.get("name") or metric.get("direction") not in ("higher", "lower") or not metric.get("unit"):
         raise ValueError("primary_metric needs name, unit, and direction: higher/lower")
     design = p.get("design", "paired_improvement")
+    if 'task' in p:
+        from .task_contracts import validate_task_protocol
+        validate_task_protocol(p)
     if design not in ("paired_improvement", "deterministic_reproduction", "paired_observations"):
         raise ValueError("Unknown experimental design")
     number(p["minimum_effect"], "minimum_effect", 0)
@@ -192,9 +195,11 @@ class Workspace:
             report.update(status="PENDING", reason="Collect exactly the preregistered replications; no early success decision.")
             return report
         elif p.get("design") == "paired_observations":
-            passed = report["mean_effect"] >= p["minimum_effect"] and report["bootstrap_interval"][0] > 0 and report["latency_ratio"] <= p["max_latency_ratio"]
+            from .observations import passes_gates
+            passed = passes_gates(p, report["mean_effect"], report)
             status, outcome = ("CONTINUE", "go") if passed else ("STOP", "stop")
-            reason = "Paired-image effect, interval and latency thresholds met." if passed else "Paired-image effect, uncertainty or latency threshold not met. Stop this intervention."
+            unit = 'row' if 'task' in p else 'image'
+            reason = f"Paired-{unit} effect, interval and latency thresholds met." if passed else f"Paired-{unit} effect, uncertainty or latency threshold not met. Stop this intervention."
         elif p.get("design") == "deterministic_reproduction":
             passed = report["absolute_error"] <= p["reproduction_tolerance"] + 1e-12
             status = "CONTINUE" if passed else "STOP"

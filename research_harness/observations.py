@@ -1,4 +1,4 @@
-"""Paired original-image bootstrap for a single frozen deterministic comparison.
+"""Paired observation bootstrap for a single frozen deterministic comparison.
 
 Intervals summarize image sampling variability, not independent training variation.
 """
@@ -28,6 +28,12 @@ def validate_design(p):
     if not 0.8 <= bootstrap['confidence'] <= 0.99:
         raise ValueError('Confidence must be 0.8..0.99')
     number(p.get('max_latency_ratio'), 'max_latency_ratio', 1)
+    if 'task' in p:
+        from .task_contracts import validate_task_protocol
+        validate_task_protocol(p)
+        if len(ids) * bootstrap['resamples'] > 1000000:
+            raise ValueError('Task bootstrap exceeds one million sampled observations')
+        return
     intervention = p.get('intervention')
     if not isinstance(intervention, dict) or set(intervention) != {'kind', 'step_size'}:
         raise ValueError('intervention needs kind and step_size')
@@ -74,4 +80,17 @@ def summarize(p, rows):
             'observation_effect_std': statistics.stdev(effects),
             'bootstrap_interval': [lo, hi], 'bootstrap_confidence': p['bootstrap']['confidence'],
             'latency_ratio': latency_ratio,
-            'bootstrap_scope': 'Original-image sampling variability; not training replication or proof against dataset contamination'}
+            'bootstrap_scope': ('Independent-row sampling variability; not training replication, proof of independence or absence of leakage'
+                                if p.get('task', {}).get('id') == 'tabular-regression' else
+                                'Original-image sampling variability; not training replication or proof against dataset contamination')}
+
+
+def passes_gates(policy, mean_effect, summary):
+    """The same frozen effect, uncertainty and latency gates for every task."""
+    number(mean_effect, 'mean_effect')
+    number(summary['bootstrap_interval'][0], 'bootstrap lower bound')
+    number(summary['latency_ratio'], 'latency_ratio', 0)
+    number(policy['minimum_effect'], 'minimum_effect', 0)
+    number(policy['max_latency_ratio'], 'max_latency_ratio', 0)
+    return (mean_effect >= policy['minimum_effect'] and summary['bootstrap_interval'][0] > 0
+            and summary['latency_ratio'] <= policy['max_latency_ratio'])

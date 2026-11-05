@@ -6,7 +6,7 @@ from pathlib import Path
 
 from .core import digest, number
 from .memory import read_json, _object
-from .observations import summarize, validate_result
+from .observations import summarize, validate_result, passes_gates
 
 
 class Evidence:
@@ -181,6 +181,8 @@ def audit_run(directory):
             if not isinstance(protocol,dict):
                 raise ValueError('Missing frozen registration')
             policy, plan = protocol['policy'], protocol['plan']
+            from .task_contracts import validate_sr_policy
+            validate_sr_policy(policy)
             code = evidence.text('candidate.py'); final_code = evidence.text('agent-candidate.py')
             final_plan = evidence.json('agent-research.json')
             code_hash = hashlib.sha256(code.encode()).hexdigest() if code is not None else None
@@ -226,7 +228,7 @@ def audit_run(directory):
                 recomputed['mean_gain_db'] = sum(recomputed['observation_effects'])/len(rows)
                 for field in ('mean_gain_db','observation_count','observation_effects','observation_effect_std','bootstrap_interval','bootstrap_confidence','latency_ratio'):
                     compare('Recomputed '+field,recomputed[field],result.get(field))
-                passed = recomputed['mean_gain_db']>=policy['minimum_effect'] and recomputed['bootstrap_interval'][0]>0 and recomputed['latency_ratio']<=policy['max_latency_ratio']
+                passed = passes_gates(policy, recomputed['mean_gain_db'], recomputed)
                 compare('Decision follows all frozen gates','CONTINUE' if passed else 'STOP',result['status'])
             else:
                 check('Invalid measurement closes STOP',result.get('measurement_valid') is False and result['status']=='STOP')
