@@ -71,6 +71,8 @@ class LiteratureStudy(AutonomousStudy):
         return set(self.library)
 
     def register(self):
+        if self.closed or self.registered:
+            raise ValueError('Registration is single-use; a rejected route cannot be revised')
         searches = self.search_records()
         if not 1 <= len(searches) <= 6:
             raise ValueError('Use real native literature search before registration, within six calls')
@@ -83,8 +85,12 @@ class LiteratureStudy(AutonomousStudy):
         compliance = plan.get('stopped_route_compliance')
         expected = getattr(self, 'policy', {}).get('stopped_route_compliance', {'uses_prediction_ensembles': False, 'uses_lr_residual_backprojection': False, 'retunes_stopped_parameters': False})
         if compliance != expected or any(type(v) is not bool for v in compliance.values()):
-            raise ValueError('A genuinely distinct mechanism is required; stopped families remain excluded')
-        reject_lr_residual_backprojection((self.actor/'candidate.py').read_text())
+            return self.reject_registration('Stopped-route compliance failed; no retry')
+        try:
+            reject_lr_residual_backprojection((self.actor/'candidate.py').read_text())
+        except ValueError as exc:
+            return self.reject_registration(str(exc))
+        atomic_json(self.destination/'search-records.json', searches)
         result = super().register()
         atomic_json(self.destination/'search-records.json', searches)
         return result

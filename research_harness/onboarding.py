@@ -14,16 +14,25 @@ def validate_workflow(destination):
     types=[e['event'] for e in events]
     operations=[e['operation'] for e in events if e['event']=='AGENT_REQUEST']
     errors=[]
+    rejected=result.get('status')=='REJECTED' and result.get('scientific_status')=='NOT_RUN'
     required=['REGISTER','EXPERIMENT_STARTED','DECISION','AGENT_FINISHED']
-    if not all(types.count(event)==1 for event in required):errors.append('Missing or repeated registration/experiment/decision/session finish')
+    if rejected:
+        if types.count('REGISTRATION_REJECTED')!=1 or any(x in types for x in ('REGISTER','EXPERIMENT_STARTED','DECISION')) or operations.count('register')!=1 or 'run' in operations:
+            errors.append('Rejected proposal did not stop before registration/inference')
+    elif not all(types.count(event)==1 for event in required):errors.append('Missing or repeated registration/experiment/decision/session finish')
     elif not all(types.index(a)<types.index(b) for a,b in zip(required,required[1:])):errors.append('Lifecycle order incorrect')
     finished=[e for e in events if e['event']=='AGENT_FINISHED']
     if not finished or finished[-1].get('exit_code')!=0:errors.append('Agent did not exit successfully')
-    if operations.count('run')!=1 or operations.count('register')!=1:errors.append('Not exactly one agent-triggered registration/run')
-    if not result.get('measurement_valid'):errors.append('Experiment measurement invalid/incomplete')
+    if not rejected and (operations.count('run')!=1 or operations.count('register')!=1):errors.append('Not exactly one agent-triggered registration/run')
+    if not rejected and not result.get('measurement_valid'):errors.append('Experiment measurement invalid/incomplete')
     registered=destination/'registered.json'
     if registered.exists():
         protocol=json.loads(registered.read_text())
+        if protocol.get('policy',{}).get('intervention_review',{}).get('required'):
+            review_path=destination/'intervention-review.json'
+            review=json.loads(review_path.read_text()) if review_path.exists() else {}
+            if review.get('decision')!='PASS' or review.get('candidate_sha256')!=protocol['candidate_sha256']:
+                errors.append('Missing or mismatched intervention review PASS')
         if not (destination/'agent-candidate.py').exists() or sha(destination/'agent-candidate.py')!=protocol['candidate_sha256']:
             errors.append('Final agent code differs from preregistered code')
         plan=destination/'agent-research.json'
@@ -36,7 +45,14 @@ def validate_workflow(destination):
     if not search.exists() or not json.loads(search.read_text()):errors.append('Missing native live-search evidence')
     raw_events=[json.loads(s) for s in (destination/'agent-events.jsonl').read_text().splitlines()]
     usage=[e['usage'] for e in raw_events if e.get('type')=='turn.completed']
-    verdict={'workflow_completed':not errors,'errors':errors,'scientific_status':result.get('status'),
+    reviewer_events=destination/'artifacts/reviewer/logs/stdout.log'
+    reviewer_usage=[]
+    if reviewer_events.exists():
+        for line in reviewer_events.read_text().splitlines():
+            try: item=json.loads(line)
+            except ValueError: continue
+            if item.get('type')=='turn.completed': reviewer_usage.append(item.get('usage'))
+    verdict={'workflow_completed':not errors, 'experiment_started': 'EXPERIMENT_STARTED' in types, 'proposal_rejected':rejected, 'reviewer_model_usage':reviewer_usage,'errors':errors,'scientific_status':result.get('scientific_status',result.get('status')),
              'measurement_valid':result.get('measurement_valid',False),'operations':operations,'isolation_backend':session.get('isolation_backend','historical-unspecified'),
              'primary_reads_completed':len(completed),'full_text_extractions':sum(e['full'] for e in completed),
              'session_seconds':session['total_wall_seconds'],'session_machine_hour_proxy_usd':session['local_proxy_usd'],
@@ -75,4 +91,4 @@ def research(name):
     verdict=validate_workflow(output)
     if not verdict['workflow_completed']:
         raise ValueError(f'Cycle incomplete; no automatic retry. Inspect {output}/workflow.json: {verdict["errors"]}')
-    return {'workflow_completed':True,'scientific_decision':result['status'],'report':str(output/'REPORT.md'),'study':str(study),'run':str(output)}
+    return {'workflow_completed':True,'scientific_decision':result.get('scientific_status',result['status']),'proposal_decision':result['status'],'report':str(output/'REPORT.md'),'study':str(study),'run':str(output)}

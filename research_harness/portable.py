@@ -126,6 +126,8 @@ def new_study(name, root=ROOT):
     (here/'policy.json').write_text(json.dumps(policy,indent=2)+'\n')
     (here/'TASK.md').write_text(task)
     (here/'literature.json').write_text('[]\n')
+    from .intervention_review import catalog
+    (here/'intervention-catalog.json').write_text(json.dumps(catalog(root, prior),indent=2)+'\n')
     shutil.copyfile(template/'labctl.py',here/'labctl.py')
     (here/'selection.json').write_text(json.dumps({'selected_ids':ids,'excluded_ids':sorted(used),'rule':'12 smallest SHA256(study_id:ID), sorted, before search/inference; reservations are not reclaimed automatically'},indent=2)+'\n')
     files = [* (root/'research_harness').glob('*.py'), root/'requirements-sr.txt', root/'requirements-sr.lock.txt', root/'requirements-sr-linux.lock.txt', root/'requirements-sr-linux-aarch64.lock.txt', root/WEIGHT,

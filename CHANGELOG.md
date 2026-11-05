@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.11.0
+
+- Require an immutable preregistration intervention review for new autonomous studies: stopped-code fingerprints, isolated synthetic tests after actual output conversion, and an independent isolated mechanism reviewer.
+- Close a rejected proposal before registration, inference or scoring; keep NOT_RUN separate from scientific STOP.
+- Preserve review artifacts and separate reviewer token usage; model charges remain unknown. Finite probes and model review are conservative checks, not equivalence proofs.
+
 ## 0.10.0
 
 - Add fail-closed rootless Linux Bubblewrap isolation with explicit mounts, PID/network namespaces, read-only responses/inputs and no host-root bind.

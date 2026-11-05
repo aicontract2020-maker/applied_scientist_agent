@@ -19,6 +19,7 @@ def main():
     parser.add_argument('--inputs', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--smoke', action='store_true')
+    parser.add_argument('--intervention-probe', action='store_true')
     args = parser.parse_args()
     resource.setrlimit(resource.RLIMIT_CPU, (90, 90))
     resource.setrlimit(resource.RLIMIT_FSIZE, (32 * 1024 * 1024, 32 * 1024 * 1024))
@@ -27,6 +28,34 @@ def main():
     spec = importlib.util.spec_from_file_location('agent_candidate', args.candidate)
     candidate = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(candidate)
+    if args.intervention_probe:
+        # Fixed software challenges, never benchmark pixels, labels or metrics.
+        y, x = np.indices((24, 32), dtype=np.float32)
+        ramp = np.stack((x/31, y/23, (x+y)/54), axis=-1)
+        rng = np.random.default_rng(20261104)
+        cases = [np.zeros_like(ramp), np.full_like(ramp, .4), ramp,
+                 np.where(ramp < .5, .1, .9).astype(np.float32),
+                 rng.uniform(0, 1, ramp.shape).astype(np.float32),
+                 (ramp*1.4-.2).astype(np.float32),
+                 ((np.floor(ramp*255)+.5)/255).astype(np.float32)]
+        def quantize(value):
+            return (np.clip(value[:, :, ::-1], 0, 1)*255.).round().astype(np.uint8)
+        changes = []
+        for index, sr in enumerate(cases):
+            lr = (sr[::2, ::2]*.97+.01).astype(np.float32)
+            a = candidate.enhance(lr.copy(), sr.copy())
+            b = candidate.enhance(lr.copy(), sr.copy())
+            for value in (a, b):
+                if not isinstance(value, np.ndarray) or value.shape != sr.shape or value.dtype.kind != 'f' or not np.isfinite(value).all():
+                    raise ValueError('Invalid synthetic intervention output')
+            if not np.array_equal(a, b):
+                raise ValueError('Candidate is not deterministic on repeated synthetic input')
+            # Match evaluator's float32 adapter before mandatory conversion.
+            changes.append(int(np.count_nonzero(quantize(a.astype(np.float32)) != quantize(sr))))
+        (args.output/'probe.json').write_text(json.dumps({'changed_channels': changes,
+            'observable_change': any(changes), 'deterministic': True,
+            'scope': 'Seven fixed synthetic cases only; not a proof of semantic inequivalence or SR quality'}))
+        return
     records = []
     paths = [] if args.smoke else sorted(args.inputs.glob('*.npz'))
     if args.smoke:

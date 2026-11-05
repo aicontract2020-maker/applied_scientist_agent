@@ -68,5 +68,11 @@
     "uses_luminance_preserving_rgb_lattice_selection": false,
     "uses_clip_only_noop": false
   },
-  "show_progress": true
+  "show_progress": true,
+  "intervention_review": {
+    "required": true,
+    "reviewer_seconds": 120,
+    "synthetic_suite": "seven-fixed-cases-v1",
+    "rejection": "terminal; no registration, inference, scores or retry"
+  }
 }

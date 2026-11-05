@@ -176,6 +176,13 @@ class AutonomousStudy:
                 raise ValueError('Cite a supplied newly consulted primary source and explain the distinct hypothesis')
         self.verify_inputs()
         snapshot = self.snapshot('registered-candidate')
+        if self.policy.get('intervention_review', {}).get('required'):
+            from .intervention_review import review_intervention
+            review = review_intervention(self, snapshot, plan)
+            if review['decision'] != 'PASS':
+                return self.reject_registration(review['reason'])
+            if sha(self.actor/'candidate.py') != review['candidate_sha256'] or json.loads(source.read_text()) != plan:
+                return self.reject_registration('Proposal changed during immutable intervention review')
         protocol = {'plan': plan, 'policy': self.policy, 'candidate_sha256': sha(snapshot / 'candidate.py'),
                     'trusted_inputs_sha256': digest(self.hidden)}
         atomic_json(self.control / 'registered.json', protocol)
@@ -185,13 +192,24 @@ class AutonomousStudy:
         self.log('REGISTER', protocol_sha256=digest(protocol), candidate_sha256=protocol['candidate_sha256'])
         return {'status': 'REGISTERED', 'protocol_sha256': digest(protocol), 'next': 'Request run exactly once; no code changes are accepted.'}
 
-    def candidate_run(self, snapshot, inputs, output, smoke=False):
+    def reject_registration(self, reason):
+        self.closed = True
+        result = {'status': 'REJECTED', 'phase': 'pre_registration', 'scientific_status': 'NOT_RUN',
+                  'measurement_valid': None, 'experiment_started': False, 'reason': reason,
+                  'next': 'Write REPORT.md and stop. No revised candidate, registration or experiment this cycle.'}
+        atomic_json(self.destination/'result.json', result)
+        self.log('REGISTRATION_REJECTED', result=result)
+        return result
+
+    def candidate_run(self, snapshot, inputs, output, smoke=False, intervention_probe=False):
         profile = self.control / (output.name + ('.sb' if sys.platform=='darwin' else '.json'))
         if sys.platform=='darwin': profile.write_text(candidate_profile(self.control, snapshot, inputs, output, self.control / 'trusted'))
         argv = [str(PYTHON), '-B', str(self.control / 'trusted/runner.py'),
                    '--candidate', str(snapshot / 'candidate.py'), '--inputs', str(inputs), '--output', str(output)]
         if smoke:
             argv.append('--smoke')
+        if intervention_probe:
+            argv.append('--intervention-probe')
         if sys.platform == 'darwin':
             command = ['/usr/bin/sandbox-exec', '-f', str(profile), *argv]
         elif sys.platform == 'linux':
@@ -202,7 +220,7 @@ class AutonomousStudy:
             raise ValueError('Unsupported isolation backend; refusing unisolated execution')
         env = {k: v for k, v in os.environ.items() if k in ('PATH', 'LANG', 'LC_ALL', 'SYSTEMROOT')}
         env.update(PYTHONNOUSERSITE='1', PYTHONDONTWRITEBYTECODE='1', OPENBLAS_NUM_THREADS='4', OMP_NUM_THREADS='4')
-        return bounded_process(command, snapshot, output, 20 if smoke else self.policy.get('limits', {}).get('candidate_seconds', 90), env)
+        return bounded_process(command, snapshot, output, 20 if smoke or intervention_probe else self.policy.get('limits', {}).get('candidate_seconds', 90), env)
 
     def smoke(self):
         if self.registered or self.closed or self.smoke_count >= 3:
@@ -222,6 +240,8 @@ class AutonomousStudy:
             raise ValueError('Register first; experiment can run only once')
         self.closed = True  # Consume the opportunity even on an operational failure.
         self.verify_inputs()
+        if json.loads((self.actor/'research.json').read_text()) != self.registered['plan']:
+            raise ValueError('Plan changed after registration; experiment cancelled')
         if sha(self.actor / 'candidate.py') != self.registered['candidate_sha256']:
             raise ValueError('Candidate changed after registration; experiment cancelled')
         begin = time.monotonic()
@@ -327,7 +347,7 @@ class AutonomousStudy:
         command = ['codex', '-c', 'approval_policy="never"',
                    'exec', '--ignore-user-config', '--ephemeral', '--skip-git-repo-check', '--sandbox', 'danger-full-access',
                    '--json', '--output-last-message', str(self.actor / 'final.txt'),
-                   'Read TASK.md and policy.json. Complete the autonomous research task yourself: propose, implement, synthetic-check, preregister, request the experiment, interpret its result, and write REPORT.md. Use the file broker; do not ask the human to do your coding or execution.']
+                   'Read TASK.md and policy.json. If registration returns REJECTED, write REPORT.md and stop without revising or running. Otherwise complete the autonomous research task yourself: propose, implement, synthetic-check, preregister, request the experiment, interpret its result, and write REPORT.md. Use the file broker; do not ask the human to do your coding or execution.']
         if self.policy.get('live_web_search'):
             command.insert(command.index('codex') + 1, '--search')
         if sys.platform == 'darwin':
@@ -382,8 +402,8 @@ class AutonomousStudy:
                         break
                     log.write(chunk)
         self.log('AGENT_FINISHED', exit_code=process.returncode, total_wall_seconds=time.monotonic() - self.start)
-        for name in ('primary-papers', 'reference-logs', 'reference-timings.json', 'candidate-output'):
-            source = self.control / name
+        for name in ('intervention-probe', 'reviewer', 'primary-papers', 'reference-logs', 'reference-timings.json', 'candidate-output'):
+            source = self.session / name if name == 'reviewer' else self.control / name
             if source.is_dir():
                 shutil.copytree(source, self.destination / 'artifacts' / name)
             elif source.is_file():
@@ -391,7 +411,7 @@ class AutonomousStudy:
                 shutil.copyfile(source, self.destination / 'artifacts' / name)
         isolation = self.destination / 'artifacts' / 'isolation'
         isolation.mkdir(parents=True, exist_ok=True)
-        for name in ('candidate-output', 'smoke-output-1', 'smoke-output-2', 'smoke-output-3'):
+        for name in ('intervention-probe', 'candidate-output', 'smoke-output-1', 'smoke-output-2', 'smoke-output-3'):
             for suffix in ('.json', '.sb'):
                 source = self.control / (name+suffix)
                 if source.is_file(): shutil.copyfile(source, isolation / source.name)

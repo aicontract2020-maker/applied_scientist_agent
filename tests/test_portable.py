@@ -17,6 +17,7 @@ class PortableStudyTests(unittest.TestCase):
         source=Path(__file__).resolve().parents[1]
         import shutil
         shutil.copytree(source/'templates',self.root/'templates')
+        (self.root/'templates/sr/history.json').write_text(json.dumps({'used_urban100_ids': [f'img_{i:03d}' for i in range(1,13)], 'stopped_routes': []}))
         (self.root/'research_harness').mkdir();(self.root/'research_harness/code.py').write_text('trusted')
         for name in ['requirements-sr.txt','assets/swinir/002_lightweightSR_DIV2K_s64w8_SwinIR-S_x2.pth','external/SwinIR/models/network_swinir.py','external/SwinIR/utils/util_calculate_psnr_ssim.py']:
             p=self.root/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text('fixture')
