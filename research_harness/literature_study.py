@@ -82,6 +82,7 @@ class LiteratureStudy(AutonomousStudy):
         sources = [canonical_paper_url(x.get('source')) for x in plan.get('new_evidence', [])]
         fresh = [url for url in sources if url.rsplit('/', 1)[-1].split('v')[0] not in set(getattr(self, 'policy', {}).get('excluded_evidence_ids', OLD_SOURCES))]
         if not fresh: raise ValueError('Previously supplied papers do not count as new external evidence')
+        atomic_json(self.destination/'search-records.json', searches)
         compliance = plan.get('stopped_route_compliance')
         expected = getattr(self, 'policy', {}).get('stopped_route_compliance', {'uses_prediction_ensembles': False, 'uses_lr_residual_backprojection': False, 'retunes_stopped_parameters': False})
         if compliance != expected or any(type(v) is not bool for v in compliance.values()):
@@ -90,10 +91,7 @@ class LiteratureStudy(AutonomousStudy):
             reject_lr_residual_backprojection((self.actor/'candidate.py').read_text())
         except ValueError as exc:
             return self.reject_registration(str(exc))
-        atomic_json(self.destination/'search-records.json', searches)
-        result = super().register()
-        atomic_json(self.destination/'search-records.json', searches)
-        return result
+        return super().register()
 
     def serve_request(self, path):
         if not path.is_symlink() and path.stat().st_size <= 4096:

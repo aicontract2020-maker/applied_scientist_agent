@@ -181,7 +181,13 @@ class AutonomousStudy:
             review = review_intervention(self, snapshot, plan)
             if review['decision'] != 'PASS':
                 return self.reject_registration(review['reason'])
-            if sha(self.actor/'candidate.py') != review['candidate_sha256'] or json.loads(source.read_text()) != plan:
+            try:
+                unchanged = (not (self.actor/'candidate.py').is_symlink() and not source.is_symlink()
+                             and sha(self.actor/'candidate.py') == review['candidate_sha256']
+                             and json.loads(source.read_text()) == plan)
+            except (OSError, ValueError):
+                unchanged = False
+            if not unchanged:
                 return self.reject_registration('Proposal changed during immutable intervention review')
         protocol = {'plan': plan, 'policy': self.policy, 'candidate_sha256': sha(snapshot / 'candidate.py'),
                     'trusted_inputs_sha256': digest(self.hidden)}
