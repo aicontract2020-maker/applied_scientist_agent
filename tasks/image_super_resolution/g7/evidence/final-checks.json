@@ -1,0 +1,25 @@
+{
+  "tested_code_commit": "b594021",
+  "linux_arm64_unit_tests": {
+    "ran": 78,
+    "passed": true
+  },
+  "macos_unit_tests": {
+    "ran": 78,
+    "passed": true
+  },
+  "bare_python_unit_tests": {
+    "ran": 77,
+    "passed": true,
+    "skipped": 4,
+    "note": "Before the final published-route unit was added; full dependency runs include it"
+  },
+  "actual_linux_kernel_probes": true,
+  "actual_linux_and_macos_intervention_rejection_fixtures": true,
+  "offline_workflow_synthetic_only": "CONTINUE",
+  "model_calls_after_scientific_STOP": 0,
+  "scientific_experiments_total": 1,
+  "linux_temporary_login_removed": true,
+  "linux_vm_stopped": true,
+  "actual_model_billing_usd": null
+}

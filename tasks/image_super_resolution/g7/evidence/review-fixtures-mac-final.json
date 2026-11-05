@@ -1,0 +1,190 @@
+{
+  "scope": "OS-isolated software fixtures, not scientific evidence",
+  "platform": "darwin",
+  "results": [
+    {
+      "fixture": "identity",
+      "decision": "REJECTED",
+      "reason": "ValueError: No observable intervention after actual clipping/uint8 conversion on the fixed synthetic suite",
+      "probe": {
+        "changed_channels": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observable_change": false,
+        "deterministic": true,
+        "scope": "Seven fixed synthetic cases only; not a proof of semantic inequivalence or SR quality"
+      },
+      "probe_execution": {
+        "error": null,
+        "returncode": 0,
+        "wall_seconds": 0.10657883388921618,
+        "artifact": "/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-aevr8lel/control/intervention-probe"
+      },
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "clip-variant",
+      "decision": "REJECTED",
+      "reason": "ValueError: No observable intervention after actual clipping/uint8 conversion on the fixed synthetic suite",
+      "probe": {
+        "changed_channels": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observable_change": false,
+        "deterministic": true,
+        "scope": "Seven fixed synthetic cases only; not a proof of semantic inequivalence or SR quality"
+      },
+      "probe_execution": {
+        "error": null,
+        "returncode": 0,
+        "wall_seconds": 0.10244991723448038,
+        "artifact": "/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-448qgdpy/control/intervention-probe"
+      },
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "rounding-noop",
+      "decision": "REJECTED",
+      "reason": "ValueError: No observable intervention after actual clipping/uint8 conversion on the fixed synthetic suite",
+      "probe": {
+        "changed_channels": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observable_change": false,
+        "deterministic": true,
+        "scope": "Seven fixed synthetic cases only; not a proof of semantic inequivalence or SR quality"
+      },
+      "probe_execution": {
+        "error": null,
+        "returncode": 0,
+        "wall_seconds": 0.10630045784637332,
+        "artifact": "/private/var/folders/tp/mg1rsdkj7h59r_jmxx6dbsdh0000gn/T/research-harness-otkgzthg/control/intervention-probe"
+      },
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "g6-original",
+      "decision": "REJECTED",
+      "reason": "ValueError: Stopped implementation fingerprint (including numeric retunes): G6",
+      "probe": null,
+      "probe_execution": null,
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "g4-retuned-renamed",
+      "decision": "REJECTED",
+      "reason": "ValueError: Stopped implementation fingerprint (including numeric retunes): G4",
+      "probe": null,
+      "probe_execution": null,
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "stopped-G2",
+      "decision": "REJECTED",
+      "reason": "ValueError: Stopped implementation fingerprint (including numeric retunes): G2",
+      "probe": null,
+      "probe_execution": null,
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "stopped-G3",
+      "decision": "REJECTED",
+      "reason": "ValueError: Stopped implementation fingerprint (including numeric retunes): G3",
+      "probe": null,
+      "probe_execution": null,
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "stopped-G4",
+      "decision": "REJECTED",
+      "reason": "ValueError: Stopped implementation fingerprint (including numeric retunes): G4",
+      "probe": null,
+      "probe_execution": null,
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "stopped-MAC",
+      "decision": "REJECTED",
+      "reason": "ValueError: Stopped implementation fingerprint (including numeric retunes): MAC",
+      "probe": null,
+      "probe_execution": null,
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "stopped-LINUX",
+      "decision": "REJECTED",
+      "reason": "ValueError: Stopped implementation fingerprint (including numeric retunes): LINUX",
+      "probe": null,
+      "probe_execution": null,
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "stopped-G5",
+      "decision": "REJECTED",
+      "reason": "ValueError: Stopped implementation fingerprint (including numeric retunes): G5",
+      "probe": null,
+      "probe_execution": null,
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "stopped-G6",
+      "decision": "REJECTED",
+      "reason": "ValueError: Stopped implementation fingerprint (including numeric retunes): G6",
+      "probe": null,
+      "probe_execution": null,
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    },
+    {
+      "fixture": "stopped-G7",
+      "decision": "REJECTED",
+      "reason": "ValueError: Stopped implementation fingerprint (including numeric retunes): G7",
+      "probe": null,
+      "probe_execution": null,
+      "registered": false,
+      "reference_started": false,
+      "model_called": false
+    }
+  ]
+}

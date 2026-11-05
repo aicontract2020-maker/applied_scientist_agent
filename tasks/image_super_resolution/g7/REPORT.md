@@ -34,6 +34,6 @@ Agent 自行搜索，读取 [Structure-Preserving Image Super-Resolution](https:
 
 全会话232.380秒，代理$0.064550；实验54.456秒、审查44.642秒均为会话子集，不能重复加总。Proposer input/cached/output=786060/748928/6479；独立审查=100606/77824/1908；实际模型标识及美元账单未知。安装、完整VM/环境/资产存储、长期保留和参考峰值内存未完整计量。见 [resource-accounting.json](evidence/resource-accounting.json)。
 
-公开归档保存原报告、协议、代码、逐图分数、审查包、控制器源码快照和隔离参数；完整论文/数组/大日志保存在被Git忽略的本地镜像，公开哈希，不发布全文或大图。原 [AGENT_REPORT.md](AGENT_REPORT.md) 未被重写；全文读取范围与因果边界另见 [operator-audit.json](evidence/operator-audit.json)。临时Linux登录已删除，VM结束后停止。
+公开归档保存原报告、协议、代码、逐图分数、审查包、控制器源码快照和隔离参数；完整论文/数组/大日志保存在被Git忽略的本地镜像，公开哈希，不发布全文或大图。原 [AGENT_REPORT.md](AGENT_REPORT.md) 未被重写；全文读取范围与因果边界另见 [operator-audit.json](evidence/operator-audit.json)。临时Linux登录已删除，VM已停止。最终Linux/macOS各78项软件测试与真实隔离拦截通过，离线合成工作流通过；均未追加模型或科学实验。
 
 累计84张Urban100原图已评分，剩16张；本轮新路线、两篇来源和图像已加入后续排除清单。新干预审查通过说明本候选可被检验，不代表科研假设成立。
