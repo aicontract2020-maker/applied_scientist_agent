@@ -1,0 +1,42 @@
+{
+  "content": {
+    "id": "abalone-t1-median-residual",
+    "phase": "proposal_screen_only",
+    "hypothesis": "One validation-fitted median residual offset improves untouched holdout MAE by >=0.05 rings over the qualified fixed HGB.",
+    "baseline_review_sha256": "bf68d98f1c7f3e67d47e39940e36d60f1bca32a4002a3ba75dcfcb27cf3e132f",
+    "mechanism": "additive_validation_median_residual_v1",
+    "calibration": "median(y_validation - prediction_hgb_seed_11); use all original validation rows, no trimming, rescaling or tuning",
+    "minimum_effect": 0.05,
+    "metric": "baseline_MAE - candidate_MAE, rings",
+    "controls": [
+      "Same HGB training and fixed baseline recipe",
+      "All previously scored validation rows; not fresh confirmatory data",
+      "No model retraining, alternative candidates or parameter rescue",
+      "No final holdout inference or scoring during screening"
+    ],
+    "prospective_bootstrap": {
+      "resamples": 1000,
+      "seed": 20261105,
+      "confidence": 0.95
+    },
+    "prospective_max_latency_ratio": 1.1,
+    "uncertainty_limit": "Prospective interval is conditional on fixed training data and unverified row independence. Screening uses a deterministic bound, not statistical confirmation.",
+    "screening_rules": {
+      "invalid_baseline": "fail closed before calibration",
+      "delta_zero": "REJECTED/NOT_RUN",
+      "abs_delta_below_minimum_effect": "REJECTED/NOT_RUN; universal MAE gain upper bound is abs(delta)",
+      "otherwise": "AWAITING_RESEARCH_REVIEW; no scoring permission"
+    },
+    "cost_scope": {
+      "new_training_runs": 0,
+      "model_calls": 0,
+      "holdout_scoring": 0,
+      "actual_local_cost_usd": null
+    },
+    "sources": [
+      "https://proceedings.mlr.press/v80/kuleshov18a.html",
+      "https://proceedings.mlr.press/v162/marx22a.html"
+    ]
+  },
+  "sha256": "a3b76c39bb33d922c52e419a02aa3937a16dc992c98deaaafd83028f4138438e"
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "kind": "tabular-screen-history",
+    "version": 1,
+    "scope": "b64fc1fa8fdd56bad0bb7c706bc158ee6ff66751b535555f50c98f76547a86c5",
+    "mechanism": "additive_validation_median_residual_v1",
+    "protocol_sha256": "a3b76c39bb33d922c52e419a02aa3937a16dc992c98deaaafd83028f4138438e",
+    "baseline_review_sha256": "bf68d98f1c7f3e67d47e39940e36d60f1bca32a4002a3ba75dcfcb27cf3e132f",
+    "status": "REJECTED",
+    "result_sha256": "902a7e8ffb7a3765884c016e18afd8c52076c96533f724865c356478b88cffad"
+  }
+]

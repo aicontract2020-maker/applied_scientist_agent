@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.17.0
+
+- Add read-only historical baseline auditing across checkout upgrades while keeping current-source equality mandatory for new baseline approval/execution.
+- Add a fixed validation-median-offset proposal screen with an analytical MAE improvement bound, explicit REJECTED/NOT_RUN versus pending research review, and no training or holdout scoring.
+- Bind proposal records to prior qualified HGB evidence and retain conservative published/local task/data-scoped mechanism closures; changed IDs cannot reopen a closed or reserved screen.
+- Preserve the T1 negative proposal: offset 0.0121221781 rings bounds any possible MAE gain below its predeclared 0.05 threshold. No parameter rescue, new baseline attempt or final holdout evaluation.
+- Keep tabular autonomous research disabled. Screening and baseline audit are engineering capabilities, not scientific success or authenticated execution proofs.
+
 ## 0.16.0
 
 - Prepare a pinned, licensed UCI Abalone baseline-qualification review with feature-hash train/validation/holdout splits; do not fit or score real data during preparation.

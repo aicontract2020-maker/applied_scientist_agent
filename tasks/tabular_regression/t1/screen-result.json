@@ -1,0 +1,17 @@
+{
+  "status": "REJECTED",
+  "scientific_status": "NOT_RUN",
+  "delta": 0.012122178108001425,
+  "universal_mae_gain_upper_bound": 0.012122178108001425,
+  "minimum_effect": 0.05,
+  "reason": "Universal MAE gain upper bound is below the frozen minimum effect",
+  "calibration_rows": 862,
+  "baseline_review_sha256": "bf68d98f1c7f3e67d47e39940e36d60f1bca32a4002a3ba75dcfcb27cf3e132f",
+  "protocol_sha256": "a3b76c39bb33d922c52e419a02aa3937a16dc992c98deaaafd83028f4138438e",
+  "calibration_source_sha256": "a4385cbcdeaaeeab037c98ab39e4941993155a904cde6a666a55d16f6b17ffe2",
+  "new_training_runs": 0,
+  "model_calls": 0,
+  "final_holdout_scored": false,
+  "screen_wall_seconds": 0.0009335840000000012,
+  "actual_local_cost_usd": null
+}

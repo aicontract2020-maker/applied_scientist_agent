@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import platform
+import re
 import shutil
 import statistics
 import subprocess
@@ -98,7 +99,7 @@ python3 -m research_harness tabular baseline --review PATH
     return {'status': 'AWAITING_REVIEW', 'review': str(folder/'REVIEW.md'), 'sha256': packet['sha256'], 'counts': content['counts']}
 
 
-def load_review(folder):
+def load_review(folder, *, require_current_sources=True):
     folder = Path(folder)
     if folder.is_symlink() or not folder.is_dir(): raise ValueError('Review must be a regular directory')
     packet = read_json(folder/'bundle.json')
@@ -110,7 +111,10 @@ def load_review(folder):
         raise ValueError('Changed/unsupported baseline review')
     if c['source'] != SOURCE and c['source'] != {'id': 'synthetic-software-fixture'}:
         raise ValueError('Unsupported dataset provenance')
-    if c['sources'] != source_hashes(): raise ValueError('Reviewed source changed; rebuild and review before execution')
+    if (not isinstance(c['sources'], dict) or not c['sources'] or
+            any(not isinstance(k,str) or not isinstance(v,str) or not re.fullmatch('[0-9a-f]{64}',v) for k,v in c['sources'].items())):
+        raise ValueError('Invalid frozen source hashes')
+    if require_current_sources and c['sources'] != source_hashes(): raise ValueError('Reviewed source changed; rebuild and review before execution')
     parts = {name: read_json(folder/name) for name in FILES}
     if any(digest(parts[name]) != c['files'][name] for name in FILES): raise ValueError('Reviewed data changed')
     rows = list(parts['train.json'])

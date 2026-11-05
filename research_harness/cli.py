@@ -72,6 +72,17 @@ def main():
             command.add_argument("--sha256", required=True)
             command.add_argument("--reviewer", required=True)
     tabular_commands.add_parser("probe", help="Test actual task isolation using synthetic secrets only")
+    tabular_commands.add_parser("screen-history", help="Read published/local task-scoped proposal closures")
+    audit_baseline = tabular_commands.add_parser("audit-baseline", help="Read-only completed baseline audit; never execute historical sources")
+    audit_baseline.add_argument("--review", required=True)
+    screen = tabular_commands.add_parser("screen", help="Screen one fixed calibration proposal using existing validation records only")
+    screen.add_argument("--baseline", required=True)
+    screen.add_argument("--protocol", required=True)
+    screen.add_argument("--out", required=True)
+    for name in ("verify-screen", "retain-screen"):
+        command = tabular_commands.add_parser(name)
+        command.add_argument("--baseline", required=True)
+        command.add_argument("--proposal", required=True)
     memory = sub.add_parser("memory", help="Exchange conservative research history without models or images")
     memory.add_argument("--root", help="Source checkout whose history to manage (default: this checkout)")
     memory_commands = memory.add_subparsers(dest="memory_command", required=True)
@@ -100,7 +111,24 @@ def main():
     try:
         if args.command == "tabular":
             from .tabular_baseline import prepare, load_review, approve as approve_baseline, execute as execute_baseline
-            if args.tabular_command == "fetch":
+            if args.tabular_command == "screen-history":
+                from .tabular_screen import history_records
+                output = history_records()
+            elif args.tabular_command == "audit-baseline":
+                from .tabular_audit import audit_baseline
+                output = audit_baseline(args.review)
+                print(json.dumps(output, indent=2, ensure_ascii=False))
+                return 0 if output['audit_ok'] else 1
+            elif args.tabular_command in ("screen", "verify-screen", "retain-screen"):
+                from .tabular_screen import screen, verify_screen, retain_screen
+                if args.tabular_command == "screen":
+                    output = screen(args.baseline, args.protocol, args.out)
+                elif args.tabular_command == "retain-screen":
+                    output = retain_screen(args.baseline, args.proposal)
+                else:
+                    _, result, scope = verify_screen(args.baseline, args.proposal)
+                    output = {'screen_integrity_ok': True, 'read_only': True, 'scope': scope, 'result': result}
+            elif args.tabular_command == "fetch":
                 from .tabular_data import fetch_abalone
                 output = fetch_abalone(args.out)
             elif args.tabular_command == "prepare":
