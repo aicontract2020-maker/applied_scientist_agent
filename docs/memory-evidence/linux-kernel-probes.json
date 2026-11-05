@@ -1,0 +1,27 @@
+{
+  "kernel_probes_passed": true,
+  "real_model_or_login_test": false,
+  "results": {
+    "actor": {
+      "repo_read": "DENIED",
+      "control_read": "DENIED",
+      "symlink_escape": "DENIED",
+      "outside_write": "DENIED",
+      "response_write": "DENIED",
+      "host_pid_hidden": true
+    },
+    "candidate": {
+      "repo_read": "DENIED",
+      "control_read": "DENIED",
+      "symlink_escape": "DENIED",
+      "outside_write": "DENIED",
+      "response_write": "DENIED",
+      "imports": "OK",
+      "input_write": "DENIED",
+      "network": "DENIED",
+      "network_namespace_isolated": true,
+      "host_pid_hidden": true
+    },
+    "actor_cli": "codex-cli 0.144.0"
+  }
+}

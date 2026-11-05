@@ -1,0 +1,98 @@
+{
+  "task": "swinir-s-x2-urban100-selfexsr-8f6dd8c1d20cb7e8792a7177b4f6fd677633f598",
+  "memory_sha256": "dda470d0047b5b73862fb72fdbfd350b0106d1b27a157a9685761a9c354e417c",
+  "scored_originals": 84,
+  "reserved_unscored_originals": 0,
+  "unused_originals": 16,
+  "full_12_image_cycles_remaining": 1,
+  "read_papers": 17,
+  "stopped_route_records": 14,
+  "rejected_proposal_records": 3,
+  "studies": [
+    {
+      "id": "linux-g5-20261104",
+      "policy_sha256": "178a6d9ce591d19f75bd0fac3b6ce93efbc636737539006449fb1439a36fa073",
+      "state": "STOP",
+      "observation_ids": [
+        "img_005",
+        "img_017",
+        "img_019",
+        "img_031",
+        "img_033",
+        "img_036",
+        "img_042",
+        "img_046",
+        "img_058",
+        "img_091",
+        "img_094",
+        "img_095"
+      ],
+      "plan_sha256": "4e313413c2c128fdd3ef2750518bb01ace3b95c9e153ea6bb26ccb86b5279282",
+      "candidate_sha256": "8708733bbd97e4329394e27c4ff25223b49b61f12d011b462243f63638692d17"
+    },
+    {
+      "id": "linux-g6-20261104",
+      "policy_sha256": "eb27733b102808d44f9d71de1e8a4cddff9054d675326bdc3b3fa739334b4066",
+      "state": "PROPOSAL_FAILURE",
+      "observation_ids": [
+        "img_012",
+        "img_016",
+        "img_024",
+        "img_029",
+        "img_030",
+        "img_034",
+        "img_039",
+        "img_053",
+        "img_061",
+        "img_073",
+        "img_074",
+        "img_082"
+      ],
+      "plan_sha256": "1238b78a4382c8c7f90e1bf0f0e9cfb19ec874342b8a5c3f3233793d431f2337",
+      "candidate_sha256": "c43cad18770d9da7de4455c3574527812052682bc6223001744f281e9cfe27cf"
+    },
+    {
+      "id": "linux-g7-20261104",
+      "policy_sha256": "889560ba9efdd26dce57ffc49ce57da271fe9f5aee912a2c5cf8aaf44f17959c",
+      "state": "STOP",
+      "observation_ids": [
+        "img_003",
+        "img_007",
+        "img_013",
+        "img_018",
+        "img_023",
+        "img_025",
+        "img_035",
+        "img_038",
+        "img_054",
+        "img_063",
+        "img_072",
+        "img_085"
+      ],
+      "plan_sha256": "95eb54f59b75aff4ebbad8f35ba4b105872d5f419cc2273d7fe6c3792e157e1b",
+      "candidate_sha256": "4c61eff2e48cd2eb8900df55e0d252642ca16772e6f84d034653c6832fa40dd3"
+    },
+    {
+      "id": "linux-validation-20261104",
+      "policy_sha256": "1b4beca87f95336d6c4866280fdedfbc19098ba32a8156f329a0ddbc413f6876",
+      "state": "STOP",
+      "observation_ids": [
+        "img_008",
+        "img_015",
+        "img_050",
+        "img_059",
+        "img_064",
+        "img_069",
+        "img_071",
+        "img_075",
+        "img_081",
+        "img_096",
+        "img_097",
+        "img_100"
+      ],
+      "plan_sha256": "b4e8f8478fa516fd3a456eac1c7787ca502586c6327097af6f1036f6e73634b3",
+      "candidate_sha256": "14c0122f920e20b6ce6e58a5e438ad857f1c8f8a3072f63de682dc1d5f688c92"
+    }
+  ],
+  "coordination": "Host-local lock and explicit snapshot exchange; no distributed live registry"
+}

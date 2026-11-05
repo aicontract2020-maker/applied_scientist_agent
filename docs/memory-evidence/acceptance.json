@@ -1,0 +1,37 @@
+{
+  "scope": "Platform software acceptance only; no new research model or empirical experiment",
+  "code_commit": "9a90d05",
+  "version": "0.12.0",
+  "macos_dependency_tests": {
+    "ran": 89,
+    "passed": true
+  },
+  "macos_bare_python_tests": {
+    "ran": 89,
+    "passed": true,
+    "skipped": 4
+  },
+  "linux_arm64_dependency_tests": {
+    "ran": 89,
+    "passed": true
+  },
+  "linux_to_clean_macos_recipient": {
+    "offline_import": "IMPORTED",
+    "roundtrip_payload_sha256": "dda470d0047b5b73862fb72fdbfd350b0106d1b27a157a9685761a9c354e417c",
+    "identical_packet_after_reexport": true,
+    "scientific_packages_assets_and_login_in_recipient": false,
+    "transferred_studies": 4,
+    "scored_originals": 84,
+    "reserved_unscored_originals": 0
+  },
+  "real_kernel_and_intervention_rejection_probes": true,
+  "linux_credentials_restored": false,
+  "linux_vm_stopped": true,
+  "new_scientific_experiments": 0,
+  "new_model_calls": 0,
+  "boundaries": [
+    "No distributed live registry; hand off before starting another machine",
+    "Checksums and trusted peer claims are not authenticity or scientific validation",
+    "Route record counts may contain multiple descriptions of the same family"
+  ]
+}
