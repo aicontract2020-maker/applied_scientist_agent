@@ -14,7 +14,8 @@ from .state_lock import research_lock
 
 TASK = 'swinir-s-x2-urban100-selfexsr-8f6dd8c1d20cb7e8792a7177b4f6fd677633f598'
 MAX_BYTES = 4 * 1024 * 1024
-STATES = {'RESERVED', 'INCOMPLETE', 'REJECTED', 'INVALID', 'STOP', 'CONTINUE'}
+STATES = {'RESERVED', 'INCOMPLETE', 'REJECTED', 'INVALID', 'STOP', 'CONTINUE', 'PROPOSAL_FAILURE'}
+MEASURED_STATES = {'STOP', 'CONTINUE', 'PROPOSAL_FAILURE'}
 
 
 def _object(pairs):
@@ -121,7 +122,7 @@ def validate(payload):
         excluded = set(payload['scored_ids']) | set(payload['reserved_ids'])
         if not set(study['observation_ids']) <= excluded:
             raise ValueError('Memory study attempts to reclaim reserved observations')
-        if study['state'] in ('STOP', 'CONTINUE') and not set(study['observation_ids']) <= set(payload['scored_ids']):
+        if study['state'] in MEASURED_STATES and not set(study['observation_ids']) <= set(payload['scored_ids']):
             raise ValueError('A measured study must retain all its scored originals')
         for image in study['observation_ids']:
             if image in claimed:
@@ -199,6 +200,16 @@ def snapshot(root):
     from .intervention_review import catalog
     history = read_json(root/'templates/sr/history.json')
     policy_template = read_json(root/'templates/sr/policy.json')
+    # Preserve existing operator findings without rewriting raw numeric results.
+    # A published, code-bound proposal failure is not a scientific route STOP.
+    proposal_failures = set()
+    for audit_path in (root/'tasks/image_super_resolution').glob('*/evidence/operator-audit.json'):
+        audit = read_json(audit_path)
+        registration_path = audit_path.parent/'registered.json'
+        if audit.get('scientific_new_intervention_requirement_met') is False and registration_path.exists():
+            code_hash = read_json(registration_path).get('candidate_sha256')
+            _hash(code_hash)
+            proposal_failures.add(code_hash)
     routes = []
     for route in catalog(root, []):
         disposition = 'REJECTED_PROPOSAL' if route['id'] == 'G6' else 'STOP'
@@ -244,10 +255,14 @@ def snapshot(root):
             if code_hash is not None and actual_hash != code_hash:
                 raise ValueError(f'Frozen candidate changed for study {name}')
             code_hash = actual_hash
+        if state in ('STOP', 'CONTINUE') and code_hash in proposal_failures:
+            state = 'PROPOSAL_FAILURE'
         local['studies'].append({'id': name, 'policy_sha256': digest(policy), 'state': state, 'observation_ids': sorted(ids),
                                  'plan_sha256': digest(plan) if plan is not None else None, 'candidate_sha256': code_hash})
-        if plan and state in ('STOP', 'REJECTED'):
+        if plan and state in ('STOP', 'REJECTED', 'PROPOSAL_FAILURE'):
             description = plan.get('hypothesis', 'Rejected proposal')+'; '+(plan.get('stop_route') or (result or {}).get('reason', 'No automatic retry'))
+            if state == 'PROPOSAL_FAILURE':
+                description = 'Previously published code-bound operator finding: measured proposal failure, not a new scientific intervention: '+description
             if state == 'REJECTED':
                 description = 'Proposal rejected before scoring, not scientific falsification: '+description
             local['routes'].append(_route('study:'+name, description, 'STOP' if state == 'STOP' else 'REJECTED_PROPOSAL', source))

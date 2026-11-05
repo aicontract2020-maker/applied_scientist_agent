@@ -37,6 +37,7 @@ python3 -m research_harness memory status
 - `unused_originals` / `full_12_image_cycles_remaining`：扣除两者后的可用原图与完整周期数量。目前发布历史为84张已用、16张未用，最多一轮12张研究；本地/导入预留可能进一步减少。
 - 论文：从冻结策略、引用及实际读取库中收集；即使尚未注册、提案被拒绝或执行中断，读过的论文仍不能重新包装成首次使用的新证据。
 - `stopped_route_records` 与 `rejected_proposal_records` 是保留的记录条数，可能包含同一机制的不同来源描述，不是不同科学假设的数量。提案拒绝始终标为 `REJECTED_PROPOSAL`，不是科学证伪。
+- 既有操作者审阅若已将某个代码绑定的候选认定为空提案失败（如G6），即使原数值结果有效并仍写STOP，迁移记录也标为 `PROPOSAL_FAILURE`，保留已评分图像，不当成新的科学停止路线；原始结果不改。
 - study 记录含ID、策略/方案/代码哈希、状态和原图ID；有效 STOP 的机制与已有源码会进入下一轮的冻结干预审查目录。
 
 新任务将合并快照保存为 `local_studies/ID/memory.json`，并纳入 `inputs.lock.json`。Agent 不能在运行中换掉这份研究历史。受让的停止实现与本地实现一样接受指纹比对及独立机制审查；记忆模块本身不会执行其中代码。

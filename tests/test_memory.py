@@ -114,6 +114,20 @@ class MemoryTests(unittest.TestCase):
         peer = self.peer(); import_memory(peer, self.packet())
         self.assertEqual(status(peer)['reserved_unscored_originals'], 24)
 
+    def test_existing_operator_proposal_failure_keeps_scored_ids_without_scientific_stop(self):
+        self.stopped()
+        run=self.root/'runs/peer-a-study'
+        registration=json.loads((run/'registered.json').read_text())
+        evidence=self.root/'tasks/image_super_resolution/g6/evidence';evidence.mkdir(parents=True)
+        (evidence/'registered.json').write_text(json.dumps({'candidate_sha256':registration['candidate_sha256']}))
+        (evidence/'operator-audit.json').write_text('{"scientific_new_intervention_requirement_met":false}')
+        value=snapshot(self.root)
+        self.assertEqual(value['studies'][0]['state'],'PROPOSAL_FAILURE')
+        self.assertEqual(len(value['scored_ids']),24)
+        route=next(x for x in value['routes'] if x['label']=='study:peer-a-study')
+        self.assertEqual(route['disposition'],'REJECTED_PROPOSAL')
+        self.assertEqual(json.loads((run/'result.json').read_text())['status'],'STOP')
+
     def test_conflicting_identity_terminal_decision_or_overlap_has_no_partial_import(self):
         peer = self.peer(); self.stopped(); packet = self.packet(); import_memory(peer, packet)
         original = load_packet(packet)['payload']; store = peer/'.research-memory/packets'
