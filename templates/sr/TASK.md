@@ -103,3 +103,12 @@ may remain unknown; do not fabricate zero. The local machine-hour proxy is not a
 `stopped_route_compliance`: exactly {"uses_prediction_ensembles": false, "uses_lr_residual_backprojection": false, "uses_weak_high_frequency_shrinkage": false, "uses_global_luminance_contrast_expansion": false, "uses_luminance_preserving_gamut_compression": false, "uses_phase_locked_luminance_offset_correction": false, "uses_luminance_preserving_rgb_lattice_selection": false, "retunes_stopped_parameters": false}. Explain all historical prior stopped routes in why_not_g1_retry. Find a genuinely different mechanism yourself; no menu or candidate algorithm is supplied. Search and read BEFORE proposing and coding. Stop if no defensible hypothesis exists.
 
 Before registering, state what a pass, a valid negative, and an invalid measurement each mean. Register only ONE candidate, not a menu. Do not infer mechanism-specific causality from a comparison that changes multiple factors. No post-result ablation or tuning.
+
+## Required complete decision wording
+
+Before registration and in REPORT.md, explicitly state ALL THREE conjunctive gates:
+mean paired PSNR-Y gain >= policy.minimum_effect AND the paired-bootstrap lower
+confidence bound > 0 AND candidate/reference latency <= policy.max_latency_ratio.
+Do not summarize pass/fail with only effect and latency. This restates the existing
+frozen evaluator rule; it does not change thresholds. A valid failure of ANY gate
+means STOP, without tuning/retry; an invalid measurement is not scientific evidence.
