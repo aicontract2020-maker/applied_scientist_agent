@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.13.0
+
+- Add read-only `study list`, `study status --run` and `study audit --run` without model or image access.
+- Audit lifecycle order, frozen code/plan and review hashes, observation identities and aggregates; recompute paired bootstrap/latency and enforce all frozen adoption gates.
+- Require this audit for new `research` completion reports; incomplete or inconsistent artifacts cannot claim workflow completion.
+- Keep invalid measurements and pre-registration rejections distinct from scientific success; status never infers process liveness or resumes work.
+
 ## 0.12.0
 
 - Add offline research-memory status/export/import for transferring conservative SR exclusions, stopped/rejected proposal mechanisms and optional candidate source across checkouts.

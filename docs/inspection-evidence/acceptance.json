@@ -1,0 +1,24 @@
+{
+  "scope": "Read-only software/artifact acceptance, not a new empirical experiment",
+  "version": "0.13.0",
+  "full_dependency_tests": {
+    "ran": 98,
+    "passed": true
+  },
+  "bare_python_tests": {
+    "ran": 98,
+    "passed": true,
+    "skipped": 4
+  },
+  "historical_run": "linux-g7-20261104",
+  "artifact_files_with_unchanged_content_hashes": 73,
+  "audit_ok": true,
+  "audit_check_count": 29,
+  "new_research_model_calls": 0,
+  "new_image_scoring_or_experiments": 0,
+  "module_sha256": {
+    "research_harness/study_inspection.py": "7b2d4368168317e583d664decf7acabfd567576fc57e2a099f93e65928683737",
+    "research_harness/onboarding.py": "dfb6dfc0bf97cb7a7890d069d38c924baa569da089a3db82de6ce9b0333531aa",
+    "research_harness/cli.py": "21680bd80e227775174c61dc430675b777d633134efe18f8ad6d9dae21beddf4"
+  }
+}

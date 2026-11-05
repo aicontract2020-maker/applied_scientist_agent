@@ -87,6 +87,16 @@ python3 -m research_harness memory import /path/to/handoff.json
 
 已关闭或已预留 ID 不覆盖、不自动恢复、不自动重跑。下一项研究要换新 ID、提供新外部证据，且不能修改已 STOP 路线的参数来重开。数据用完会拒绝继续，要求获得新数据并审查协议。同一 clone 的研究、建任务及记忆变更受本地锁保护；并发调用在预留和模型调用前报忙。进程退出释放锁，保留图像预留，不自动恢复研究。
 
+## 查看进度与只读审计
+
+```sh
+python3 -m research_harness study list
+python3 -m research_harness study status --run runs/first-study
+python3 -m research_harness study audit --run runs/first-study
+```
+
+状态只显示已记录阶段，不猜测进程存活，也不恢复或重跑任务。审计核对冻结代码/方案、账本顺序和审查绑定，并从已存逐图分数重算统计量、核对全部采用门槛；不调用模型或重新评分图像。新 `research` 完成检查强制执行该审计，不一致就不能声称流程完成。`audit_ok` 表示产物一致，不代表科研成功；完整的拒绝/无效/负结果都应保留。详见 [状态与审计](docs/STUDY_INSPECTION.md)。
+
 ## 产物与历史
 
 - `local_studies/ID/`：本机独立任务、冻结输入哈希、图像清单和环境检查。

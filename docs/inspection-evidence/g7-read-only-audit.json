@@ -1,0 +1,159 @@
+{
+  "audit_ok": true,
+  "read_only": true,
+  "run": "local full G7 mirror (path normalized for publication)",
+  "stage": "STOP",
+  "declared_scientific_status": "STOP",
+  "measurement_valid": true,
+  "snapshot_stable": true,
+  "checks": [
+    {
+      "check": "Recognized terminal result",
+      "passed": true
+    },
+    {
+      "check": "One successful agent finish",
+      "passed": true
+    },
+    {
+      "check": "Agent report agrees with declared result",
+      "passed": true
+    },
+    {
+      "check": "Two primary reads including full-text extraction recorded",
+      "passed": true
+    },
+    {
+      "check": "Native search evidence present",
+      "passed": true
+    },
+    {
+      "check": "Frozen and final candidate hashes match",
+      "passed": true
+    },
+    {
+      "check": "Final plan matches frozen plan",
+      "passed": true
+    },
+    {
+      "check": "Plan preserves policy field: controls",
+      "passed": true
+    },
+    {
+      "check": "Plan preserves policy field: minimum_effect",
+      "passed": true
+    },
+    {
+      "check": "Plan preserves policy field: max_latency_ratio",
+      "passed": true
+    },
+    {
+      "check": "Plan preserves policy field: bootstrap",
+      "passed": true
+    },
+    {
+      "check": "Plan preserves policy field: observation_ids",
+      "passed": true
+    },
+    {
+      "check": "Registration ledger binds protocol and code",
+      "passed": true
+    },
+    {
+      "check": "Single registration/run, no rejection",
+      "passed": true
+    },
+    {
+      "check": "Registration, decision and finish ordered",
+      "passed": true
+    },
+    {
+      "check": "Experiment start binds registered protocol",
+      "passed": true
+    },
+    {
+      "check": "Decision ledger matches result",
+      "passed": true
+    },
+    {
+      "check": "Review PASS bound to frozen code/plan",
+      "passed": true
+    },
+    {
+      "check": "Review ledger agrees with PASS and candidate",
+      "passed": true
+    },
+    {
+      "check": "Review completed before registration",
+      "passed": true
+    },
+    {
+      "check": "One experiment before decision",
+      "passed": true
+    },
+    {
+      "check": "Recomputed mean_gain_db",
+      "passed": true
+    },
+    {
+      "check": "Recomputed observation_count",
+      "passed": true
+    },
+    {
+      "check": "Recomputed observation_effects",
+      "passed": true
+    },
+    {
+      "check": "Recomputed observation_effect_std",
+      "passed": true
+    },
+    {
+      "check": "Recomputed bootstrap_interval",
+      "passed": true
+    },
+    {
+      "check": "Recomputed bootstrap_confidence",
+      "passed": true
+    },
+    {
+      "check": "Recomputed latency_ratio",
+      "passed": true
+    },
+    {
+      "check": "Decision follows all frozen gates",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "recomputed": {
+    "observation_count": 12,
+    "observation_effects": [
+      -0.034280385909919886,
+      -0.04955392370384715,
+      0.018926617969398762,
+      -0.05126302549192019,
+      -0.13225237725765027,
+      -0.460077981340703,
+      -0.18284255392733684,
+      0.049247660205502086,
+      -0.06089959255211852,
+      0.09660761049955369,
+      -0.1333753639423385,
+      -0.04735898172886266
+    ],
+    "observation_effect_std": 0.14254466768324958,
+    "bootstrap_interval": [
+      -0.16795364658531428,
+      -0.01379691763950112
+    ],
+    "bootstrap_confidence": 0.95,
+    "latency_ratio": 0.4912638680872355,
+    "bootstrap_scope": "Original-image sampling variability; not training replication or proof against dataset contamination",
+    "mean_gain_db": -0.08226019143168688
+  },
+  "limits": [
+    "Artifact consistency and recorded-score reanalysis only; no pixel scoring, model execution, process liveness, authenticity or proof of novelty.",
+    "Original images/weights and historical input files are not reread; a historical checkout may have legitimately changed.",
+    "An invalid measurement or rejected proposal can have internally consistent evidence; audit success is not scientific success."
+  ]
+}

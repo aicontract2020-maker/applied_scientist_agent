@@ -6,7 +6,7 @@ from pathlib import Path
 from .portable import ROOT, _new_study, sha
 
 
-def validate_workflow(destination):
+def validate_workflow(destination, *, require_integrity=False):
     destination=Path(destination)
     result=json.loads((destination/'result.json').read_text())
     session=json.loads((destination/'session.json').read_text())
@@ -53,7 +53,12 @@ def validate_workflow(destination):
             try: item=json.loads(line)
             except ValueError: continue
             if item.get('type')=='turn.completed': reviewer_usage.append(item.get('usage'))
-    verdict={'workflow_completed':not errors, 'experiment_started': 'EXPERIMENT_STARTED' in types, 'proposal_rejected':rejected, 'reviewer_model_usage':reviewer_usage,'errors':errors,'scientific_status':result.get('scientific_status',result.get('status')),
+    completion_audit=None
+    if require_integrity:
+        from .study_inspection import audit_run
+        completion_audit=audit_run(destination)
+        errors.extend('Completion audit: '+message for message in completion_audit['errors'])
+    verdict={'completion_audit':completion_audit,'workflow_completed':not errors, 'experiment_started': 'EXPERIMENT_STARTED' in types, 'proposal_rejected':rejected, 'reviewer_model_usage':reviewer_usage,'errors':errors,'scientific_status':result.get('scientific_status',result.get('status')),
              'measurement_valid':result.get('measurement_valid',False),'operations':operations,'isolation_backend':session.get('isolation_backend','historical-unspecified'),
              'primary_reads_completed':len(completed),'full_text_extractions':sum(e['full'] for e in completed),
              'session_seconds':session['total_wall_seconds'],'session_machine_hour_proxy_usd':session['local_proxy_usd'],
@@ -95,7 +100,7 @@ def _research_locked(name):
     # preflight.json is diagnostic, not an experimental input; frozen inputs are explicit.
     print(f"[3/3] Running one live agent cycle. Evidence: {output}", file=sys.stderr, flush=True)
     result=LiteratureStudy(output,study).launch()
-    verdict=validate_workflow(output)
+    verdict=validate_workflow(output, require_integrity=True)
     if not verdict['workflow_completed']:
         raise ValueError(f'Cycle incomplete; no automatic retry. Inspect {output}/workflow.json: {verdict["errors"]}')
     return {'workflow_completed':True,'scientific_decision':result.get('scientific_status',result['status']),'proposal_decision':result['status'],'report':str(output/'REPORT.md'),'study':str(study),'run':str(output)}
