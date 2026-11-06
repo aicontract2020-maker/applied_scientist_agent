@@ -2,6 +2,7 @@
 
 ## 0.19.0
 
+- 2026-11-06: record C3 handoff acceptance as user-confirmed PASS for commit bf832f6; recipient logs and timing/cost records were not supplied. Prepare the D1 research-value comparison design; no new empirical execution is authorized or started.
 - Add conservative published/local/imported tabular exclusions with row fingerprints and stopped feature structure checks; matching records block renamed studies, reordered rows, repartitioning and numeric retuning.
 - Add private allowlisted evidence export, exact Python 3.12 offline verification and review-only unpacking. Packets contain data/labels/paper/approval text; no private packet is published.
 - Add explicit propose/execute stages under the unified research CLI while preserving immutable v1 evaluation bindings and exact human approval.

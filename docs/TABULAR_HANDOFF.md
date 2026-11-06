@@ -64,4 +64,4 @@ python3 -m research_harness tabular memory import NEW_MEMORY.json
 
 本轮 macOS 3.12.13 → Linux 3.12.3 对真实 T2 包完成只读验收，STOP 和 804 个排除特征组一致；原始 T2 所有文件保持不变。见 [macOS 检查](tabular-handoff-evidence/macos.json) 和 [Linux 检查](tabular-handoff-evidence/linux.json)。这是本机不同环境的工程验证，尚不是独立同事的可用性验收。
 
-下一步为 [独立同事交接验收](INDEPENDENT_HANDOFF_REVIEW.md)，建议先交付合成包，避免真实数据、论文和审批记录的共享问题。
+后续 C3 [独立同事交接验收](INDEPENDENT_HANDOFF_REVIEW.md)已于 2026-11-06 由用户确认通过，接收端原始记录未附；不将上面的维护者检查冒充独立使用者证据。下一步为 [D1 研究价值评测设计](RESEARCH_VALUE_REVIEW.md)。
