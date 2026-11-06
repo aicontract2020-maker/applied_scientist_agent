@@ -83,6 +83,17 @@ def main():
         command = tabular_commands.add_parser(name)
         command.add_argument("--baseline", required=True)
         command.add_argument("--proposal", required=True)
+    proposer=tabular_commands.add_parser("propose", help="One isolated literature/feature proposal; no data rows, training or scoring")
+    proposer.add_argument("--baseline",required=True); proposer.add_argument("--out",required=True)
+    proposer.add_argument("--recover-launch",help="Explicit one-time recovery of a retained pre-agent Node initialization abort only")
+    trial=tabular_commands.add_parser("prepare-trial", help="Freeze one concrete feature study for human review; no real experiment")
+    trial.add_argument("--baseline",required=True); trial.add_argument("--proposal",required=True)
+    trial.add_argument("--literature",required=True); trial.add_argument("--out",required=True)
+    for name in ("verify-trial","approve-trial","run-trial","audit-trial"):
+        command=tabular_commands.add_parser(name)
+        command.add_argument("--review",required=True)
+        if name=="approve-trial":
+            command.add_argument("--sha256",required=True); command.add_argument("--reviewer",required=True)
     memory = sub.add_parser("memory", help="Exchange conservative research history without models or images")
     memory.add_argument("--root", help="Source checkout whose history to manage (default: this checkout)")
     memory_commands = memory.add_subparsers(dest="memory_command", required=True)
@@ -111,7 +122,23 @@ def main():
     try:
         if args.command == "tabular":
             from .tabular_baseline import prepare, load_review, approve as approve_baseline, execute as execute_baseline
-            if args.tabular_command == "screen-history":
+            if args.tabular_command == "propose":
+                from .tabular_proposer import propose
+                output=propose(args.baseline,args.out,recover_launch=args.recover_launch)
+            elif args.tabular_command == "prepare-trial":
+                from .tabular_trial import prepare as prepare_trial
+                output=prepare_trial(args.baseline,args.proposal,args.out,args.literature)
+            elif args.tabular_command in ("verify-trial","approve-trial","run-trial","audit-trial"):
+                from .tabular_trial import load_trial,approve_trial,execute_trial,audit_trial
+                if args.tabular_command=="approve-trial": output=approve_trial(args.review,args.sha256,args.reviewer)
+                elif args.tabular_command in ("run-trial","audit-trial"):
+                    output=(execute_trial if args.tabular_command=="run-trial" else audit_trial)(args.review)
+                    print(json.dumps(output,indent=2,ensure_ascii=False))
+                    return 0 if output.get('audit_ok',output.get('measurement_valid',False)) else 1
+                else:
+                    envelope,_,_=load_trial(args.review)
+                    output={'integrity_ok':True,'sha256':envelope['sha256'],'status':'AWAITING_RESEARCH_REVIEW'}
+            elif args.tabular_command == "screen-history":
                 from .tabular_screen import history_records
                 output = history_records()
             elif args.tabular_command == "audit-baseline":

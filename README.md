@@ -14,7 +14,7 @@ python3 -m examples.tabular_demo.workflow --out runs/tabular-software-demo
 
 演示先冻结方案和输入哈希，再评价并写入 STOP 账本；所有数据、时延和成本都是软件 fixture。`research --task tabular-regression` 会在环境检查和数据预留前拒绝，不会退回无隔离执行。
 
-第二任务的[基线资格审查方案](docs/TABULAR_BASELINE_REVIEW.md)已获用户审核并执行：HGB 在预定比较中通过资格检查。0.17.0 新增[历史基线审计与提案筛查](docs/TABULAR_PROPOSAL_SCREEN.md)；首个固定中位数偏移提案被解析上界拒绝，804 条最终留出记录仍未评分。基线和筛查入口不开放第二任务自主研究。
+第二任务的[基线资格审查方案](docs/TABULAR_BASELINE_REVIEW.md)已获用户审核并执行：HGB 在预定比较中通过资格检查。T1 固定中位数偏移已被解析上界拒绝。0.18 新增[自主提案与人工审核候选执行接口](docs/TABULAR_FEATURE_TRIAL.md)：真实 actor 已提出一个壳重比例特征，待审核；804 条最终留出记录仍未评分。`research --task tabular-regression` 仍关闭，第二任务尚未完成真实自主实验闭环。
 
 最近一轮 [G7 Linux研究与审查记录](tasks/image_super_resolution/g7/REPORT.md)：新机制审查通过，几何校正候选有效负结果，按规则 STOP；未调参重跑。
 

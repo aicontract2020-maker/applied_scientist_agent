@@ -1,0 +1,9 @@
+{
+  "synthetic_only": true,
+  "actual_isolated_six_fit_trial": true,
+  "strict_audit_passed": true,
+  "tampering_rejected": true,
+  "repeat_execution_rejected": true,
+  "real_data_scored": false,
+  "model_calls": 0
+}

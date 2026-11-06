@@ -1,0 +1,53 @@
+[
+  {
+    "url": "https://arxiv.org/abs/1901.00497",
+    "title": "A computational framework for the morpho-elastic development of molluskan shells by surface and volume growth",
+    "authors": [
+      "Rudraraju, Shiva",
+      "Moulton, Derek E.",
+      "Chirat, R\u00e9gis",
+      "Goriely, Alain",
+      "Garikipati, Krishna"
+    ],
+    "date": "2019/01/02",
+    "read_at": "2026-11-06T02:41:15.364292+00:00",
+    "html_sha256": "66b6fa2e385d94eccd67f8d41f4c8516706eb3b3933012e125509fab44a63a2b",
+    "pdf_sha256": "6bd76c5569f3ee0891b24a744d08bb4ba97f4f1089afd62185212ae6fb9c7a88",
+    "download_bytes": 8051767,
+    "full_text_truncated": true
+  },
+  {
+    "url": "https://arxiv.org/abs/2211.12507",
+    "title": "OpenFE: Automated Feature Generation with Expert-level Performance",
+    "authors": [
+      "Zhang, Tianping",
+      "Zhang, Zheyu",
+      "Fan, Zhiyuan",
+      "Luo, Haoyan",
+      "Liu, Fengyuan",
+      "Liu, Qian",
+      "Cao, Wei",
+      "Li, Jian"
+    ],
+    "date": "2022/11/22",
+    "read_at": "2026-11-06T02:41:17.525033+00:00",
+    "html_sha256": "fe8de0b231807421f16e686fd9d71a906056e7a4b68fc2d44714b6fdf1280913",
+    "pdf_sha256": "66f4c6548dec1d980704b0dff6ec7b6103bd64bfa810207f9454611f21fb3eba",
+    "download_bytes": 715426,
+    "full_text_truncated": true
+  },
+  {
+    "url": "https://arxiv.org/abs/1603.02754",
+    "title": "XGBoost: A Scalable Tree Boosting System",
+    "authors": [
+      "Chen, Tianqi",
+      "Guestrin, Carlos"
+    ],
+    "date": "2016/03/09",
+    "read_at": "2026-11-06T02:41:17.822553+00:00",
+    "html_sha256": "5c47cf0189cdd6e0f1418a2acaff61645bf7f0146efd354d174c8cee2c124df6",
+    "pdf_sha256": "52bc282c922a239134ee4d6f4367c58bf920a9bdd53acbb3b2aa3342e2bb7214",
+    "download_bytes": 987337,
+    "full_text_truncated": true
+  }
+]

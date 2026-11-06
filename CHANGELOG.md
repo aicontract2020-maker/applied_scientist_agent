@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.18.0
+
+- Add an isolated tabular literature/proposal actor with no dataset rows, training or score operation.
+- Interpret a closed arithmetic feature language instead of importing candidate Python; reject obvious constant, duplicate and single-column monotone features using synthetic probes.
+- Add content-bound candidate review/approval, six fixed paired HGB fits, historical validation reproduction, private-label controller scoring, shared effect/bootstrap/latency gates and conservative partition reservations.
+- Add read-only completed-trial auditing and actual macOS/Linux synthetic integration checks; these are not evidence of research performance.
+- Preserve the pre-agent Node startup failure and a separate, narrowly checked native-launch recovery. No credential transfer was performed. The actor produced a shell-mass-fraction proposal for review; no real candidate training or final holdout scoring occurred.
+
 ## 0.17.0
 
 - Add read-only historical baseline auditing across checkout upgrades while keeping current-source equality mandatory for new baseline approval/execution.
