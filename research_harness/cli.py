@@ -111,6 +111,14 @@ def main():
     command=te.add_parser("export"); command.add_argument("--review",required=True); command.add_argument("--out",required=True)
     te.add_parser("verify").add_argument("packet")
     command=te.add_parser("unpack"); command.add_argument("packet"); command.add_argument("--out",required=True)
+    airfoil = sub.add_parser("airfoil", help="Pinned condition-grouped public task; baseline qualification requires review")
+    ac = airfoil.add_subparsers(dest="airfoil_command", required=True)
+    ac.add_parser("fetch").add_argument("--out", required=True)
+    ap = ac.add_parser("prepare"); ap.add_argument("--data", required=True); ap.add_argument("--out", required=True)
+    for name in ("review", "approve", "baseline", "audit"):
+        ap = ac.add_parser(name); ap.add_argument("--review", required=True)
+        if name == "approve":
+            ap.add_argument("--sha256", required=True); ap.add_argument("--reviewer", required=True)
     memory = sub.add_parser("memory", help="Exchange conservative research history without models or images")
     memory.add_argument("--root", help="Source checkout whose history to manage (default: this checkout)")
     memory_commands = memory.add_subparsers(dest="memory_command", required=True)
@@ -137,7 +145,22 @@ def main():
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
-        if args.command == "tabular":
+        if args.command == "airfoil":
+            from . import airfoil_baseline as ab
+            if args.airfoil_command == "fetch":
+                from .airfoil_data import fetch
+                output = fetch(args.out)
+            elif args.airfoil_command == "prepare": output = ab.prepare(args.data, args.out)
+            elif args.airfoil_command == "review":
+                packet, _ = ab.load_review(args.review)
+                output = {"sha256": packet["sha256"], "content": packet["content"]}
+            elif args.airfoil_command == "approve": output = ab.approve(args.review, args.sha256, args.reviewer)
+            elif args.airfoil_command == "audit": output = ab.audit(args.review)
+            else:
+                output = ab.execute(args.review)
+                print(json.dumps(output, indent=2, ensure_ascii=False))
+                return 0 if output["measurement_valid"] else 1
+        elif args.command == "tabular":
             from .tabular_baseline import prepare, load_review, approve as approve_baseline, execute as execute_baseline
             if args.tabular_command == "memory":
                 from .portable import ROOT

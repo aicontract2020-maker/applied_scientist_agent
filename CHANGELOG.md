@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.20.0
+
+- Add a pinned public Airfoil task with target-blind condition-group partitions, macro condition MAE, grouped uncertainty and a fixed five-model/three-seed baseline qualification.
+- Add exact review/approval, single-attempt dataset reservations, isolated trusted worker and read-only audit; preserve existing Abalone/SR protocols and stopped routes.
+- Validate new boundaries with synthetic tests and actual OS-isolated fits. Prepare the real A1 review without real training, prediction or scoring. No human-efficiency or commercial-value claim.
+
 ## 0.19.0
 
 - 2026-11-06: record C3 handoff acceptance as user-confirmed PASS for commit bf832f6; recipient logs and timing/cost records were not supplied. Prepare the D1 research-value comparison design; no new empirical execution is authorized or started.

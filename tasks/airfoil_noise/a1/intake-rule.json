@@ -1,0 +1,17 @@
+{
+  "status": "FROZEN_BEFORE_DOWNLOAD",
+  "source": "https://archive.ics.uci.edu/dataset/291/airfoil+self-noise",
+  "group_columns": [
+    1,
+    2,
+    3
+  ],
+  "split": "sha256 canonical JSON of {split: airfoil-condition-v1, condition: [angle,chord,velocity]}; first 8 hex / 2**32; <.6 train, <.8 validation, else holdout",
+  "minimum_groups": {
+    "train": 20,
+    "validation": 10,
+    "holdout": 10
+  },
+  "selection": "No labels or model scores used; no alternate salt/split if group counts fail",
+  "allowed": "Download, schema check, target-blind counts, freeze review; no real training/scoring"
+}

@@ -1,0 +1,178 @@
+{
+  "content": {
+    "recipe": {
+      "kind": "airfoil-condition-baseline",
+      "version": 1,
+      "seeds": [
+        11,
+        22,
+        33
+      ],
+      "hypothesis": "A fixed learned reference reduces condition-macro validation MAE by >=1 dB versus train-median at every seed and has a positive group-bootstrap lower bound.",
+      "decision_purpose": "Qualify the lowest mean error reference from a bounded fixed model set; not global SOTA or scientific novelty.",
+      "models": [
+        "median",
+        "ridge",
+        "svr",
+        "hgb",
+        "extra_trees"
+      ],
+      "baseline_parameters": {
+        "median": "DummyRegressor(strategy=median), fitted on training rows",
+        "ridge": "StandardScaler then Ridge(alpha=1, solver=svd)",
+        "svr": "StandardScaler then SVR(kernel=rbf, C=10, epsilon=.1, gamma=scale, cache_size=200); no target scaling",
+        "hgb": "absolute_error, learning_rate=.1, max_iter=100, max_leaf_nodes=31, min_samples_leaf=20, l2_regularization=0, max_bins=255, max_features=1.0, categorical_features=None, early_stopping=False",
+        "extra_trees": "100 trees, squared_error, unlimited depth, min_samples_split=2, min_samples_leaf=1, max_features=1.0, bootstrap=False, n_jobs=1",
+        "other_parameters": "Pinned scikit-learn 1.7.2 defaults; random_state=seed where supported"
+      },
+      "controls": [
+        "Pinned raw data and fixed target-blind condition split",
+        "All models train on original row-weighted training set only; scaling fitted on training rows",
+        "Validation labels stay in controller; no final holdout mounted",
+        "Single-thread CPU, fixed versions, no tuning/early stopping, all 15 fits charged"
+      ],
+      "group_rule": {
+        "columns": [
+          1,
+          2,
+          3
+        ],
+        "split": "airfoil-condition-v1",
+        "boundaries": [
+          0.6,
+          0.8
+        ],
+        "minimum_groups": {
+          "train": 20,
+          "validation": 10,
+          "holdout": 10
+        }
+      },
+      "primary_metric": "Mean of per-condition mean absolute errors, in dB; every condition equal weight",
+      "minimum_gain_db": 1.0,
+      "threshold_reason": "Proposed engineering qualification margin, not an established business or perceptual threshold",
+      "selection": "Lowest mean condition-macro MAE across 3 seeds among ridge, svr, hgb, extra_trees; ties use that order; never choose a different model to rescue a failed selected model",
+      "bootstrap": {
+        "resamples": 10000,
+        "seed": 20261106,
+        "confidence_per_model": 0.99,
+        "lower_quantile": 0.005,
+        "upper_quantile": 0.995
+      },
+      "uncertainty": "Resample complete validation condition groups with replacement on seed-averaged paired losses. Four 99% marginal percentile intervals mitigate selection (nominal Bonferroni family coverage >=96%, approximate bootstrap only). Seeds measure training variation, not independent data. Unknown campaign dependence remains.",
+      "validity": [
+        "Pinned source/data/environment; exact identities and finite complete outputs",
+        "Actual OS isolation probe passes; every condition stays in one partition",
+        "Median/Ridge/SVR/HGB cross-seed prediction range <=1e-8; Extra Trees variation is reported, not invalidated"
+      ],
+      "max_deterministic_prediction_range": 1e-08,
+      "go": "Only draft a separate candidate protocol; no automatic candidate execution or holdout scoring",
+      "stop": "Close qualification; no alternate model, changed split, tuning or automatic retry",
+      "invalid": "Preserve failed measurement and reservation; no automatic retry or scientific conclusion",
+      "limits": {
+        "worker_seconds": 240,
+        "output_bytes": 16777216,
+        "threads": 1,
+        "attempts": 1,
+        "fits": 15
+      },
+      "costs": {
+        "model_calls": 0,
+        "paid_cloud_jobs": 0,
+        "actual_local_cost_usd": null,
+        "unpriced": [
+          "installation/downloads",
+          "electricity/depreciation",
+          "retained storage",
+          "human review"
+        ]
+      },
+      "python": "3.12",
+      "packages": {
+        "numpy": "1.26.4",
+        "scipy": "1.15.3",
+        "scikit-learn": "1.7.2",
+        "joblib": "1.5.2",
+        "threadpoolctl": "3.6.0"
+      }
+    },
+    "source": {
+      "id": "uci-airfoil-condition-v1",
+      "url": "https://archive.ics.uci.edu/dataset/291/airfoil+self-noise",
+      "download": "https://archive.ics.uci.edu/static/public/291/airfoil+self+noise.zip",
+      "archive_sha256": "5c7767ba53ad827d3f48ba1eb9434117f4892df8f10bc4c99e118a9e8a7ae07c",
+      "raw_sha256": "74c75fd71783f1e6b71f8a622b993dc592897a97cd689c5090a07147a1b097b3",
+      "license": "CC BY 4.0",
+      "citation": "Brooks, Pope & Marcolini (1989). Airfoil Self-Noise. UCI. DOI:10.24432/C5VW2C"
+    },
+    "files": {
+      "train.json": "c947db70083f2bea1af1a3e88521a52e86dc467a9cc759cb0b32ea2b3ea0f101",
+      "validation.json": "6b94151614427498898dcf80dea618e9291bb0e70c10420151044722ad3dc519",
+      "validation-targets.json": "51924ba7193e32db1aaafb397e2e758ff02f1497f9b7e185ada10f51a1c5b42e",
+      "holdout.json": "ac1210c88f4e0a4890c10722991105806fb97ed8f1a1e0dead8feb44b757a84d",
+      "holdout-targets.json": "605e643e9182575103b59d62fa8be4e5859ab52655dbe5749627d03699160553"
+    },
+    "counts": {
+      "train": {
+        "rows": 961,
+        "groups": 67
+      },
+      "validation": {
+        "rows": 257,
+        "groups": 18
+      },
+      "holdout": {
+        "rows": 285,
+        "groups": 21
+      }
+    },
+    "sources": {
+      "research_harness/__init__.py": "494453de1ad67611853f078d411c284ef90c63ba425a60be9380a5bd6da424dd",
+      "research_harness/__main__.py": "13a1a5b340cdcfc1902b62be90e508c7c71886000d5bf087e7854aadf09fb35e",
+      "research_harness/airfoil_baseline.py": "1cd6f298da92f9214965668e25dae754064927d0f4e83102cf827830ea7df1ce",
+      "research_harness/airfoil_data.py": "951a7c2e29fee8505f13bf2fa88a6423faa47e0ab9e29ee30278710f6e409c38",
+      "research_harness/airfoil_worker.py": "bcf64fc9780d25f90d1e53941a9619ef669d077a8659c01b39aa64f71b124e58",
+      "research_harness/autonomous_candidate.py": "a9b7bda9333b52c5bc3c928c4f99a0668a3a14980cf3ed14fa806e2df27e048f",
+      "research_harness/autonomous_reference.py": "aa0697435738d035609df142f3581725d5937a6b9fa40f9eaaa48db9bd8de229",
+      "research_harness/autonomy.py": "abecf405313b24a4504436ae24ebbb53f437e4e261dcd20112902faf07949e71",
+      "research_harness/cli.py": "7012165e1b4891e2962523f9479a1ebc44602b291802e91eb8fe28163a58189f",
+      "research_harness/core.py": "173b94d14cd154a84c4d1c288a2d445e5855111e87ca65984cf5f90ed7d86d7e",
+      "research_harness/doctor.py": "21d9a03fbdbbf48a9a7783594e3d9801cceb5c379cfac2e663953a822ef192c1",
+      "research_harness/evidence_bundle.py": "4c8ba3f1097956f4dd8b9463f4a1869b6c5192b420b37062b1ae990f91bee4d7",
+      "research_harness/execution.py": "ec5eaed5f90cfe651e6f932f881623df1b94a29d546877175f4566883bdac16c",
+      "research_harness/intervention_review.py": "5f41d69116204d35e90b1bfc9b00235425a14fb0202b955a22c0fa5a67e7b7a6",
+      "research_harness/linux_isolation.py": "02b0c740ab63b6540b0c58706a6d7300276dab28ac75c529f47b7fb4f19475c1",
+      "research_harness/literature_study.py": "f30d0aaf7e0a24526a343a37dd3931e237fe1fa4771aaecefcd48e4fe4cc735d",
+      "research_harness/memory.py": "2a4b9cc0dae426da8a9f0e1db3fded482370817fa3caaffd75d0a65c20d72dc4",
+      "research_harness/observations.py": "5a32cb4f56a9cd89af101bd59a965953820a3f6357bf3ac9d914e3ded25bd7f7",
+      "research_harness/onboarding.py": "e4bdb5b8c1b420e951ce0160168a27843d2a5eeb21d9620b8e566fb6e6e14932",
+      "research_harness/planning.py": "14f65096496af8fbe02a38f62e467f5363cecdbf65c6aaa7eaa4b5ec005fd5f8",
+      "research_harness/portable.py": "a2181c56f3b43662fbf0a0b917283817488a2be833bf12d678d002d9262e1e74",
+      "research_harness/primary_literature.py": "d070b1d18440d229d9e753264d0b65695ee30eb7986edbc1a1d64dfb1ccdd5de",
+      "research_harness/regression_evaluation.py": "9646cb864b85c3ff95243dc73a273ff267c52cb1e20e869ba12540c734354004",
+      "research_harness/review.py": "6c9cb348a9ddf70b9bdde1c76d177e04a2fc4b9957f309bbcfadd10d7366ec3d",
+      "research_harness/sr_evaluation.py": "a6599e530e68d626dd1fd67c1fa40b901e156b852a0afa92a2c827bd927aedf9",
+      "research_harness/state_lock.py": "d5a080aad92519df908527dd9208c3b732ecdd9fa7e5773728e6ae971c47134a",
+      "research_harness/study_inspection.py": "ee2a84d7dec244c99854b6b7f2c97c821012c9a309274683c04429b9e9074c4b",
+      "research_harness/tabular_audit.py": "439c9d76886fac1ff42a9b21eb6a34add9a9b2194aba58a67a3e0e4b1dc75091",
+      "research_harness/tabular_baseline.py": "2eae3300090bdb0143ec815062e8e8ae6d8223fd6630e4c30ae8a4688e147426",
+      "research_harness/tabular_data.py": "3906a4064da20a056f9d0441e048d76c0e2d3cdaf9b0d93353940b5c16b9304f",
+      "research_harness/tabular_evidence.py": "ff9c38fe544952c47f9f009fa365bfe6f801dfc3f86e3462cc956c627f19d5dd",
+      "research_harness/tabular_features.py": "5d8c31d89dbfb5da10f97663af47e48e7c1862001e73ae6f4f6f7895f8bf9c94",
+      "research_harness/tabular_memory.py": "c020867712817f43c2f5fa5d426b7528b82ad6b6cb535abb94768da4e3c5ca95",
+      "research_harness/tabular_proposer.py": "4403e75b292d5ffbb34d7bf50710d107835081067438a25bdd1b5bc8e26e627a",
+      "research_harness/tabular_sandbox.py": "25597c61bb56b6505582fd4b570725edb3aaabf8e2d3c4797baf1b76aecc2bd1",
+      "research_harness/tabular_screen.py": "8aeefe5acf6a2f2b80d459965aa13dc9d0c4b74c07979aff39b95e1923b0b7d5",
+      "research_harness/tabular_trial.py": "6f4b0073a88305ef660b7e8cd3731f23a3046fcdc5feb5c1db1da7378195bb4f",
+      "research_harness/tabular_trial_worker.py": "ffdf0f344360c4207da23e41e9e178f3912923696b1fb1547a9e4b43b95d7dfe",
+      "research_harness/tabular_worker.py": "3dd072b7c53303f1f5b696b3c95a3fbc937597663ebb4aa9a5641b63a965a333",
+      "research_harness/tabular_workflow.py": "971e1defd16395099c3d092d26f41429b42fd4aeb9eff53507c05b1de494fc05",
+      "research_harness/task_contracts.py": "842ab12411854a6d90c5dbfb921adc6474f1a23089ef2535f86d51e467d8878d",
+      "requirements-tabular.lock.txt": "b4ae79c69fb4708b77b84c249d41a2a74ffa4f3f1220f7e8ff45f38909a4f790",
+      "scripts/bootstrap-tabular.sh": "9089d19742af7b66a9cef4ac20b8b49a0b40c2a3eee8b36d53d989858be7c782",
+      "scripts/check-tabular-isolation.py": "1b698f6e750833aa0e1553e113081f3ea7068b9d49d892a4e8e3d53e940e9242"
+    },
+    "status": "AWAITING_REVIEW"
+  },
+  "sha256": "ac8f7df93f688a9621038c881fa5ab312e4bc5790d7f59c134547dbbd81e2dd5"
+}
