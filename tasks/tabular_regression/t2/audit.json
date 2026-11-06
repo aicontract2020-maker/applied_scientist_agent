@@ -1,0 +1,9 @@
+{
+  "audit_ok": true,
+  "read_only": true,
+  "status": "STOP",
+  "measurement_valid": true,
+  "trial_sha256": "b07cab854924e57ec11bd2dad064fdf9623c180ca4e951215163bd318686c502",
+  "final_holdout_scored": true,
+  "limit": "Record consistency, not authenticated execution, independence or scientific novelty"
+}

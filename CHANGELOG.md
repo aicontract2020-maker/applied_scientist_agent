@@ -2,6 +2,8 @@
 
 ## 0.18.0
 
+- 2026-11-06: after explicit user approval, execute frozen T2 once and retain a valid STOP: MAE gain 0.0092071 <0.05, 95% interval crosses zero, latency ratio 1.4498 >1.1. All 804 final holdout rows are consumed; no retry/tuning. Pinned Python 3.12 read-only audit passes.
+
 - Add an isolated tabular literature/proposal actor with no dataset rows, training or score operation.
 - Interpret a closed arithmetic feature language instead of importing candidate Python; reject obvious constant, duplicate and single-column monotone features using synthetic probes.
 - Add content-bound candidate review/approval, six fixed paired HGB fits, historical validation reproduction, private-label controller scoring, shared effect/bootstrap/latency gates and conservative partition reservations.

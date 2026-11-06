@@ -1,0 +1,124 @@
+{
+  "status": "STOP",
+  "measurement_valid": true,
+  "mean_effect": 0.009207104761322278,
+  "per_seed_effects": [
+    0.009207104761322278,
+    0.009207104761322278,
+    0.009207104761322278
+  ],
+  "seed_effect_std": 0.0,
+  "final_holdout_scored": true,
+  "conclusion": "Any valid below-threshold result closes this mechanism; no tuning or complexity rescue",
+  "peak_rss_bytes": 122683392,
+  "fit_seconds": 0.5087478756904602,
+  "transform_train_seconds": 0.00631879223510623,
+  "wall_seconds": 2.326651083305478,
+  "holdout_exposed_to_worker": true,
+  "actual_local_cost_usd": null,
+  "model_calls": 0,
+  "retained_bytes_before_report": 1272290,
+  "summary": {
+    "observation_count": 804,
+    "observation_effect_std": 0.4430196531440932,
+    "bootstrap_interval": [
+      -0.022429215673562534,
+      0.04062612508308957
+    ],
+    "bootstrap_confidence": 0.95,
+    "latency_ratio": 1.4498036095368294,
+    "bootstrap_scope": "Independent-row sampling variability; not training replication, proof of independence or absence of leakage"
+  },
+  "baseline_mae": 1.504051168257541,
+  "candidate_mae": 1.4948440634962188,
+  "trial_sha256": "b07cab854924e57ec11bd2dad064fdf9623c180ca4e951215163bd318686c502",
+  "scope": "b64fc1fa8fdd56bad0bb7c706bc158ee6ff66751b535555f50c98f76547a86c5",
+  "source_result_sha256": "3410c1ab3805784b72baa1f775e38cef5dff04e2df8f9a2eae060a2a50b2fcec",
+  "source_ledger_sha256": "cd1a97f9a207f57ddba80c59b866a9cbc227e715f69d2e2786013c0c1b5c854b",
+  "execution_platform": "macos-seatbelt",
+  "controller_python": "3.12.13",
+  "scientific_attempts": 1,
+  "planned_fits": 6,
+  "retained_run_bytes": 1865705,
+  "reporting_note": "Scalar summary derived from original evidence; not a full independently verifiable evidence bundle.",
+  "per_seed_timings": [
+    {
+      "kind": "baseline",
+      "seed": 11,
+      "fit_seconds": 0.08639812469482422,
+      "batch_seconds": 0.004293166100978851,
+      "timing_seconds": [
+        0.004220041912049055,
+        0.004293166100978851,
+        0.004492500331252813,
+        0.004689791239798069,
+        0.004125792067497969
+      ]
+    },
+    {
+      "kind": "candidate",
+      "seed": 11,
+      "fit_seconds": 0.08982441714033484,
+      "batch_seconds": 0.005593084264546633,
+      "timing_seconds": [
+        0.005955792032182217,
+        0.005741833243519068,
+        0.005593084264546633,
+        0.0055487919598817825,
+        0.005570082925260067
+      ]
+    },
+    {
+      "kind": "baseline",
+      "seed": 22,
+      "fit_seconds": 0.0823218752630055,
+      "batch_seconds": 0.003619167022407055,
+      "timing_seconds": [
+        0.003713000100106001,
+        0.0036722091026604176,
+        0.003614750225096941,
+        0.003619167022407055,
+        0.003565375227481127
+      ]
+    },
+    {
+      "kind": "candidate",
+      "seed": 22,
+      "fit_seconds": 0.08451933274045587,
+      "batch_seconds": 0.005582583136856556,
+      "timing_seconds": [
+        0.00569162517786026,
+        0.005582583136856556,
+        0.0054908329620957375,
+        0.013764999806880951,
+        0.005462000146508217
+      ]
+    },
+    {
+      "kind": "baseline",
+      "seed": 33,
+      "fit_seconds": 0.08141695894300938,
+      "batch_seconds": 0.00364725012332201,
+      "timing_seconds": [
+        0.003664750140160322,
+        0.00364725012332201,
+        0.0036118747666478157,
+        0.00367041677236557,
+        0.003607833292335272
+      ]
+    },
+    {
+      "kind": "candidate",
+      "seed": 33,
+      "fit_seconds": 0.0842671669088304,
+      "batch_seconds": 0.005583458114415407,
+      "timing_seconds": [
+        0.005622124765068293,
+        0.005587124731391668,
+        0.0055050416849553585,
+        0.0054277079179883,
+        0.005583458114415407
+      ]
+    }
+  ]
+}
