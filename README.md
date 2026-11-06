@@ -4,7 +4,7 @@
 
 当前完整任务是 **固定 SwinIR-S ×2 图像超分的确定性后处理研究**，不是任意领域的通用科学家。基础工作流无需模型；完整研究使用你自己的 Codex 登录与额度。
 
-0.15.0 开始分离任务接口：超分保留完整自主流程；新增的表格回归仅支持固定预测的可信数值评价和合成演示，尚不能自主查文献、训练或运行候选。查看 [研发路线图](docs/ROADMAP.md) 和 [任务接口](docs/TASK_CONTRACTS.md)。
+0.19.0 提供两类工作流：超分的完整自主周期，以及回归的自主提案 → 人工审核 → 单次隔离执行。回归已接入统一分阶段入口、排除记忆和私有证据交接；其 v1 数值评价契约保持不变。查看 [研发路线图](docs/ROADMAP.md)、[任务接口](docs/TASK_CONTRACTS.md) 和 [回归交接说明](docs/TABULAR_HANDOFF.md)。
 
 ```sh
 python3 -m research_harness task list
@@ -14,7 +14,7 @@ python3 -m examples.tabular_demo.workflow --out runs/tabular-software-demo
 
 演示先冻结方案和输入哈希，再评价并写入 STOP 账本；所有数据、时延和成本都是软件 fixture。`research --task tabular-regression` 会在环境检查和数据预留前拒绝，不会退回无隔离执行。
 
-第二任务的[基线资格审查方案](docs/TABULAR_BASELINE_REVIEW.md)已获用户审核并执行：HGB 在预定比较中通过资格检查。T1 固定中位数偏移已被解析上界拒绝。0.18 新增[自主提案与人工审核候选执行接口](docs/TABULAR_FEATURE_TRIAL.md)：真实 actor 的壳重比例提案已获批准并完成一次实验，[结果 STOP](tasks/tabular_regression/t2/REPORT.md)，804 条最终留出记录已消耗。`research --task tabular-regression` 仍关闭，第二任务已完成自主提案、人工审核、隔离执行和终局审计；通用自主接口及跨机器记忆仍待验收。
+第二任务的[基线资格审查方案](docs/TABULAR_BASELINE_REVIEW.md)已获用户审核并执行：HGB 在预定比较中通过资格检查。T1 固定中位数偏移已被解析上界拒绝。真实 actor 的壳重比例提案已获批准并完成一次实验，[结果 STOP](tasks/tabular_regression/t2/REPORT.md)，804 条最终留出记录已消耗。回归统一入口需明确 `--stage propose/execute`，保留人工审查；已用数据会在模型调用前拒绝复用。新数据集适配、无人工边界的自主周期和独立同事验收尚未完成。
 
 最近一轮 [G7 Linux研究与审查记录](tasks/image_super_resolution/g7/REPORT.md)：新机制审查通过，几何校正候选有效负结果，按规则 STOP；未调参重跑。
 

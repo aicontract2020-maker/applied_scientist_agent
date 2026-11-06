@@ -1,16 +1,17 @@
 # 任务接口与能力范围
 
-0.15.0 将任务身份、领域评价和共用判定分开。这是第一步提取，不是任意插件执行系统。当前仅有两个内置任务，任务文档不能指定 Python 模块、shell 命令或放宽隔离权限。
+0.15.0 将任务身份、领域评价和共用判定分开；0.19.0 在不修改历史 v1 评价绑定的前提下增加独立的工作流能力查询。当前仅有两个内置任务，任务文档不能指定 Python 模块、shell 命令或放宽隔离权限。
 
 | 任务 ID | 评价 | 执行能力 |
 | --- | --- | --- |
 | `swinir-s-x2` | 原有 PSNR-Y、uint8 转换和裁边、固定双次参考 | 现有 macOS/Linux 自主研究流程 |
-| `tabular-regression` | 固定预测的逐行绝对误差，聚合 MAE，越低越好 | 仅可信数值评价；无自主执行能力 |
+| `tabular-regression` | 固定预测的逐行绝对误差，聚合 MAE，越低越好 | v1 绑定仅数值评价；另有明确 propose/execute 阶段及人工审批的 Abalone 特征试验流程 |
 
 ```sh
 python3 -m research_harness task list
 python3 -m research_harness task show swinir-s-x2
 python3 -m research_harness task show tabular-regression
+python3 -m research_harness task capabilities tabular-regression
 ```
 
 目录列出数据、基线、允许干预、不确定性、预算解释、评价器及能力边界。`task` 绑定含 `id/version/sha256`，哈希对应内置契约的规范化 JSON。新 SR policy 自动保存该绑定；执行和审计检查它。未知版本、错误哈希或把回归任务交给 SR runner 都会拒绝。历史没有绑定的 SR 记录保留原行为，不重写历史文件。
@@ -50,9 +51,9 @@ python3 -m examples.tabular_demo.workflow --out runs/tabular-software-demo
 
 输出包括输入、冻结协议、REGISTER → RESULT → DECISION 账本及报告。固定候选比基线差，预期 STOP；不能覆盖同名目录。测试另用相互独立的合成场景验证正结果、效果不足、不确定性过高和延迟超限，没有在科研负结果后调参。
 
-这些数值、时延和费用全部是 fixture，既不是一个真实回归实验，也不是第二领域自主能力的证明。未选择真实数据集、训练算法或研究假设，未调用模型。
+这个合成演示的数值、时延和费用全部是 fixture，既不是一个真实回归实验，也不是第二领域自主能力的证明。演示不选择真实数据集、训练算法或研究假设，不调用模型。
 
-`research --id example --task tabular-regression` 会在锁、环境检查、数据预留和模型调用前拒绝。回归目前不接入 `memory`、`study audit/export`、自主规划、干预审查或隔离 runner。完整支持必须按 [路线图](ROADMAP.md) 的下一道门槛逐项接入并验证，不能仅把能力标志改为 true。
+`research --id example --task tabular-regression` 未提供阶段时仍会在锁、环境检查、数据预留和模型调用前拒绝。0.19.0 必须显式指定 `--stage propose` 或 `--stage execute`，分别进入文献/提案/冻结审查和获批后一次隔离执行；参见 [特征试验](TABULAR_FEATURE_TRIAL.md) 与 [记忆和证据交接](TABULAR_HANDOFF.md)。回归使用独立的 `tabular memory/evidence` 命令，不冒充 SR 的 `memory`、`study audit/export` 接口。当前 Abalone 留出已经全部消耗；跨任务完整自主能力仍未宣称完成，见 [路线图](ROADMAP.md)。
 
 ## 本轮验证记录
 

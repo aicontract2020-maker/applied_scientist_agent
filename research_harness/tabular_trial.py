@@ -66,11 +66,13 @@ def scope_for(packet):
     return digest({'task':'tabular-regression','source':packet['content']['source'],'files':packet['content']['files']})
 
 
-def prepare(baseline, proposal_path, output, literature):
+def prepare(baseline, proposal_path, output, literature, root=ROOT):
     """Freeze a concrete review. Only syntax/synthetic probes; no real feature evaluation."""
     packet,parts,result,_=validated_baseline(baseline)
     if result['status']!='CONTINUE' or result['selected_baseline']!='hgb': raise ValueError('Qualified HGB required')
     proposal=read_json(proposal_path); gate=validate_proposal(proposal)
+    from .tabular_memory import assert_available
+    assert_available(packet,parts,root,candidate=proposal['candidate_source'])
     papers=read_json(literature)
     if not isinstance(papers,list) or {p['url'] for p in papers}!={e['url'] for e in proposal['evidence']}:
         raise ValueError('Retrieved primary papers must match all proposal references')
@@ -108,6 +110,8 @@ def prepare(baseline, proposal_path, output, literature):
 def load_trial(folder, current=True):
     folder=Path(folder)
     if folder.is_symlink() or not folder.is_dir(): raise ValueError('Regular trial folder required')
+    if current and ((folder/'EVIDENCE_ONLY.json').exists() or (folder/'EVIDENCE_ONLY.json').is_symlink()):
+        raise ValueError('Imported evidence is review-only, never an executable approval')
     envelope=read_json(folder/'trial.json'); c=envelope['content']
     if set(envelope)!={'content','sha256'} or digest(c)!=envelope['sha256'] or c['recipe']!=RECIPE or c['status']!='AWAITING_RESEARCH_REVIEW':
         raise ValueError('Changed trial protocol')
@@ -182,6 +186,9 @@ def execute_trial(folder, root=ROOT):
         run=folder/'trial-run'; history=Path(root)/'.research-memory/tabular-trial'/envelope['content']['scope']
         if any(p.is_symlink() for p in (history,history.parent,history.parent.parent)): raise ValueError('Linked trial memory')
         if run.exists() or history.exists(): raise ValueError('Final holdout already reserved; no retry or alternate candidate')
+        from .tabular_memory import assert_available,data_keys,family_hash
+        baseline_packet=read_json(folder/'baseline/bundle.json')
+        assert_available(baseline_packet,parts,root,candidate=envelope['content']['proposal']['candidate_source'])
         python=ROOT/'.venv-tabular/bin/python'
         env=environment(python); probe=isolation_probe(ROOT,python)
         # Last code check before consuming a reservation. Current code must be reviewed.
@@ -189,6 +196,10 @@ def execute_trial(folder, root=ROOT):
         history.mkdir(parents=True,exist_ok=False)
         write_json(history/'reservation.json',{'scope':envelope['content']['scope'],'trial_sha256':envelope['sha256'],
             'canonical_candidate_sha256':digest(envelope['content']['feature_review']['canonical']),'status':'RESERVED'})
+        write_json(history/'exclusions.json',{'data_keys':data_keys(parts),
+            'family_sha256':family_hash(envelope['content']['proposal']['candidate_source']),
+            'route':{'source':envelope['content']['proposal']['candidate_source'],
+                     'mechanism':envelope['content']['proposal']['mechanism']}})
         run.mkdir(mode=0o700,exist_ok=False); begin=time.monotonic()
         Workspace.append(run,{'event':'REGISTER','trial_sha256':envelope['sha256']})
         exposed=False

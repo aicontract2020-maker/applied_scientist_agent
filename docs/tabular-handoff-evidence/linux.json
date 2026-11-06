@@ -1,0 +1,16 @@
+{
+  "read_only_handoff_passed": true,
+  "platform": "Linux",
+  "python": "3.12.3",
+  "packet_sha256": "5528aa724d8e5c9acf879548eaa581aa68661a693f7e2001e42a35e21c303e8e",
+  "memory_sha256": "9188b946de2cbcd1136fa924545545010ae473710ec566f9e5536e428648438e",
+  "trial_sha256": "b07cab854924e57ec11bd2dad064fdf9623c180ca4e951215163bd318686c502",
+  "decision": "STOP",
+  "excluded_feature_groups": 804,
+  "imported_approval_not_executable": true,
+  "consumed_data_blocked": true,
+  "model_calls": 0,
+  "training_runs": 0,
+  "new_prediction_runs": 0,
+  "limit": "Record consistency and local fresh-directory acceptance; not independent human usability or authenticated execution"
+}

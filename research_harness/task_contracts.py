@@ -61,6 +61,18 @@ def require_autonomous(task_id):
     return item
 
 
+def capabilities(task_id):
+    contract(task_id)  # Closed registry; no external plugin loading.
+    if task_id==SR_TASK:
+        return {'task':task_id,'full_autonomous_cycle':True,'workflow':'research --task swinir-s-x2 --id ID',
+                'handoff':'memory / study evidence','evaluation_binding':binding(task_id)}
+    return {'task':task_id,'full_autonomous_cycle':False,'human_reviewed_workflow':True,
+            'stages':['propose','execute'],'proposal_entry':'research --task tabular-regression --stage propose --baseline BASE --id ID',
+            'execution_entry':'research --task tabular-regression --stage execute --review REVIEW --id FROZEN_PROPOSAL_ID',
+            'handoff':'tabular memory / tabular evidence','evaluation_binding':binding(task_id),
+            'limits':'Pinned qualified Abalone/HGB feature pilot only; exact human approval, fresh data and closed-language review remain required'}
+
+
 def validate_sr_policy(policy):
     # Historical immutable SR policies predate task bindings.
     if 'task' not in policy:

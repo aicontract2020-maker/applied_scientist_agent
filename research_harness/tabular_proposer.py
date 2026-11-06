@@ -88,8 +88,10 @@ def propose(baseline, output, root=ROOT, recover_launch=None):
     from .linux_isolation import linux_actor_command
     from .doctor import isolation_probe
     with research_lock(root):
-        packet,_,result,_=validated_baseline(baseline)
+        packet,parts,result,_=validated_baseline(baseline)
         if result['status']!='CONTINUE' or result['selected_baseline']!='hgb': raise ValueError('Qualified HGB required')
+        from .tabular_memory import assert_available
+        assert_available(packet,parts,root)
         scope=scope_for(packet); folder=Path(output).absolute()
         if folder.exists() or folder.is_symlink(): raise ValueError('Proposal output exists; no retries')
         reservation=Path(root)/'.research-memory/tabular-proposer'/scope
@@ -112,6 +114,8 @@ def propose(baseline, output, root=ROOT, recover_launch=None):
             'baseline_mae':result['mean_validation_mae'],'baseline_parameters':packet['content']['recipe']['baseline_parameters']['hgb'],
             'stopped':['T1 additive validation median residual: bound 0.012122178108001425 < 0.05; no rescue'],
             'recipe':RECIPE,'data_access':'No dataset rows or labels; all real computation remains behind human review'}
+        from .tabular_memory import snapshot
+        context['stopped_routes']=[record['route'] for record in snapshot(root) if record['state']=='STOP' and record['route'] is not None]
         if recovery is None:
             reservation.mkdir(parents=True,exist_ok=False)
             write_json(reservation/'reservation.json',{'baseline_sha256':packet['sha256'],'scope':scope,'status':'RESERVED'})

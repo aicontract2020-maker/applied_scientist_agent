@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.19.0
+
+- Add conservative published/local/imported tabular exclusions with row fingerprints and stopped feature structure checks; matching records block renamed studies, reordered rows, repartitioning and numeric retuning.
+- Add private allowlisted evidence export, exact Python 3.12 offline verification and review-only unpacking. Packets contain data/labels/paper/approval text; no private packet is published.
+- Add explicit propose/execute stages under the unified research CLI while preserving immutable v1 evaluation bindings and exact human approval.
+- Verify completed T2 evidence read-only on macOS and Linux without model calls, training or inference; preserve all original artifacts and its STOP.
+- Prepare a synthetic handoff fixture and an independent-colleague acceptance plan. New datasets and general autonomous research remain outside the supported pilot.
+
 ## 0.18.0
 
 - 2026-11-06: after explicit user approval, execute frozen T2 once and retain a valid STOP: MAE gain 0.0092071 <0.05, 95% interval crosses zero, latency ratio 1.4498 >1.1. All 804 final holdout rows are consumed; no retry/tuning. Pinned Python 3.12 read-only audit passes.

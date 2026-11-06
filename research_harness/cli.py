@@ -50,15 +50,20 @@ def main():
     sub.add_parser("setup-assets", help="Download and verify pinned SR repositories, weights and data")
     health = sub.add_parser("doctor", help="Check dependencies, login, assets and actual OS isolation; no model call")
     health.add_argument("--network", action="store_true")
-    research = sub.add_parser("research", help="Prepare fresh SR holdout, run one autonomous cycle, preserve all evidence")
+    research = sub.add_parser("research", help="Run an SR cycle or an explicit human-reviewed tabular stage")
     research.add_argument("--id", required=True, help="New unique study name; cannot overwrite/retry")
-    research.add_argument("--task", default="swinir-s-x2", help="Built-in task; evaluation-only tasks cannot start research")
+    research.add_argument("--task", default="swinir-s-x2", help="Built-in task; tabular workflow requires an explicit stage")
+    research.add_argument("--stage",choices=("propose","execute"),help="Explicit tabular workflow stage; proposal stops for human review")
+    research.add_argument("--baseline",help="Qualified baseline for tabular proposal stage")
+    research.add_argument("--review",help="Exact approved trial for tabular execution stage")
     task = sub.add_parser("task", help="Inspect built-in task contracts and supported capabilities (no execution)")
     task_commands = task.add_subparsers(dest="task_command", required=True)
     task_commands.add_parser("list")
     task_show = task_commands.add_parser("show")
     task_show.add_argument("id")
-    tabular = sub.add_parser("tabular", help="Prepare/review one isolated baseline qualification; no autonomous research")
+    task_caps=task_commands.add_parser("capabilities",help="Workflow capabilities separate from immutable evaluation bindings")
+    task_caps.add_argument("id")
+    tabular = sub.add_parser("tabular", help="Reviewed baseline/feature trials, exclusion memory and private evidence")
     tabular_commands = tabular.add_subparsers(dest="tabular_command", required=True)
     tabular_fetch = tabular_commands.add_parser("fetch", help="Download pinned public UCI data only; no scoring")
     tabular_fetch.add_argument("--out", required=True)
@@ -94,6 +99,18 @@ def main():
         command.add_argument("--review",required=True)
         if name=="approve-trial":
             command.add_argument("--sha256",required=True); command.add_argument("--reviewer",required=True)
+    tab_memory=tabular_commands.add_parser("memory",help="Conservative tabular exclusion handoff; no data reclamation")
+    tab_memory.add_argument("--root",help="Checkout to inspect/import/export (default: current checkout)")
+    tm=tab_memory.add_subparsers(dest="tabular_memory_command",required=True)
+    tm.add_parser("status")
+    tm.add_parser("export").add_argument("--out",required=True)
+    tm.add_parser("import").add_argument("packet")
+    tm.add_parser("retain").add_argument("--review",required=True)
+    tab_evidence=tabular_commands.add_parser("evidence",help="PRIVATE full evidence, including labels and paper text; no publishing")
+    te=tab_evidence.add_subparsers(dest="tabular_evidence_command",required=True)
+    command=te.add_parser("export"); command.add_argument("--review",required=True); command.add_argument("--out",required=True)
+    te.add_parser("verify").add_argument("packet")
+    command=te.add_parser("unpack"); command.add_argument("packet"); command.add_argument("--out",required=True)
     memory = sub.add_parser("memory", help="Exchange conservative research history without models or images")
     memory.add_argument("--root", help="Source checkout whose history to manage (default: this checkout)")
     memory_commands = memory.add_subparsers(dest="memory_command", required=True)
@@ -122,7 +139,27 @@ def main():
     try:
         if args.command == "tabular":
             from .tabular_baseline import prepare, load_review, approve as approve_baseline, execute as execute_baseline
-            if args.tabular_command == "propose":
+            if args.tabular_command == "memory":
+                from .portable import ROOT
+                from .tabular_memory import snapshot,export_memory,import_memory,retain_trial
+                root=Path(args.root).resolve() if args.root else ROOT
+                if args.tabular_memory_command=='status':
+                    records=snapshot(root)
+                    output={'records':records,'reserved_or_consumed_scopes':len(records),
+                            'known_excluded_feature_groups':len({k for r in records for k in r['data_keys'] or []}),
+                            'note':'Offline exclusions, not a global lock or authenticated execution evidence'}
+                elif args.tabular_memory_command=='export': output=export_memory(args.out,root)
+                elif args.tabular_memory_command=='import': output=import_memory(args.packet,root)
+                else: output=retain_trial(args.review,root)
+            elif args.tabular_command == "evidence":
+                from .tabular_evidence import export as export_evidence,verify as verify_evidence,unpack as unpack_evidence
+                if args.tabular_evidence_command=='export': output=export_evidence(args.review,args.out)
+                elif args.tabular_evidence_command=='unpack': output=unpack_evidence(args.packet,args.out)
+                else:
+                    output=verify_evidence(args.packet)
+                    print(json.dumps(output,indent=2,ensure_ascii=False))
+                    return 0 if output['audit_ok'] else 1
+            elif args.tabular_command == "propose":
                 from .tabular_proposer import propose
                 output=propose(args.baseline,args.out,recover_launch=args.recover_launch)
             elif args.tabular_command == "prepare-trial":
@@ -175,8 +212,8 @@ def main():
                 print(json.dumps(output, indent=2, ensure_ascii=False))
                 return 0 if output['measurement_valid'] else 1
         elif args.command == "task":
-            from .task_contracts import list_tasks, contract, binding
-            output = list_tasks() if args.task_command == "list" else dict(contract(args.id), binding=binding(args.id))
+            from .task_contracts import list_tasks, contract, binding, capabilities
+            output = capabilities(args.id) if args.task_command=='capabilities' else (list_tasks() if args.task_command == "list" else dict(contract(args.id), binding=binding(args.id)))
         elif args.command == "study":
             from .study_inspection import list_studies, run_status, audit_run
             from .portable import ROOT
@@ -218,7 +255,7 @@ def main():
             return 0 if output['ok'] else 1
         elif args.command == "research":
             from .onboarding import research
-            output = research(args.id, task=args.task)
+            output = research(args.id, task=args.task,stage=args.stage,baseline=args.baseline,review=args.review)
         elif args.command == "autonomous":
             from .autonomy import AutonomousStudy
             if args.literature:

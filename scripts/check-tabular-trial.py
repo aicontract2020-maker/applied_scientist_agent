@@ -1,9 +1,11 @@
 """Actual isolation, six-fit candidate worker, STOP/go and audit; SYNTHETIC ONLY."""
 import json
+import argparse
 from pathlib import Path
 import random
 import sys
 import tempfile
+import shutil
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from research_harness.tabular_baseline import prepare_rows,approve,execute
@@ -11,6 +13,9 @@ from research_harness.tabular_trial import prepare,approve_trial,execute_trial,a
 from research_harness.tabular_data import write_json
 
 root=Path(__file__).resolve().parents[1]; (root/'runs').mkdir(exist_ok=True)
+parser=argparse.ArgumentParser()
+parser.add_argument('--export-fixture',help='Keep a new synthetic-only handoff folder for independent installation acceptance')
+args=parser.parse_args()
 rng=random.Random(21); rows=[]
 for i in range(350):
     x=[rng.random() for _ in range(10)]
@@ -45,7 +50,32 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     try: execute_trial(trial,root=work)
     except ValueError as exc: assert 'already reserved' in str(exc)
     else: raise AssertionError('Repeated holdout execution allowed')
+    from research_harness.tabular_evidence import export,verify,unpack
+    from research_harness.tabular_memory import export_memory,import_memory,assert_available
+    from research_harness.tabular_trial import load_trial
+    evidence=work/'private-evidence.json'; export(trial,evidence)
+    assert verify(evidence)['audit_ok']
+    memory=work/'memory.json'; export_memory(memory,root=work)
+    clone=work/'fresh-clone'; clone.mkdir(); import_memory(memory,root=clone)
+    copied=Path(unpack(evidence,clone/'evidence')['review'])
+    assert audit_trial(copied)['audit_ok']
+    _,parts,_=load_trial(copied,current=False)
+    try: assert_available(json.loads((copied/'baseline/bundle.json').read_text()),parts,root=clone)
+    except ValueError as exc: assert 'already reserved' in str(exc)
+    else: raise AssertionError('Imported memory did not block reuse')
+    try: load_trial(copied)
+    except ValueError as exc: assert 'review-only' in str(exc)
+    else: raise AssertionError('Evidence copy is executable')
+    if args.export_fixture:
+        target=Path(args.export_fixture); target.mkdir(mode=0o700,parents=True,exist_ok=False)
+        shutil.copyfile(evidence,target/'synthetic-evidence.json'); (target/'synthetic-evidence.json').chmod(0o600)
+        shutil.copyfile(memory,target/'synthetic-memory.json'); (target/'synthetic-memory.json').chmod(0o600)
+        (target/'README.md').write_text('# SYNTHETIC SOFTWARE FIXTURE ONLY\n\n'
+            'No real research data, human approval, model account or paper full text. '
+            'Paper URLs are schema fixtures, not evidence claims. STOP/CONTINUE is a software output, not scientific performance.\n\n'
+            'Use scripts/check-tabular-handoff.py with these two packets in a fresh destination.\n')
     path=trial/'trial-run/result.json'; value=json.loads(path.read_text()); value['mean_effect']+=1
     path.write_text(json.dumps(value)); assert not audit_trial(trial)['audit_ok']
     print(json.dumps({'synthetic_only':True,'actual_isolated_six_fit_trial':True,'strict_audit_passed':True,
-                      'tampering_rejected':True,'repeat_execution_rejected':True,'real_data_scored':False,'model_calls':0},indent=2))
+                      'tampering_rejected':True,'repeat_execution_rejected':True,'private_evidence_and_memory_handoff':True,
+                      'real_data_scored':False,'model_calls':0},indent=2))
