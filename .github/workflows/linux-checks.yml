@@ -57,3 +57,4 @@ jobs:
           .venv-tabular/bin/python scripts/check-tabular-isolation.py
           .venv-tabular/bin/python scripts/check-tabular-trial.py
           .venv-tabular/bin/python scripts/check-airfoil-isolation.py
+          .venv-tabular/bin/python scripts/check-airfoil-trial.py

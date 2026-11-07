@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.21.0
+
+- Prepare the single A2 suction-side Strouhal feature hypothesis from a checked NASA source and the pinned Extra Trees implementation. No real candidate fit, prediction or holdout score.
+- Add fixed-intervention review, exact approval, six paired isolated fits, historical A1 validation reproduction, condition-level effect/uncertainty/latency gates, conservative reservations and read-only audit.
+- Validate positive/negative gates and actual macOS/Linux synthetic boundaries; preserve A1 and all previously stopped routes. Generic autonomous Airfoil research and human-efficiency evaluation remain outside this release.
+
 ## 0.20.0
 
 - 2026-11-06: execute explicitly approved A1 once on macOS Seatbelt. Extra Trees qualifies with condition MAE 1.359248 dB and mean gain 4.155519 dB versus median; valid CONTINUE and read-only audit pass. Preserve the reservation; no tuning or second execution. All 285 final holdout observations remain unscored; only a separate candidate protocol may be drafted.

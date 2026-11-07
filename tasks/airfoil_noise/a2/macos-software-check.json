@@ -1,0 +1,11 @@
+{
+  "synthetic_only": true,
+  "isolated_candidate_fits": 6,
+  "baseline_reproduction_passed": true,
+  "strict_audit_passed": true,
+  "tampering_rejected": true,
+  "repeat_and_copy_rejected": true,
+  "synthetic_model_predictions_changed": true,
+  "real_data_scored": false,
+  "model_calls": 0
+}

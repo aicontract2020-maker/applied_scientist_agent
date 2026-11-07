@@ -1,0 +1,30 @@
+{
+  "id": "airfoil-a2-strouhal",
+  "hypothesis": "Appending the suction-side displacement-thickness Strouhal coordinate f*delta*/U to the original five inputs improves the qualified fixed Extra Trees reference by at least 0.2 dB condition-macro MAE at every paired seed, with positive group-bootstrap lower bound and <=1.1 prediction latency ratio on the untouched final holdout.",
+  "mechanism": "airfoil-suction-strouhal-v1",
+  "why_new": "This is an Airfoil spectral-coordinate interaction, not the stopped Abalone T1 residual offset or T2 shell-mass composition ratio, and not an image-super-resolution postprocessor. A1 selected a reference without engineered features. This proposal changes a multivariate split coordinate, not constants, model capacity, labels, data splits or success thresholds after a failed Airfoil result. It is an application hypothesis, not a claim that Strouhal scaling is scientifically novel.",
+  "limitations": [
+    "The literature motivates a coordinate, not a guarantee that appending it improves Extra Trees. Original variables already contain the information.",
+    "Additional features alter randomized tree split selection; any benefit cannot be uniquely attributed to acoustic physics without a separate preregistered study.",
+    "NASA reports dependence on Reynolds number, Mach number and noise mechanism. One suction-side coordinate is not the complete BPM model or a universal spectral collapse.",
+    "Twenty-one proxy condition groups share an apparatus and airfoil family; unknown campaign dependence remains. Public historical data are not contamination-proof.",
+    "A1 validation has already selected the reference. It is used only to verify baseline reproduction, never to screen this candidate.",
+    "The 0.2 dB adoption margin and 1.1 latency cap are prospective engineering criteria, not established business thresholds. Local monetary costs remain unknown.",
+    "One failed or interrupted execution reserves all final holdout groups. No changed constants, log transform, additional features or parameter tuning may rescue this route."
+  ],
+  "candidate_source": "def augment(row):\n    return row + [row[0] * row[4] / row[3]]\n",
+  "evidence": [
+    {
+      "url": "https://ntrs.nasa.gov/citations/19890016302",
+      "title": "Brooks, Pope and Marcolini (1989), Airfoil Self-Noise and Prediction, NASA RP-1218",
+      "locator": "Section 5.1.1, printed page 51 / PDF page 59: displacement-thickness peak Strouhal coordinate; original PDF SHA-256 0c22690c6216c4355c0da7e09ce0d1a1dd96a2b88d3d8abda30e293b3db76006, visually checked 2026-11-07",
+      "claim": "Frequency scaling uses f*delta*/U, including suction-side displacement thickness; the page also cautions that peak position and spectral shape vary. Using this coordinate as one Extra Trees input is our proposed inference, not a result of the paper."
+    },
+    {
+      "url": "https://scikit-learn.org/1.7/modules/ensemble.html",
+      "title": "scikit-learn 1.7.2 user guide: Extremely Randomized Trees",
+      "locator": "Section 1.11.2.2, retrieved 2026-11-07",
+      "claim": "Extra Trees considers random thresholds for candidate features. A new multivariate coordinate changes available partitions and random split selection; it is not a guaranteed improvement or an implementation of the complete acoustic model."
+    }
+  ]
+}

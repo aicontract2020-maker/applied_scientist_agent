@@ -1,0 +1,153 @@
+{
+  "content": {
+    "recipe": {
+      "kind": "airfoil-strouhal-trial",
+      "version": 1,
+      "mechanism": "airfoil-suction-strouhal-v1",
+      "seeds": [
+        11,
+        22,
+        33
+      ],
+      "minimum_effect": 0.2,
+      "max_latency_ratio": 1.1,
+      "hypothesis": "Append f*delta_suction/U to the five original inputs of qualified Extra Trees; every paired seed gains >=0.2 dB condition-macro MAE on unused holdout, group-bootstrap lower bound >0, latency ratio <=1.1.",
+      "controls": [
+        "Original A1 training rows only; no validation refit or new split",
+        "Exact A1 Extra Trees parameters; 100 trees, seeds 11/22/33, single thread",
+        "Only one fixed interaction appended; no scaling, offset, logs, clipping, new objective or tuning",
+        "Baseline validation predictions must reproduce saved A1 Extra Trees per seed within 1e-8 before scoring",
+        "All 21 real holdout condition groups scored once; labels in controller only"
+      ],
+      "metric": "Mean per-condition MAE in dB, equal condition weight; report all seeds and variability",
+      "bootstrap": {
+        "resamples": 10000,
+        "seed": 20261107,
+        "confidence": 0.95
+      },
+      "uncertainty": "Bootstrap complete condition groups on seed-averaged paired losses; conditional on fixed training and three paired seeds, not independent campaigns or a proof of generalization",
+      "timing": "Five whole-holdout-batch passes per fit, median; candidate includes augmentation and array conversion; seed 22 candidate-first, other seeds baseline-first",
+      "minimum_effect_reason": "Prospective engineering adoption margin; not a calibrated business or acoustic perceptual threshold",
+      "go": "All seed gains >=0.2 AND group bootstrap lower >0 AND total median batch latency ratio <=1.1; permit a separately reviewed external replication only",
+      "stop": "Any valid failed gate closes this mechanism. Do not alter the feature, constants, seeds, model, thresholds or split to rescue it",
+      "invalid": "Keep full holdout reservation after worker launch or failure; no automatic retry and no scientific conclusion",
+      "limits": {
+        "attempts": 1,
+        "fits": 6,
+        "threads": 1,
+        "worker_seconds": 240,
+        "output_bytes": 16777216
+      },
+      "costs": "Record all six fits, train transform, 30 timing passes, wall time, RSS and retained bytes; actual money unknown; no model API calls"
+    },
+    "proposal": {
+      "id": "airfoil-a2-strouhal",
+      "hypothesis": "Appending the suction-side displacement-thickness Strouhal coordinate f*delta*/U to the original five inputs improves the qualified fixed Extra Trees reference by at least 0.2 dB condition-macro MAE at every paired seed, with positive group-bootstrap lower bound and <=1.1 prediction latency ratio on the untouched final holdout.",
+      "mechanism": "airfoil-suction-strouhal-v1",
+      "why_new": "This is an Airfoil spectral-coordinate interaction, not the stopped Abalone T1 residual offset or T2 shell-mass composition ratio, and not an image-super-resolution postprocessor. A1 selected a reference without engineered features. This proposal changes a multivariate split coordinate, not constants, model capacity, labels, data splits or success thresholds after a failed Airfoil result. It is an application hypothesis, not a claim that Strouhal scaling is scientifically novel.",
+      "limitations": [
+        "The literature motivates a coordinate, not a guarantee that appending it improves Extra Trees. Original variables already contain the information.",
+        "Additional features alter randomized tree split selection; any benefit cannot be uniquely attributed to acoustic physics without a separate preregistered study.",
+        "NASA reports dependence on Reynolds number, Mach number and noise mechanism. One suction-side coordinate is not the complete BPM model or a universal spectral collapse.",
+        "Twenty-one proxy condition groups share an apparatus and airfoil family; unknown campaign dependence remains. Public historical data are not contamination-proof.",
+        "A1 validation has already selected the reference. It is used only to verify baseline reproduction, never to screen this candidate.",
+        "The 0.2 dB adoption margin and 1.1 latency cap are prospective engineering criteria, not established business thresholds. Local monetary costs remain unknown.",
+        "One failed or interrupted execution reserves all final holdout groups. No changed constants, log transform, additional features or parameter tuning may rescue this route."
+      ],
+      "candidate_source": "def augment(row):\n    return row + [row[0] * row[4] / row[3]]\n",
+      "evidence": [
+        {
+          "url": "https://ntrs.nasa.gov/citations/19890016302",
+          "title": "Brooks, Pope and Marcolini (1989), Airfoil Self-Noise and Prediction, NASA RP-1218",
+          "locator": "Section 5.1.1, printed page 51 / PDF page 59: displacement-thickness peak Strouhal coordinate; original PDF SHA-256 0c22690c6216c4355c0da7e09ce0d1a1dd96a2b88d3d8abda30e293b3db76006, visually checked 2026-11-07",
+          "claim": "Frequency scaling uses f*delta*/U, including suction-side displacement thickness; the page also cautions that peak position and spectral shape vary. Using this coordinate as one Extra Trees input is our proposed inference, not a result of the paper."
+        },
+        {
+          "url": "https://scikit-learn.org/1.7/modules/ensemble.html",
+          "title": "scikit-learn 1.7.2 user guide: Extremely Randomized Trees",
+          "locator": "Section 1.11.2.2, retrieved 2026-11-07",
+          "claim": "Extra Trees considers random thresholds for candidate features. A new multivariate coordinate changes available partitions and random split selection; it is not a guaranteed improvement or an implementation of the complete acoustic model."
+        }
+      ]
+    },
+    "feature_review": {
+      "mechanism": "airfoil-suction-strouhal-v1",
+      "appended_columns": 1,
+      "effective_input_columns": [
+        0,
+        3,
+        4
+      ],
+      "synthetic_probe_passed": true,
+      "original_columns_unchanged": true,
+      "limit": "Rejects this fixed feature as a constant/single-column duplicate; not a general semantic novelty proof"
+    },
+    "baseline_sha256": "ac8f7df93f688a9621038c881fa5ab312e4bc5790d7f59c134547dbbd81e2dd5",
+    "scope": "3802910440c0c0334b27ff2a54664068c12577ed59faddc6b2a40ae24a82df47",
+    "counts": {
+      "train": {
+        "rows": 961,
+        "groups": 67
+      },
+      "validation": {
+        "rows": 257,
+        "groups": 18
+      },
+      "holdout": {
+        "rows": 285,
+        "groups": 21
+      }
+    },
+    "sources": {
+      "research_harness/__init__.py": "494453de1ad67611853f078d411c284ef90c63ba425a60be9380a5bd6da424dd",
+      "research_harness/__main__.py": "13a1a5b340cdcfc1902b62be90e508c7c71886000d5bf087e7854aadf09fb35e",
+      "research_harness/airfoil_baseline.py": "1cd6f298da92f9214965668e25dae754064927d0f4e83102cf827830ea7df1ce",
+      "research_harness/airfoil_candidate.py": "d6226ec211ce1d9cc5c2a6bea2597b0886e73d666be55dabe95f9b3fb1e34c7f",
+      "research_harness/airfoil_data.py": "951a7c2e29fee8505f13bf2fa88a6423faa47e0ab9e29ee30278710f6e409c38",
+      "research_harness/airfoil_trial.py": "6d69fa56f6038d3ab06676f05792383433af93ec60a7fcc4296d0e5689628132",
+      "research_harness/airfoil_trial_worker.py": "7f722af6ffc32e3b97a074de80d8eca504ab4ea4d6c075d154fae735d6651a6f",
+      "research_harness/airfoil_worker.py": "bcf64fc9780d25f90d1e53941a9619ef669d077a8659c01b39aa64f71b124e58",
+      "research_harness/autonomous_candidate.py": "a9b7bda9333b52c5bc3c928c4f99a0668a3a14980cf3ed14fa806e2df27e048f",
+      "research_harness/autonomous_reference.py": "aa0697435738d035609df142f3581725d5937a6b9fa40f9eaaa48db9bd8de229",
+      "research_harness/autonomy.py": "abecf405313b24a4504436ae24ebbb53f437e4e261dcd20112902faf07949e71",
+      "research_harness/cli.py": "e551e12c2bdbd0abafe879cbe06ea5c511359ecf98de9287586506d30f1cef40",
+      "research_harness/core.py": "173b94d14cd154a84c4d1c288a2d445e5855111e87ca65984cf5f90ed7d86d7e",
+      "research_harness/doctor.py": "21d9a03fbdbbf48a9a7783594e3d9801cceb5c379cfac2e663953a822ef192c1",
+      "research_harness/evidence_bundle.py": "4c8ba3f1097956f4dd8b9463f4a1869b6c5192b420b37062b1ae990f91bee4d7",
+      "research_harness/execution.py": "ec5eaed5f90cfe651e6f932f881623df1b94a29d546877175f4566883bdac16c",
+      "research_harness/intervention_review.py": "5f41d69116204d35e90b1bfc9b00235425a14fb0202b955a22c0fa5a67e7b7a6",
+      "research_harness/linux_isolation.py": "02b0c740ab63b6540b0c58706a6d7300276dab28ac75c529f47b7fb4f19475c1",
+      "research_harness/literature_study.py": "f30d0aaf7e0a24526a343a37dd3931e237fe1fa4771aaecefcd48e4fe4cc735d",
+      "research_harness/memory.py": "2a4b9cc0dae426da8a9f0e1db3fded482370817fa3caaffd75d0a65c20d72dc4",
+      "research_harness/observations.py": "5a32cb4f56a9cd89af101bd59a965953820a3f6357bf3ac9d914e3ded25bd7f7",
+      "research_harness/onboarding.py": "e4bdb5b8c1b420e951ce0160168a27843d2a5eeb21d9620b8e566fb6e6e14932",
+      "research_harness/planning.py": "14f65096496af8fbe02a38f62e467f5363cecdbf65c6aaa7eaa4b5ec005fd5f8",
+      "research_harness/portable.py": "a2181c56f3b43662fbf0a0b917283817488a2be833bf12d678d002d9262e1e74",
+      "research_harness/primary_literature.py": "d070b1d18440d229d9e753264d0b65695ee30eb7986edbc1a1d64dfb1ccdd5de",
+      "research_harness/regression_evaluation.py": "9646cb864b85c3ff95243dc73a273ff267c52cb1e20e869ba12540c734354004",
+      "research_harness/review.py": "6c9cb348a9ddf70b9bdde1c76d177e04a2fc4b9957f309bbcfadd10d7366ec3d",
+      "research_harness/sr_evaluation.py": "a6599e530e68d626dd1fd67c1fa40b901e156b852a0afa92a2c827bd927aedf9",
+      "research_harness/state_lock.py": "d5a080aad92519df908527dd9208c3b732ecdd9fa7e5773728e6ae971c47134a",
+      "research_harness/study_inspection.py": "ee2a84d7dec244c99854b6b7f2c97c821012c9a309274683c04429b9e9074c4b",
+      "research_harness/tabular_audit.py": "439c9d76886fac1ff42a9b21eb6a34add9a9b2194aba58a67a3e0e4b1dc75091",
+      "research_harness/tabular_baseline.py": "2eae3300090bdb0143ec815062e8e8ae6d8223fd6630e4c30ae8a4688e147426",
+      "research_harness/tabular_data.py": "3906a4064da20a056f9d0441e048d76c0e2d3cdaf9b0d93353940b5c16b9304f",
+      "research_harness/tabular_evidence.py": "ff9c38fe544952c47f9f009fa365bfe6f801dfc3f86e3462cc956c627f19d5dd",
+      "research_harness/tabular_features.py": "5d8c31d89dbfb5da10f97663af47e48e7c1862001e73ae6f4f6f7895f8bf9c94",
+      "research_harness/tabular_memory.py": "c020867712817f43c2f5fa5d426b7528b82ad6b6cb535abb94768da4e3c5ca95",
+      "research_harness/tabular_proposer.py": "4403e75b292d5ffbb34d7bf50710d107835081067438a25bdd1b5bc8e26e627a",
+      "research_harness/tabular_sandbox.py": "25597c61bb56b6505582fd4b570725edb3aaabf8e2d3c4797baf1b76aecc2bd1",
+      "research_harness/tabular_screen.py": "8aeefe5acf6a2f2b80d459965aa13dc9d0c4b74c07979aff39b95e1923b0b7d5",
+      "research_harness/tabular_trial.py": "6f4b0073a88305ef660b7e8cd3731f23a3046fcdc5feb5c1db1da7378195bb4f",
+      "research_harness/tabular_trial_worker.py": "ffdf0f344360c4207da23e41e9e178f3912923696b1fb1547a9e4b43b95d7dfe",
+      "research_harness/tabular_worker.py": "3dd072b7c53303f1f5b696b3c95a3fbc937597663ebb4aa9a5641b63a965a333",
+      "research_harness/tabular_workflow.py": "971e1defd16395099c3d092d26f41429b42fd4aeb9eff53507c05b1de494fc05",
+      "research_harness/task_contracts.py": "842ab12411854a6d90c5dbfb921adc6474f1a23089ef2535f86d51e467d8878d",
+      "requirements-tabular.lock.txt": "b4ae79c69fb4708b77b84c249d41a2a74ffa4f3f1220f7e8ff45f38909a4f790",
+      "scripts/bootstrap-tabular.sh": "9089d19742af7b66a9cef4ac20b8b49a0b40c2a3eee8b36d53d989858be7c782",
+      "scripts/check-tabular-isolation.py": "1b698f6e750833aa0e1553e113081f3ea7068b9d49d892a4e8e3d53e940e9242"
+    },
+    "status": "AWAITING_RESEARCH_REVIEW"
+  },
+  "sha256": "de0f852d0bfb7a832604aef4f2fb5c82944176bda4a354deadb573ed726ea5de"
+}

@@ -119,6 +119,10 @@ def main():
         ap = ac.add_parser(name); ap.add_argument("--review", required=True)
         if name == "approve":
             ap.add_argument("--sha256", required=True); ap.add_argument("--reviewer", required=True)
+    ap=ac.add_parser("prepare-trial"); ap.add_argument("--baseline",required=True); ap.add_argument("--proposal",required=True); ap.add_argument("--out",required=True)
+    for name in ("approve-trial","execute-trial","audit-trial"):
+        ap=ac.add_parser(name); ap.add_argument("--review",required=True)
+        if name=="approve-trial": ap.add_argument("--sha256",required=True); ap.add_argument("--reviewer",required=True)
     memory = sub.add_parser("memory", help="Exchange conservative research history without models or images")
     memory.add_argument("--root", help="Source checkout whose history to manage (default: this checkout)")
     memory_commands = memory.add_subparsers(dest="memory_command", required=True)
@@ -147,7 +151,16 @@ def main():
     try:
         if args.command == "airfoil":
             from . import airfoil_baseline as ab
-            if args.airfoil_command == "fetch":
+            if args.airfoil_command.endswith("-trial"):
+                from . import airfoil_trial as at
+                if args.airfoil_command=="prepare-trial": output=at.prepare(args.baseline,args.proposal,args.out)
+                elif args.airfoil_command=="approve-trial": output=at.approve(args.review,args.sha256,args.reviewer)
+                elif args.airfoil_command=="audit-trial": output=at.audit(args.review)
+                else:
+                    output=at.execute(args.review)
+                    print(json.dumps(output,indent=2,ensure_ascii=False))
+                    return 0 if output['measurement_valid'] else 1
+            elif args.airfoil_command == "fetch":
                 from .airfoil_data import fetch
                 output = fetch(args.out)
             elif args.airfoil_command == "prepare": output = ab.prepare(args.data, args.out)
