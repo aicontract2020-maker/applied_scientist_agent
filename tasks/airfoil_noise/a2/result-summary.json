@@ -1,0 +1,155 @@
+{
+  "status": "CONTINUE",
+  "measurement_valid": true,
+  "final_holdout_scored": true,
+  "per_seed_condition_mae_db": {
+    "baseline": [
+      1.6188096074771487,
+      1.6278929460635192,
+      1.6026596541250677
+    ],
+    "candidate": [
+      1.3719834307836332,
+      1.3824437386677395,
+      1.335429014081282
+    ]
+  },
+  "per_seed_gains_db": [
+    0.2468261766935156,
+    0.2454492073957797,
+    0.2672306400437858
+  ],
+  "mean_gain_db": 0.25316867471102705,
+  "gain_sample_std_db": 0.012197465428379349,
+  "per_model_seed_std_db": {
+    "baseline": 0.012780499828515835,
+    "candidate": 0.024684771788222985
+  },
+  "summary": {
+    "observation_count": 21,
+    "observation_effects": [
+      -0.10355511111111948,
+      0.3101269444444752,
+      0.3701035416667031,
+      -0.07482027777778799,
+      0.44402307692306353,
+      0.9876654166666348,
+      0.22892294117643952,
+      0.14369638888891156,
+      -0.060624615384672786,
+      0.08281547619048535,
+      -0.19592145833331243,
+      0.7231687179487422,
+      0.4249966666666676,
+      0.2939412121211745,
+      -0.07183577777777694,
+      0.07756686274512015,
+      0.6709143750000075,
+      0.5397402564102742,
+      -0.043444761904760876,
+      0.02200380952381531,
+      0.5470584848484823
+    ],
+    "observation_effect_std": 0.31955999357915366,
+    "bootstrap_interval": [
+      0.1249173146767319,
+      0.3897367961844388
+    ],
+    "bootstrap_confidence": 0.95,
+    "latency_ratio": 1.0983163112946905,
+    "bootstrap_scope": "Bootstrap complete condition groups on seed-averaged paired losses; conditional on fixed training and three paired seeds, not independent campaigns or a proof of generalization"
+  },
+  "conditions": 21,
+  "rows": 285,
+  "fit_costs": [
+    {
+      "kind": "baseline",
+      "seed": 11,
+      "fit_seconds": 0.05877908272668719,
+      "timing_seconds": [
+        0.00297866715118289,
+        0.002683041151612997,
+        0.0026273750700056553,
+        0.002872208133339882,
+        0.0027798330411314964
+      ],
+      "batch_seconds": 0.0027798330411314964
+    },
+    {
+      "kind": "candidate",
+      "seed": 11,
+      "fit_seconds": 0.07119858311489224,
+      "timing_seconds": [
+        0.0035254578106105328,
+        0.0030349581502377987,
+        0.0029042502865195274,
+        0.002787249628454447,
+        0.002735166810452938
+      ],
+      "batch_seconds": 0.0029042502865195274
+    },
+    {
+      "kind": "candidate",
+      "seed": 22,
+      "fit_seconds": 0.07264437479898334,
+      "timing_seconds": [
+        0.003558957949280739,
+        0.003030332736670971,
+        0.0028836247511208057,
+        0.002988166641443968,
+        0.0028480407781898975
+      ],
+      "batch_seconds": 0.002988166641443968
+    },
+    {
+      "kind": "baseline",
+      "seed": 22,
+      "fit_seconds": 0.05758150015026331,
+      "timing_seconds": [
+        0.00288945809006691,
+        0.002640250138938427,
+        0.0025210417807102203,
+        0.0026080827228724957,
+        0.002668582834303379
+      ],
+      "batch_seconds": 0.002640250138938427
+    },
+    {
+      "kind": "baseline",
+      "seed": 33,
+      "fit_seconds": 0.05863058380782604,
+      "timing_seconds": [
+        0.002979875076562166,
+        0.002664082683622837,
+        0.002556249964982271,
+        0.0024933749809861183,
+        0.0025575831532478333
+      ],
+      "batch_seconds": 0.0025575831532478333
+    },
+    {
+      "kind": "candidate",
+      "seed": 33,
+      "fit_seconds": 0.07213362492620945,
+      "timing_seconds": [
+        0.0035050841979682446,
+        0.0029730419628322124,
+        0.002869584131985903,
+        0.002828457858413458,
+        0.0027616252191364765
+      ],
+      "batch_seconds": 0.002869584131985903
+    }
+  ],
+  "fits": 6,
+  "transform_train_seconds": 0.0007154587656259537,
+  "total_fit_seconds": 0.3909677495248616,
+  "total_timing_seconds": 0.0857537048868835,
+  "conclusion": "All seed gains >=0.2 AND group bootstrap lower >0 AND total median batch latency ratio <=1.1; permit a separately reviewed external replication only",
+  "peak_rss_bytes": 130760704,
+  "holdout_exposed": true,
+  "wall_seconds": 1.1460595410317183,
+  "model_calls": 0,
+  "actual_local_cost_usd": null,
+  "retained_bytes_before_report": 490938
+}

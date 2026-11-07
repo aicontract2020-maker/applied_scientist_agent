@@ -2,6 +2,8 @@
 
 ## 0.21.0
 
+- Execute the separately approved frozen A2 once on macOS: valid CONTINUE, mean gain 0.253169 dB, grouped 95% interval [0.124917, 0.389737], latency ratio 1.098316. Publish decision and consumed-holdout memory; all 285 final rows are unavailable for reuse. External replication requires a separate review. Correct the A2 index hash typo; formal frozen artifacts and implementation are unchanged.
+
 - Prepare the single A2 suction-side Strouhal feature hypothesis from a checked NASA source and the pinned Extra Trees implementation. No real candidate fit, prediction or holdout score.
 - Add fixed-intervention review, exact approval, six paired isolated fits, historical A1 validation reproduction, condition-level effect/uncertainty/latency gates, conservative reservations and read-only audit.
 - Validate positive/negative gates and actual macOS/Linux synthetic boundaries; preserve A1 and all previously stopped routes. Generic autonomous Airfoil research and human-efficiency evaluation remain outside this release.

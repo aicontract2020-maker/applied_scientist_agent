@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-07",
+  "source_commit": "a9950dbaaa7f9b79e7ef48007522a6b29be51c6d",
+  "review_sha256": "de0f852d0bfb7a832604aef4f2fb5c82944176bda4a354deadb573ed726ea5de",
+  "authorization": "User explicitly approved the frozen A2 review in conversation",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "isolation": "macOS Seatbelt",
+  "attempts": 1,
+  "fits": 6,
+  "final_holdout_scored": true,
+  "final_holdout_rows": 285,
+  "final_holdout_groups": 21,
+  "worker_request_keys": [
+    "train",
+    "validation",
+    "holdout"
+  ],
+  "validation_labels_in_worker": false,
+  "holdout_labels_in_worker": false,
+  "baseline_validation_reproduction_passed": true,
+  "candidate_validation_predictions_generated": false,
+  "retained_review_bytes_after_report": 1533397,
+  "model_calls": 0,
+  "actual_local_cost_usd": null,
+  "cost_limit": "Fit/transform/all 30 prediction passes, runner wall time, RSS and storage recorded; preflight, installation, download, auditing, energy/hardware and human review remain unpriced",
+  "next_allowed_action": "Separately reviewed external replication only; no reuse of consumed holdout, automatic rerun or deployment",
+  "readme_hash_correction": "The pre-run A2 README had 44177 where formal REVIEW.md, public manifest and local trial.json all correctly had 44176; execution used the matching formal frozen digest, with no protocol or source changes."
+}

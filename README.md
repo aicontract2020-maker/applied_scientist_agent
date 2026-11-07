@@ -14,7 +14,7 @@ python3 -m examples.tabular_demo.workflow --out runs/tabular-software-demo
 
 演示先冻结方案和输入哈希，再评价并写入 STOP 账本；所有数据、时延和成本都是软件 fixture。`research --task tabular-regression` 会在环境检查和数据预留前拒绝，不会退回无隔离执行。
 
-第二任务的[基线资格审查方案](docs/TABULAR_BASELINE_REVIEW.md)已获用户审核并执行：HGB 在预定比较中通过资格检查。T1 固定中位数偏移已被解析上界拒绝。真实 actor 的壳重比例提案已获批准并完成一次实验，[结果 STOP](tasks/tabular_regression/t2/REPORT.md)，804 条最终留出记录已消耗。回归统一入口需明确 `--stage propose/execute`，保留人工审查；已用数据会在模型调用前拒绝复用。C3 独立同事交接验收已由用户确认通过（接收端原始记录未附）；通用数据适配和无人工边界的自主周期尚未完成。D1 的人工对照评测仍缺业务数据与研究员；[Airfoil A1 基线资格检查](tasks/airfoil_noise/a1/REPORT.md)已获批准并执行一次，Extra Trees 通过，最终留出未评分。[A2 单一 Strouhal 特征候选](docs/AIRFOIL_CANDIDATE_REVIEW.md)已准备，隔离执行与审计通过合成验证，等待用户批准；尚未进行真实候选拟合或最终留出评分。
+第二任务的[基线资格审查方案](docs/TABULAR_BASELINE_REVIEW.md)已获用户审核并执行：HGB 在预定比较中通过资格检查。T1 固定中位数偏移已被解析上界拒绝。真实 actor 的壳重比例提案已获批准并完成一次实验，[结果 STOP](tasks/tabular_regression/t2/REPORT.md)，804 条最终留出记录已消耗。回归统一入口需明确 `--stage propose/execute`，保留人工审查；已用数据会在模型调用前拒绝复用。C3 独立同事交接验收已由用户确认通过（接收端原始记录未附）；通用数据适配和无人工边界的自主周期尚未完成。D1 的人工对照评测仍缺业务数据与研究员；[Airfoil A1 基线资格检查](tasks/airfoil_noise/a1/REPORT.md)已获批准并执行一次，Extra Trees 通过。[A2 单一 Strouhal 特征试验](tasks/airfoil_noise/a2/REPORT.md)已单独获批并在 macOS 隔离环境执行一次，结果为有效 CONTINUE：平均改善 0.253169 dB，95% 区间 [0.124917, 0.389737]，时延比 1.098316。285 条最终留出已全部消费，禁止重跑；下一步仅允许另行审查外部数据复现。
 
 最近一轮 [G7 Linux研究与审查记录](tasks/image_super_resolution/g7/REPORT.md)：新机制审查通过，几何校正候选有效负结果，按规则 STOP；未调参重跑。
 
