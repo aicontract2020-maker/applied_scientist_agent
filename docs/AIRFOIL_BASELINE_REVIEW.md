@@ -1,6 +1,6 @@
 # A1：公开翼型噪声任务与基线资格审查
 
-2026-11-06，状态 **AWAITING_REVIEW / NOT_RUN**。用户目前没有业务数据或人类对照，授权先选择公开任务并完成可自主推进的准备。这一关验证新任务的基线与工程适配，不是 D1 人工时间/商业价值评测。真实数据尚未拟合、推理或评分；最终留出未消耗。
+2026-11-06，用户明确批准后执行一次，状态 **CONTINUE / 测量有效**；Extra Trees 通过固定基线资格检查，只读复算通过。见 [完整结果](../tasks/airfoil_noise/a1/REPORT.md)。285 条最终留出未评分。下面保留原设计与执行边界；这一关验证基线与工程适配，不是 D1 人工时间/商业价值评测。
 
 ## 任务选择与来源
 
@@ -66,4 +66,4 @@ python3 -m research_harness airfoil approve --review reviews/airfoil-baseline-02
 .venv-tabular/bin/python -m research_harness airfoil audit --review reviews/airfoil-baseline-020
 ```
 
-本次已经准备实际审查包，公开摘要见 [A1 审查索引](../tasks/airfoil_noise/a1/README.md)。请审核：是否接受工况分组及局限、固定五模型/三 seed、1 dB 与区间门槛、单线程本地一次执行范围。该审批不覆盖后续候选、最终留出或商业效率评测。保留审查门槛来自既有精确审批流程及用户“直到需要我审查”的任务范围。
+原审查范围为工况分组及局限、固定五模型/三 seed、1 dB 与区间门槛、单线程本地一次执行；用户已经批准并完成，公开摘要见 [A1 索引](../tasks/airfoil_noise/a1/README.md)。原冻结审查包保持不变。该批准不覆盖后续候选、最终留出或商业效率评测，不得再次执行上述 baseline 命令。下一步只允许起草单独的候选研究协议。

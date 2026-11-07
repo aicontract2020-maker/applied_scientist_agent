@@ -1,0 +1,203 @@
+{
+  "status": "CONTINUE",
+  "measurement_valid": true,
+  "selected_baseline": "extra_trees",
+  "mean_condition_mae_db": {
+    "median": 5.514766799631015,
+    "ridge": 3.370668224419269,
+    "svr": 2.289533233345631,
+    "hgb": 1.4493427080731054,
+    "extra_trees": 1.3592479719422137
+  },
+  "per_seed_condition_mae_db": {
+    "median": [
+      5.514766799631015,
+      5.514766799631015,
+      5.514766799631015
+    ],
+    "ridge": [
+      3.370668224419269,
+      3.370668224419269,
+      3.370668224419269
+    ],
+    "svr": [
+      2.289533233345631,
+      2.289533233345631,
+      2.289533233345631
+    ],
+    "hgb": [
+      1.4493427080731054,
+      1.4493427080731054,
+      1.4493427080731054
+    ],
+    "extra_trees": [
+      1.3317005928298267,
+      1.3974119491261776,
+      1.348631373870637
+    ]
+  },
+  "seed_mae_sample_std_db": {
+    "median": 0.0,
+    "ridge": 0.0,
+    "svr": 0.0,
+    "hgb": 0.0,
+    "extra_trees": 0.03411787951406931
+  },
+  "per_seed_gains_db": {
+    "ridge": [
+      2.1440985752117454,
+      2.1440985752117454,
+      2.1440985752117454
+    ],
+    "svr": [
+      3.2252335662853837,
+      3.2252335662853837,
+      3.2252335662853837
+    ],
+    "hgb": [
+      4.065424091557909,
+      4.065424091557909,
+      4.065424091557909
+    ],
+    "extra_trees": [
+      4.183066206801188,
+      4.117354850504837,
+      4.166135425760378
+    ]
+  },
+  "mean_gains_db": {
+    "ridge": 2.1440985752117454,
+    "svr": 3.2252335662853837,
+    "hgb": 4.065424091557909,
+    "extra_trees": 4.155518827688801
+  },
+  "group_bootstrap_intervals_db": {
+    "ridge": [
+      1.3960133274605002,
+      2.8262261836213924
+    ],
+    "svr": [
+      2.372793938918879,
+      4.055121581135
+    ],
+    "hgb": [
+      3.3319795973779422,
+      4.718243620037928
+    ],
+    "extra_trees": [
+      3.4860521088086225,
+      4.782258782186559
+    ]
+  },
+  "prediction_range": {
+    "median": 0.0,
+    "ridge": 0.0,
+    "svr": 0.0,
+    "hgb": 0.0,
+    "extra_trees": 2.290540000000135
+  },
+  "validation_conditions": 18,
+  "fit_costs": [
+    {
+      "model": "median",
+      "seed": 11,
+      "fit_seconds": 0.000593249686062336,
+      "predict_seconds": 2.9916875064373016e-05
+    },
+    {
+      "model": "ridge",
+      "seed": 11,
+      "fit_seconds": 0.0010880418121814728,
+      "predict_seconds": 0.00010991701856255531
+    },
+    {
+      "model": "svr",
+      "seed": 11,
+      "fit_seconds": 0.019335458986461163,
+      "predict_seconds": 0.006333415862172842
+    },
+    {
+      "model": "hgb",
+      "seed": 11,
+      "fit_seconds": 0.08020220790058374,
+      "predict_seconds": 0.002162958960980177
+    },
+    {
+      "model": "extra_trees",
+      "seed": 11,
+      "fit_seconds": 0.0797459171153605,
+      "predict_seconds": 0.00493220891803503
+    },
+    {
+      "model": "median",
+      "seed": 22,
+      "fit_seconds": 0.00016954075545072556,
+      "predict_seconds": 1.2625008821487427e-05
+    },
+    {
+      "model": "ridge",
+      "seed": 22,
+      "fit_seconds": 0.0006305421702563763,
+      "predict_seconds": 9.975023567676544e-05
+    },
+    {
+      "model": "svr",
+      "seed": 22,
+      "fit_seconds": 0.02189833391457796,
+      "predict_seconds": 0.006447749678045511
+    },
+    {
+      "model": "hgb",
+      "seed": 22,
+      "fit_seconds": 0.06926383310928941,
+      "predict_seconds": 0.0010424591600894928
+    },
+    {
+      "model": "extra_trees",
+      "seed": 22,
+      "fit_seconds": 0.06432020897045732,
+      "predict_seconds": 0.003453375305980444
+    },
+    {
+      "model": "median",
+      "seed": 33,
+      "fit_seconds": 0.0001222500577569008,
+      "predict_seconds": 1.058308407664299e-05
+    },
+    {
+      "model": "ridge",
+      "seed": 33,
+      "fit_seconds": 0.0005190828815102577,
+      "predict_seconds": 8.395873010158539e-05
+    },
+    {
+      "model": "svr",
+      "seed": 33,
+      "fit_seconds": 0.015934540890157223,
+      "predict_seconds": 0.005547875072807074
+    },
+    {
+      "model": "hgb",
+      "seed": 33,
+      "fit_seconds": 0.06573633290827274,
+      "predict_seconds": 0.0009881248697638512
+    },
+    {
+      "model": "extra_trees",
+      "seed": 33,
+      "fit_seconds": 0.06279500015079975,
+      "predict_seconds": 0.003490250091999769
+    }
+  ],
+  "fits": 15,
+  "total_fit_seconds": 0.4823545413091779,
+  "total_predict_seconds": 0.0347451688721776,
+  "final_holdout_scored": false,
+  "conclusion": "Only draft a separate candidate protocol; no automatic candidate execution or holdout scoring",
+  "peak_rss_bytes": 136380416,
+  "wall_seconds": 1.8250175002031028,
+  "model_calls": 0,
+  "actual_local_cost_usd": null,
+  "retained_bytes_before_report": 525119,
+  "scope": "One Airfoil baseline qualification only; no candidate or final holdout scoring"
+}

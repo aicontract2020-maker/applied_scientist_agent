@@ -2,6 +2,7 @@
 
 ## 0.20.0
 
+- 2026-11-06: execute explicitly approved A1 once on macOS Seatbelt. Extra Trees qualifies with condition MAE 1.359248 dB and mean gain 4.155519 dB versus median; valid CONTINUE and read-only audit pass. Preserve the reservation; no tuning or second execution. All 285 final holdout observations remain unscored; only a separate candidate protocol may be drafted.
 - Add a pinned public Airfoil task with target-blind condition-group partitions, macro condition MAE, grouped uncertainty and a fixed five-model/three-seed baseline qualification.
 - Add exact review/approval, single-attempt dataset reservations, isolated trusted worker and read-only audit; preserve existing Abalone/SR protocols and stopped routes.
 - Validate new boundaries with synthetic tests and actual OS-isolated fits. Prepare the real A1 review without real training, prediction or scoring. No human-efficiency or commercial-value claim.

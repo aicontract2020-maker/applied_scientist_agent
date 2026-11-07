@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-06",
+  "source_commit": "4ab382c910f2aa9c70afb56ca56fa0dfd3134d08",
+  "review_sha256": "ac8f7df93f688a9621038c881fa5ab312e4bc5790d7f59c134547dbbd81e2dd5",
+  "authorization": "User explicitly approved the frozen A1 review in conversation",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "isolation": "macOS Seatbelt",
+  "attempts": 1,
+  "fits": 15,
+  "validation_rows": 257,
+  "validation_groups": 18,
+  "final_holdout_scored": false,
+  "final_holdout_rows": 285,
+  "final_holdout_groups": 21,
+  "worker_request_keys": [
+    "train",
+    "validation"
+  ],
+  "validation_labels_in_worker": false,
+  "retained_review_bytes_after_report": 1023509,
+  "initial_archive_download_bytes": 60126,
+  "actual_local_cost_usd": null,
+  "cost_limit": "Model calls 0; installation/download time, storage, energy/hardware and human review remain unpriced",
+  "next_allowed_action": "Draft a separate scientific candidate protocol; no candidate execution or final holdout scoring"
+}

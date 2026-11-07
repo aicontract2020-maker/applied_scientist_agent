@@ -1,0 +1,8 @@
+{
+  "audit_ok": true,
+  "review_sha256": "ac8f7df93f688a9621038c881fa5ab312e4bc5790d7f59c134547dbbd81e2dd5",
+  "status": "CONTINUE",
+  "final_holdout_scored": false,
+  "authenticity": "UNVERIFIED",
+  "limit": "Internal record consistency only"
+}
