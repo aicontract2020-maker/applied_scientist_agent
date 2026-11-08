@@ -2,6 +2,8 @@
 
 ## 0.21.0
 
+- After explicit user authorization, send the reviewed metadata/permission inquiry to the verified Delft dataset co-creator and record the reply-assessment boundary. Keep private mail receipts local, preserve the pre-send review snapshot, and leave all external experiments unregistered and unrun.
+
 - Screen independent sources for A2-R1, pin a metadata-only Delft inventory, and document a conditional direct-transfer protocol. Keep execution blocked on measurement compatibility, acoustic validity, eligible groups and intended-use permission; no external labels, fits, predictions or messages. Original A2 evidence and protocol remain unchanged.
 
 - Execute the separately approved frozen A2 once on macOS: valid CONTINUE, mean gain 0.253169 dB, grouped 95% interval [0.124917, 0.389737], latency ratio 1.098316. Publish decision and consumed-holdout memory; all 285 final rows are unavailable for reuse. External replication requires a separate review. Correct the A2 index hash typo; formal frozen artifacts and implementation are unchanged.

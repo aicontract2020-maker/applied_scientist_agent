@@ -20,6 +20,8 @@ python3 -m examples.tabular_demo.workflow --out runs/tabular-software-demo
 
 A2 后续：[外部复现数据审查](docs/AIRFOIL_REPLICATION_REVIEW.md)已完成首轮筛选，Delft 独立风洞数据为首选；测量定义、有效频段和适用许可仍待确认，当前 **BLOCKED_DATA_QUALIFICATION**。协议草案保留原特征和停止门槛，但不是执行审批包；外部实验未注册、未运行。
 
+2026-11-08，用户已批准联系作者，[询问邮件已发送、等待回复](tasks/airfoil_noise/a2_replication/OUTREACH_STATUS.md)。回复只用于补齐资格证据和准备后续审查，不授权运行实验。
+
 ## 注册前干预审查
 
 新建研究会先冻结首次提交的方案与代码，再检查历史实现指纹（包括改数值的重试）、隔离合成输入经过实际裁剪/量化后的输出变化，并由独立隔离的模型审阅机制是否重开任何已停止路线。拒绝或无法确认时关闭本轮，记录 `REJECTED / NOT_RUN`，不注册、不推理、不评分、不换候选。通过后仍只允许一次留出评估，原成功门槛不变。
