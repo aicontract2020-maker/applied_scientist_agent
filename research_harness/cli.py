@@ -63,6 +63,17 @@ def main():
     task_show.add_argument("id")
     task_caps=task_commands.add_parser("capabilities",help="Workflow capabilities separate from immutable evaluation bindings")
     task_caps.add_argument("id")
+    data_review = sub.add_parser("data-review", help="Offline metadata qualification; never authorizes experiments")
+    dc = data_review.add_subparsers(dest="data_review_command", required=True)
+    dc.add_parser("template", help="Write an unfilled metadata template").add_argument("--out", required=True)
+    dp = dc.add_parser("prepare", help="Freeze explicitly selected metadata evidence; no data scoring")
+    dp.add_argument("draft"); dp.add_argument("--out", required=True)
+    dp = dc.add_parser("inspect", help="Read-only integrity and qualification status")
+    dp.add_argument("packet")
+    dp = dc.add_parser("decide", help="Record exact-hash human review for protocol design only")
+    dp.add_argument("packet"); dp.add_argument("--sha256", required=True)
+    dp.add_argument("--reviewer", required=True); dp.add_argument("--decision", choices=("accept", "reject"), required=True)
+    dp.add_argument("--reason", required=True)
     tabular = sub.add_parser("tabular", help="Reviewed baseline/feature trials, exclusion memory and private evidence")
     tabular_commands = tabular.add_subparsers(dest="tabular_command", required=True)
     tabular_fetch = tabular_commands.add_parser("fetch", help="Download pinned public UCI data only; no scoring")
@@ -149,7 +160,13 @@ def main():
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
-        if args.command == "airfoil":
+        if args.command == "data-review":
+            from . import data_qualification as dq
+            if args.data_review_command == "template": output = dq.template(args.out)
+            elif args.data_review_command == "prepare": output = dq.prepare(args.draft, args.out)
+            elif args.data_review_command == "inspect": output = dq.inspect(args.packet)
+            else: output = dq.decide(args.packet, args.sha256, args.reviewer, args.decision, args.reason)
+        elif args.command == "airfoil":
             from . import airfoil_baseline as ab
             if args.airfoil_command.endswith("-trial"):
                 from . import airfoil_trial as at

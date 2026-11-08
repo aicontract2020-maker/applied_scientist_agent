@@ -4,7 +4,7 @@
 
 当前完整任务是 **固定 SwinIR-S ×2 图像超分的确定性后处理研究**，不是任意领域的通用科学家。基础工作流无需模型；完整研究使用你自己的 Codex 登录与额度。
 
-0.21.0 保留两类研究工作流：超分的完整自主周期，以及回归的自主提案 → 人工审核 → 单次隔离执行。回归已接入统一分阶段入口、排除记忆和私有证据交接；其 v1 数值评价契约保持不变。查看 [研发路线图](docs/ROADMAP.md)、[任务接口](docs/TASK_CONTRACTS.md) 和 [回归交接说明](docs/TABULAR_HANDOFF.md)。
+0.22.0 新增[跨任务数据资格审查](docs/DATA_QUALIFICATION.md)：冻结元数据证据，明确阻塞/拒绝原因，并记录精确摘要上的人工决定。通过只允许准备协议，不授权研究执行；[本轮工程验收](docs/DATA_QUALIFICATION_REVIEW.md)待审。原有两类研究工作流保留：超分的完整自主周期，以及回归的自主提案 → 人工审核 → 单次隔离执行。回归已接入统一分阶段入口、排除记忆和私有证据交接；其 v1 数值评价契约保持不变。查看 [研发路线图](docs/ROADMAP.md)、[任务接口](docs/TASK_CONTRACTS.md) 和 [回归交接说明](docs/TABULAR_HANDOFF.md)。
 
 ```sh
 python3 -m research_harness task list

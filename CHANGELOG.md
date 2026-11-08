@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.22.0
+
+- Add offline `data-review` template, prepare, inspect and exact-hash human decision commands. Require all eight metadata criteria and referenced evidence; unresolved cases block and incompatible cases stop data qualification. Acceptance permits protocol design only, never execution.
+- Embed bounded, checksum-verified metadata text for private offline handoff. Reject changed evidence, ambiguous JSON, missing criteria, unsafe paths and overwrite attempts; bind a single local decision to the complete packet.
+- Add synthetic workflow, 15 regression tests and Python 3.10/3.12 macOS/Linux CI coverage for the new module. Existing runners, task bindings, scientific gates and historical research artifacts are unchanged. No new research experiment was run.
+
 ## 0.21.0
 
 - After explicit user authorization, send the reviewed metadata/permission inquiry to the verified Delft dataset co-creator and record the reply-assessment boundary. Keep private mail receipts local, preserve the pre-send review snapshot, and leave all external experiments unregistered and unrun.
