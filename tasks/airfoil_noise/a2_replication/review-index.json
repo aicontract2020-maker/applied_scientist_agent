@@ -1,0 +1,19 @@
+{
+  "content": {
+    "kind": "data-qualification-review-only",
+    "execution_authorized": false,
+    "files": {
+      "docs/AIRFOIL_REPLICATION_REVIEW.md": "9f719379c83da39c41666e98db889b4c62d0244a600e7e2dcd61f94247b7bdaa",
+      "scripts/check-airfoil-external-metadata.py": "4b8b4c86b49928d38265ee1872f412245a92c7b16a5013742680a4390058d5d5",
+      "tasks/airfoil_noise/a2_replication/AUTHOR_QUESTIONS.md": "a132762183b3c852e275e841e2e7734f9bce8fd33cd66cc0b41874d8b0a6bc95",
+      "tasks/airfoil_noise/a2_replication/README.md": "887f37bd6400d1a03189bd7df64c277af0c527ef47ba334106ceeee967322d46",
+      "tasks/airfoil_noise/a2_replication/decision.json": "88e40598de53dc163736d8340b4ac5f3102959a8859269251f684599a4d75b76",
+      "tasks/airfoil_noise/a2_replication/metadata-inventory.json": "aff680f7614168adbd72cfb70f48153b2c75c0557da3ae9dca12479948daca0d",
+      "tasks/airfoil_noise/a2_replication/protocol-draft.json": "73e82e80b129d4451eeb2b023b167a6109f09075178561de6fcb06c41f0e9e71",
+      "tasks/airfoil_noise/a2_replication/source-screen.json": "964b7242d2cd0a7697fdb4a5147896e4248371fbd138e7378217c8c30f7f5c74",
+      "tasks/airfoil_noise/a2_replication/validation.json": "6bb54e0d432f63298c2894e6e87ccea5453e7a8813c33408294b7a21234d29de"
+    }
+  },
+  "sha256": "24ef07ed55a2928f6d77e2a3092733066f47e78cde260f40ebeb4d869cfc3405",
+  "hash_format": "SHA-256 of UTF-8 json.dumps(content, sort_keys=True, separators=(comma,colon)); this is NOT an experiment execution approval hash"
+}

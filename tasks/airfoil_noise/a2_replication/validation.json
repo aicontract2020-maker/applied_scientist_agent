@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-08",
+  "base_python": {
+    "tests": 177,
+    "skipped": 9,
+    "passed": true
+  },
+  "full_research_environment": {
+    "tests": 177,
+    "skipped": 0,
+    "passed": true
+  },
+  "pinned_metadata_inventory_reproduced": true,
+  "changed_metadata_rejected": true,
+  "original_a1_files_unchanged": 20,
+  "original_a2_files_unchanged": 31,
+  "a2_readonly_audit_passed": true,
+  "empirical_experiment_executed": false,
+  "external_acoustic_targets_read": false,
+  "scope": "Inventory/software checks only; no scientific replication result"
+}

@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-08",
+  "stage": "External data qualification, not empirical model experiment",
+  "hypothesis_under_consideration": "A2 fixed feature transfers to independent external observations under the original training and thresholds",
+  "protocol": "protocol-draft.json",
+  "result": "Metadata screening identified a preferred independent source, but did not establish compatible targets/inputs, quality mask, eligible count or permission for intended use",
+  "conclusion": "Do not register or execute on the current evidence; seek source clarification before an exact replication review",
+  "decision": "BLOCKED_DATA_QUALIFICATION",
+  "scientific_stop": false,
+  "a2_original_decision_unchanged": "CONTINUE",
+  "fits": 0,
+  "external_target_reads": 0,
+  "external_predictions": 0,
+  "external_holdout_reserved": false,
+  "outbound_messages_sent": 0
+}

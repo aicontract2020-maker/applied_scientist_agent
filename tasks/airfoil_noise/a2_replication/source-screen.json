@@ -1,0 +1,123 @@
+{
+  "date": "2026-11-08",
+  "status": "BLOCKED_DATA_QUALIFICATION",
+  "preferred_dataset": "10.4121/20940646.v1",
+  "selection_basis": "Independent experimental acquisition and case-indexed boundary-layer metadata; no prediction or label performance used for selection",
+  "license": "CC-BY-NC-4.0",
+  "intended_use_permission_confirmed": false,
+  "downloaded_source_files": [
+    {
+      "local_name": "delft-LRM_Master.txt",
+      "url": "https://data.4tu.nl/file/da231bc5-450d-4ed8-9be8-fd3874b80352/92cabe6f-bb7e-4202-881a-c8baec66421c",
+      "bytes": 17809,
+      "sha256": "d22fd8ce53d34735bfd94c0608684fa4d2b73994b2793fad428c6ed40a6a0e5c"
+    },
+    {
+      "local_name": "delft-HRM_Master.txt",
+      "url": "https://data.4tu.nl/file/da231bc5-450d-4ed8-9be8-fd3874b80352/7e3dd26f-54b6-41f7-9e45-db7df7657e3c",
+      "bytes": 3083,
+      "sha256": "946c511c89d830e0b708ce1640593344d2dee46b265c73ad141829cb6678259b"
+    },
+    {
+      "local_name": "delft-readme.pdf",
+      "url": "https://data.4tu.nl/file/da231bc5-450d-4ed8-9be8-fd3874b80352/9abfb1f9-574c-41cf-92d8-1b9ffdab2b1e",
+      "bytes": 67516,
+      "sha256": "0d42111b78fbb6e3f6d02527d345cf6e687e11127241db181f65a2ee27d53c14"
+    },
+    {
+      "local_name": "delft-metadata.json",
+      "url": "https://data.4tu.nl/v3/datasets/da231bc5-450d-4ed8-9be8-fd3874b80352/versions/1/ro-crate-metadata.json",
+      "bytes": 3192,
+      "sha256": "7c522981b03be870679d4a18ff33fa01c26689cc8989e861492ded486d7345a0"
+    },
+    {
+      "local_name": "delft.html",
+      "url": "https://data.4tu.nl/datasets/da231bc5-450d-4ed8-9be8-fd3874b80352",
+      "bytes": 24669,
+      "sha256": "04e3e4e050f1de677755b653c757195fc0e298f84ba66a1e9278e2ba281df717"
+    },
+    {
+      "local_name": "soton.html",
+      "url": "https://eprints.soton.ac.uk/id/eprint/398169/",
+      "bytes": 33532,
+      "sha256": "3917b82e2254e5ce214288452414d3841529aa13be1ed5634a575cad11d9b418"
+    },
+    {
+      "local_name": "bristol-readme.txt",
+      "url": "https://data.bris.ac.uk/datasets/30c8q39wi1mxf205flnun3l5rl/readme.txt",
+      "bytes": 1336,
+      "sha256": "7fb970c9963c45e54e55c56ae621506790e37b5de1db7ee758407d954f9428d2"
+    },
+    {
+      "local_name": "bristol-using.txt",
+      "url": "https://data.bris.ac.uk/datasets/30c8q39wi1mxf205flnun3l5rl/using%20the%20dataset.txt",
+      "bytes": 11526,
+      "sha256": "587dbe26df45332fa8ccc10e6cca1cc03b591c7a2957534792d9d719edb06d64"
+    }
+  ],
+  "known_not_downloaded": [
+    "Delft 02Acoustics.zip",
+    "Delft 01Aerodynamics.zip",
+    "Bristol acoustic HDF5",
+    "PIBE acoustic HDF5"
+  ],
+  "retrieval_failures": [
+    {
+      "url": "https://eprints.soton.ac.uk/id/eprint/398169/1/DataFiles.zip",
+      "result": "HTTP 401 Unauthorized"
+    },
+    {
+      "url": "https://pure.tudelft.nl/ws/portalfiles/portal/142949814/1.j061630.pdf",
+      "result": "Timeout"
+    },
+    {
+      "url": "https://research.tudelft.nl/files/142949814/1.j061630.pdf",
+      "result": "HTTP 403 Forbidden"
+    },
+    {
+      "url": "https://repository.tudelft.nl/file/File_519f9099-e9db-4d61-8bfc-7f883f790338?preview=1",
+      "result": "Timeout"
+    }
+  ],
+  "reading_limits": "Delft README: both pages visually inspected. Full article and correction not obtained; official records/indexed text identify issues only, not completed acoustic calibration or quality-mask verification.",
+  "alternatives": [
+    {
+      "id": "10.24432/C5VW2C",
+      "decision": "REJECT_SAME_ACQUISITION",
+      "url": "https://archive.ics.uci.edu/dataset/291/airfoil+self-noise"
+    },
+    {
+      "id": "10.5523/bris.30c8q39wi1mxf205flnun3l5rl",
+      "decision": "NOT_QUALIFIED",
+      "reason": "Required displacement thickness not documented in inspected guides; non-commercial license. Acoustic files not inspected.",
+      "url": "https://data.bris.ac.uk/data/dataset/30c8q39wi1mxf205flnun3l5rl"
+    },
+    {
+      "id": "10.5281/zenodo.10638882",
+      "decision": "NOT_QUALIFIED",
+      "reason": "Pressure/acoustic arrays described; required suction displacement thickness not established. Metadata only, not a complete HDF5 audit.",
+      "url": "https://zenodo.org/records/10638882"
+    },
+    {
+      "id": "10.5258/SOTON/398169",
+      "decision": "ACCESS_UNVERIFIED",
+      "reason": "Record available; ZIP returned HTTP 401; independence/schema not inferred from title.",
+      "url": "https://eprints.soton.ac.uk/398169/"
+    },
+    {
+      "id": "10.17632/6x59x7x3ny.2",
+      "decision": "REJECT_DIFFERENT_TARGET",
+      "reason": "Tip vortex formation noise rather than direct trailing-edge replication.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6953522/"
+    }
+  ],
+  "costs": {
+    "retained_download_bytes": 162663,
+    "model_fits": 0,
+    "prediction_calls": 0,
+    "acoustic_scores": 0,
+    "paid_cloud_jobs": 0,
+    "actual_money": null,
+    "note": "Retained payload bytes only; protocol overhead, failed transfers, search, conversation agent, time and human review costs are not fully metered or priced."
+  }
+}

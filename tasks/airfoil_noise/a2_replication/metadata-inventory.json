@@ -1,0 +1,58 @@
+{
+  "dataset_doi": "10.4121/20940646.v1",
+  "status": "BLOCKED_DATA_QUALIFICATION",
+  "execution_ready": false,
+  "metadata_only": true,
+  "models_fitted": 0,
+  "acoustic_targets_read": false,
+  "files": {
+    "LRM": {
+      "sha256": "d22fd8ce53d34735bfd94c0608684fa4d2b73994b2793fad428c6ed40a6a0e5c",
+      "bytes": 17809,
+      "all_case_count": 178,
+      "straight_edge_case_count": 67,
+      "straight_edge_cases_with_reported_delta_star": 14,
+      "case_ids_with_reported_delta_star": [
+        "LRM-006",
+        "LRM-011",
+        "LRM-019",
+        "LRM-029",
+        "LRM-030",
+        "LRM-032",
+        "LRM-034",
+        "LRM-105",
+        "LRM-110",
+        "LRM-118",
+        "LRM-128",
+        "LRM-129",
+        "LRM-131",
+        "LRM-133"
+      ],
+      "nominal_re_angle_proxy_count": 6
+    },
+    "HRM": {
+      "sha256": "946c511c89d830e0b708ce1640593344d2dee46b265c73ad141829cb6678259b",
+      "bytes": 3083,
+      "all_case_count": 45,
+      "straight_edge_case_count": 18,
+      "straight_edge_cases_with_reported_delta_star": 4,
+      "case_ids_with_reported_delta_star": [
+        "HRM-101",
+        "HRM-131",
+        "HRM-133",
+        "HRM-161"
+      ],
+      "nominal_re_angle_proxy_count": 4
+    }
+  },
+  "combined_model_re_angle_proxy_count": 10,
+  "count_caveat": "Field presence is not confirmed suction-side semantics, valid acoustic coverage, independence or an eligible holdout count.",
+  "unresolved": [
+    "target_scale_mapping",
+    "suction_side_and_flow_semantics",
+    "predeclared_acoustic_validity_mask",
+    "eligible_group_count",
+    "intended_use_permission",
+    "frozen_external_adapter_and_manifest"
+  ]
+}

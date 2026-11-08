@@ -1,0 +1,63 @@
+{
+  "id": "airfoil-a2-r1-delft-external",
+  "date": "2026-11-08",
+  "status": "BLOCKED_DATA_QUALIFICATION",
+  "execution_ready": false,
+  "registered": false,
+  "approval_exists": false,
+  "draft_is_not_execution_manifest": true,
+  "parent_a2_sha256": "de0f852d0bfb7a832604aef4f2fb5c82944176bda4a354deadb573ed726ea5de",
+  "parent_a2_execution_commit": "a9950dbaaa7f9b79e7ef48007522a6b29be51c6d",
+  "proposed_dataset_doi": "10.4121/20940646.v1",
+  "hypothesis": "With the original A1 training rows and fixed A2 model recipe, the exact suction-side Strouhal feature meets the same paired gain, grouped uncertainty and latency gates on independent wind-tunnel measurements expressed in the verified original target definition.",
+  "baseline": "Original five-input ExtraTreesRegressor selected by A1; not claimed globally strongest on external data",
+  "mechanism": "airfoil-suction-strouhal-v1",
+  "candidate_source": "def augment(row):\n    return row + [row[0] * row[4] / row[3]]\n",
+  "unchanged_controls": {
+    "training_rows": 961,
+    "training_conditions": 67,
+    "validation_purpose": "Historical A1 baseline reproduction only, tolerance 1e-8; no candidate validation screening",
+    "old_holdout_reuse": false,
+    "seeds": [
+      11,
+      22,
+      33
+    ],
+    "trees": 100,
+    "fits": 6,
+    "minimum_effect_db_each_seed": 0.2,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20261107,
+      "confidence": 0.95
+    },
+    "max_latency_ratio": 1.1,
+    "timing": "Five whole-holdout-batch passes per fit, median; candidate includes augmentation and array conversion; seed 22 candidate-first, other seeds baseline-first",
+    "limits": {
+      "attempts": 1,
+      "fits": 6,
+      "threads": 1,
+      "worker_seconds": 240,
+      "output_bytes": 16777216
+    }
+  },
+  "primary_metric": "Condition-macro paired MAE improvement in dB; same verified target definition, no post-hoc calibration",
+  "external_selection_rule": "All and only straight-edge BASELINE cases with author-verified suction-side delta*, freestream velocity, angle convention, geometry and predeclared valid acoustic bins; no score-based exclusions, imputation, serrated cases or simulated targets",
+  "minimum_condition_groups": 10,
+  "grouping_status": "Unqualified: cluster spectra/nozzle/tripping variants within physical model-condition; pin exact IDs and dependence structure before registration",
+  "data_mapping": null,
+  "validity_mask": null,
+  "external_row_ids": null,
+  "external_target_sha256": null,
+  "adapter_source_sha256": null,
+  "execution_location": null,
+  "uncertainty_limit": "Within-campaign condition bootstrap, not independent tunnel replication; retain all seeds and variability. Group floor is not a power guarantee.",
+  "decisions": {
+    "data_invalid": "STOP_DATA_QUALIFICATION without scientific claim; no model run",
+    "measurement_invalid": "INVALID; retain reservation after launch; no automatic retry",
+    "valid_failed_gate": "STOP fixed-feature external-transfer route; no tuning, masks, target scale, data or model rescue",
+    "valid_all_gates_passed": "CONTINUE limited to the preregistered external conditions; no automatic deployment"
+  },
+  "next_gate": "Resolve source definitions, quality and intended-use permission; implement and synthetically validate external adapter; freeze full execution manifest; seek separate explicit user approval",
+  "no_outbound_messages_sent": true
+}
