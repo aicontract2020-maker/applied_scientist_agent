@@ -20,6 +20,7 @@ jobs:
       - name: Offline data qualification software checks (no extra dependencies)
         run: |
           python -m unittest discover -s tests -p test_data_qualification.py -v
+          python -m unittest discover -s tests -p test_data_admission.py -v
           python -m examples.data_qualification.workflow --out runs/ci-data-review
   linux-x86_64:
     runs-on: ubuntu-24.04

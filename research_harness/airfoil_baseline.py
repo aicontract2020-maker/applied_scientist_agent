@@ -18,6 +18,9 @@ from .portable import ROOT
 from .state_lock import research_lock
 from .tabular_baseline import PACKAGES, environment, source_hashes
 from .tabular_data import FILES, write_json
+from . import data_admission as admission
+
+ADAPTER = 'airfoil-baseline-v1'
 
 SCOPE = 'One Airfoil baseline qualification only; no candidate or final holdout scoring'
 RECIPE = {
@@ -57,17 +60,22 @@ RECIPE = {
 }
 
 
-def prepare(data, output):
-    return prepare_rows(parse(data),output,SOURCE,raw=Path(data).read_bytes())
+def prepare(data, output, data_review=None, intended_use=None):
+    snapshot = admission.accepted_snapshot(data_review, ADAPTER, SOURCE, intended_use)
+    return prepare_rows(parse(data),output,SOURCE,raw=Path(data).read_bytes(),qualification=snapshot,intended_use=intended_use)
 
 
-def prepare_rows(rows, output, source=FIXTURE, raw=None):
+def prepare_rows(rows, output, source=FIXTURE, raw=None, *, qualification=None, intended_use=None):
     if source not in (SOURCE,FIXTURE): raise ValueError('Unsupported Airfoil source')
     if source==SOURCE and (raw is None or hashlib.sha256(raw).hexdigest()!=SOURCE['raw_sha256']):
         raise ValueError('Real review requires pinned raw bytes')
+    if source == SOURCE and qualification is None: raise ValueError('Real data requires accepted data qualification')
     parts=split_rows(rows)
     c={'recipe':RECIPE,'source':source,'files':{n:digest(parts[n]) for n in FILES},
        'counts':counts(parts),'sources':source_hashes(),'status':'AWAITING_REVIEW'}
+    if qualification is not None:
+        c['data_admission'] = admission.bind(qualification, ADAPTER, source, intended_use, c['files'], RECIPE)
+    admission.check_packet_size(c)
     folder=Path(output).absolute(); folder.mkdir(mode=0o700,parents=True,exist_ok=False)
     for name in FILES: write_json(folder/name,parts[name])
     if raw is not None: (folder/'airfoil_self_noise.dat').write_bytes(raw)
@@ -79,6 +87,7 @@ def prepare_rows(rows, output, source=FIXTURE, raw=None):
         'Approval covers 15 fixed baseline fits on training data and condition-level validation only. '
         'Any failed threshold closes this qualification; no tuning or retry. Final holdout remains sealed.\n\n'
         '```json\n'+json.dumps({'source':source,'counts':c['counts'],'recipe':RECIPE},indent=2)+'\n```\n')
+    with (folder/'REVIEW.md').open('a') as handle: handle.write(admission.review_note(c))
     return {'status':'AWAITING_REVIEW','review':str(folder/'REVIEW.md'),'sha256':packet['sha256'],'counts':c['counts']}
 
 
@@ -86,10 +95,13 @@ def load_review(folder, current=True):
     folder=Path(folder)
     if folder.is_symlink() or not folder.is_dir(): raise ValueError('Regular Airfoil review directory required')
     packet=read_json(folder/'bundle.json'); _keys(packet,('content','sha256')); c=packet['content']
-    _keys(c,('recipe','source','files','counts','sources','status'))
+    fields = {'recipe','source','files','counts','sources','status'}
+    if not isinstance(c, dict) or set(c) not in (fields, fields | {'data_admission'}):
+        raise ValueError('Invalid Airfoil review fields')
     if packet['sha256']!=digest(c) or c['recipe']!=RECIPE or c['status']!='AWAITING_REVIEW':
         raise ValueError('Changed Airfoil review/recipe')
     if c['source'] not in (SOURCE,FIXTURE): raise ValueError('Unsupported Airfoil source')
+    admission.verify(c, ADAPTER, required=current and c['source'] == SOURCE)
     _keys(c['files'],FILES)
     expected=source_hashes()
     if (not isinstance(c['sources'],dict) or 'research_harness/airfoil_worker.py' not in c['sources']
@@ -193,17 +205,32 @@ def worker_request(parts):
     return {'train':parts['train.json'],'validation':parts['validation.json']}
 
 
+def _approved_review(folder, root):
+    packet, parts = load_review(folder)
+    approval = read_json(Path(folder)/'approval.json'); _keys(approval, ('sha256','reviewer','scope'))
+    if approval['sha256'] != packet['sha256'] or approval['scope'] != SCOPE or not isinstance(approval['reviewer'], str) or not approval['reviewer'].strip():
+        raise ValueError('Missing/stale Airfoil-only approval')
+    run = Path(folder)/'run'; history = reservation(root, packet)
+    if run.exists() or run.is_symlink() or history.exists(): raise ValueError('Airfoil qualification already reserved; no retry')
+    return packet, parts, approval
+
+
+def preflight(folder, root=ROOT):
+    packet, _, _ = _approved_review(folder, root)
+    return {'status': 'PRECHECK_PASSED', 'read_only': True, 'sha256': packet['sha256'],
+            'data_admission': admission.verify(packet['content'], ADAPTER, required=packet['content']['source'] == SOURCE),
+            'execution_authorized': False, 'isolation_checked': False,
+            'note': 'Execution still rechecks exact approval, reservation and environment, then probes isolation.'}
+
+
 def execute(folder, root=ROOT):
     from .tabular_sandbox import isolation_probe, isolated_worker
     with research_lock(root):
-        folder=Path(folder).absolute(); packet,parts=load_review(folder)
-        approval=read_json(folder/'approval.json'); _keys(approval,('sha256','reviewer','scope'))
-        if approval['sha256']!=packet['sha256'] or approval['scope']!=SCOPE or not isinstance(approval['reviewer'],str) or not approval['reviewer'].strip():
-            raise ValueError('Missing/stale Airfoil-only approval')
+        folder=Path(folder).absolute(); packet,parts,approval=_approved_review(folder, root)
         run=folder/'run'; history=reservation(root,packet)
-        if run.exists() or run.is_symlink() or history.exists(): raise ValueError('Airfoil qualification already reserved; no retry')
         python=ROOT/'.venv-tabular/bin/python'; env=environment(python); probe=isolation_probe(ROOT,python)
-        load_review(folder)  # Recheck after environment/probe, before reserving or exposing data.
+        if _approved_review(folder, root) != (packet, parts, approval):
+            raise ValueError('Review or approval changed during preflight; no execution')
         history.mkdir(parents=True,exist_ok=False)
         write_json(history/'reservation.json',{'review_sha256':packet['sha256'],'status':'RESERVED'})
         run.mkdir(mode=0o700,exist_ok=False); begin=time.monotonic()

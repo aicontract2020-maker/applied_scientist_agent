@@ -15,6 +15,10 @@ from .memory import read_json
 from .portable import ROOT
 from .state_lock import research_lock
 from .tabular_data import FILES, SOURCE, parse_abalone, split_rows, write_json
+from . import data_admission as admission
+
+ADAPTER = 'abalone-baseline-v1'
+FIXTURE = {'id': 'synthetic-software-fixture'}
 
 PACKAGES = {'numpy': '1.26.4', 'scipy': '1.15.3', 'scikit-learn': '1.7.2',
             'joblib': '1.5.2', 'threadpoolctl': '3.6.0'}
@@ -51,16 +55,22 @@ def source_hashes():
     return {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
 
 
-def prepare(data, output):
-    return prepare_rows(parse_abalone(data), output, SOURCE)
+def prepare(data, output, data_review=None, intended_use=None):
+    snapshot = admission.accepted_snapshot(data_review, ADAPTER, SOURCE, intended_use)
+    return prepare_rows(parse_abalone(data), output, SOURCE, qualification=snapshot, intended_use=intended_use)
 
 
-def prepare_rows(rows, output, source):
+def prepare_rows(rows, output, source, *, qualification=None, intended_use=None):
     """Internal fixture seam. Public CLI only accepts the pinned UCI raw file."""
+    if source not in (SOURCE, FIXTURE): raise ValueError('Unsupported dataset provenance')
+    if source == SOURCE and qualification is None: raise ValueError('Real data requires accepted data qualification')
     parts = split_rows(rows)
     content = {'recipe': RECIPE, 'source': source, 'files': {name: digest(parts[name]) for name in FILES},
                'counts': {key: len(parts[key+'.json']) for key in ('train', 'validation', 'holdout')},
                'sources': source_hashes(), 'status': 'AWAITING_REVIEW'}
+    if qualification is not None:
+        content['data_admission'] = admission.bind(qualification, ADAPTER, source, intended_use, content['files'], RECIPE)
+    admission.check_packet_size(content)
     folder = Path(output).absolute()
     folder.mkdir(parents=True, mode=0o700, exist_ok=False)
     for name in FILES: write_json(folder/name, parts[name])
@@ -96,6 +106,7 @@ python3 -m research_harness tabular baseline --review PATH
 
 同一目录只能批准/执行一次，内容变动使批准失效。批准是本地审查记录，不是身份认证。不同副本无全局锁；不得通过复制或删除记录重跑。若任务或门槛不合适，应在看见分数前修订方案并重新审查。
 ''')
+    with (folder/'REVIEW.md').open('a') as handle: handle.write(admission.review_note(content))
     return {'status': 'AWAITING_REVIEW', 'review': str(folder/'REVIEW.md'), 'sha256': packet['sha256'], 'counts': content['counts']}
 
 
@@ -105,12 +116,14 @@ def load_review(folder, *, require_current_sources=True):
     packet = read_json(folder/'bundle.json')
     if not isinstance(packet, dict) or set(packet) != {'content', 'sha256'}: raise ValueError('Invalid review envelope')
     c = packet['content']
-    if (not isinstance(c, dict) or set(c) != {'recipe', 'source', 'files', 'counts', 'sources', 'status'}
+    fields = {'recipe', 'source', 'files', 'counts', 'sources', 'status'}
+    if (not isinstance(c, dict) or set(c) not in (fields, fields | {'data_admission'})
             or packet['sha256'] != digest(c) or digest(c['recipe']) != digest(RECIPE) or c['status'] != 'AWAITING_REVIEW'
             or not isinstance(c['files'], dict) or set(c['files']) != set(FILES)):
         raise ValueError('Changed/unsupported baseline review')
     if c['source'] != SOURCE and c['source'] != {'id': 'synthetic-software-fixture'}:
         raise ValueError('Unsupported dataset provenance')
+    admission.verify(c, ADAPTER, required=require_current_sources and c['source'] == SOURCE)
     if (not isinstance(c['sources'], dict) or not c['sources'] or
             any(not isinstance(k,str) or not isinstance(v,str) or not re.fullmatch('[0-9a-f]{64}',v) for k,v in c['sources'].items())):
         raise ValueError('Invalid frozen source hashes')
@@ -184,21 +197,37 @@ def qualify(output, targets):
             'conclusion': RECIPE['go'] if passed else RECIPE['stop'], 'final_holdout_scored': False}
 
 
+def _approved_review(folder):
+    packet, parts = load_review(folder)
+    approval = read_json(Path(folder)/'approval.json')
+    if (not isinstance(approval, dict) or set(approval) != {'sha256', 'reviewer', 'scope'}
+            or approval['sha256'] != packet['sha256'] or not isinstance(approval['reviewer'], str) or not approval['reviewer'].strip()
+            or approval['scope'] != 'One baseline qualification only; no candidate study or final holdout scoring'):
+        raise ValueError('Missing/stale baseline-only approval')
+    run = Path(folder)/'run'
+    if run.exists() or run.is_symlink(): raise ValueError('Baseline attempt already consumed; inspect evidence, no retry')
+    return packet, parts, approval
+
+
+def preflight(folder):
+    packet, _, _ = _approved_review(folder)
+    return {'status': 'PRECHECK_PASSED', 'read_only': True, 'sha256': packet['sha256'],
+            'data_admission': admission.verify(packet['content'], ADAPTER, required=packet['content']['source'] == SOURCE),
+            'execution_authorized': False, 'isolation_checked': False,
+            'note': 'Execution still rechecks exact approval, data and environment, then probes isolation.'}
+
+
 def execute(folder):
     from .tabular_sandbox import isolation_probe, isolated_worker
     with research_lock(ROOT):
         folder = Path(folder).absolute()
-        packet, parts = load_review(folder)
-        approval = read_json(folder/'approval.json')
-        if (not isinstance(approval, dict) or set(approval) != {'sha256', 'reviewer', 'scope'}
-                or approval['sha256'] != packet['sha256'] or not isinstance(approval['reviewer'], str) or not approval['reviewer'].strip()
-                or approval['scope'] != 'One baseline qualification only; no candidate study or final holdout scoring'):
-            raise ValueError('Missing/stale baseline-only approval')
+        packet, parts, approval = _approved_review(folder)
         run = folder/'run'
-        if run.exists(): raise ValueError('Baseline attempt already consumed; inspect evidence, no retry')
         python = ROOT/'.venv-tabular/bin/python'
         env = environment(python)
         probe = isolation_probe(ROOT, python)
+        if _approved_review(folder) != (packet, parts, approval):
+            raise ValueError('Review or approval changed during preflight; no execution')
         run.mkdir(mode=0o700, exist_ok=False)
         Workspace.append(run, {'event': 'REGISTER', 'review_sha256': packet['sha256']})
         begin = time.monotonic()

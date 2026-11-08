@@ -81,7 +81,9 @@ def main():
     tabular_prepare = tabular_commands.add_parser("prepare", help="Prepare pinned UCI data and a review packet; no training")
     tabular_prepare.add_argument("--data", required=True)
     tabular_prepare.add_argument("--out", required=True)
-    for name in ("verify", "approve", "baseline"):
+    tabular_prepare.add_argument("--data-review", required=True, help="Accepted C4 metadata packet; not execution approval")
+    tabular_prepare.add_argument("--intended-use", required=True, help="Exact use stated in accepted metadata")
+    for name in ("verify", "approve", "baseline", "preflight"):
         command = tabular_commands.add_parser(name)
         command.add_argument("--review", required=True)
         if name == "approve":
@@ -126,7 +128,9 @@ def main():
     ac = airfoil.add_subparsers(dest="airfoil_command", required=True)
     ac.add_parser("fetch").add_argument("--out", required=True)
     ap = ac.add_parser("prepare"); ap.add_argument("--data", required=True); ap.add_argument("--out", required=True)
-    for name in ("review", "approve", "baseline", "audit"):
+    ap.add_argument("--data-review", required=True, help="Accepted C4 metadata packet; not execution approval")
+    ap.add_argument("--intended-use", required=True, help="Exact use stated in accepted metadata")
+    for name in ("review", "approve", "baseline", "audit", "preflight"):
         ap = ac.add_parser(name); ap.add_argument("--review", required=True)
         if name == "approve":
             ap.add_argument("--sha256", required=True); ap.add_argument("--reviewer", required=True)
@@ -180,7 +184,8 @@ def main():
             elif args.airfoil_command == "fetch":
                 from .airfoil_data import fetch
                 output = fetch(args.out)
-            elif args.airfoil_command == "prepare": output = ab.prepare(args.data, args.out)
+            elif args.airfoil_command == "prepare": output = ab.prepare(args.data, args.out, args.data_review, args.intended_use)
+            elif args.airfoil_command == "preflight": output = ab.preflight(args.review)
             elif args.airfoil_command == "review":
                 packet, _ = ab.load_review(args.review)
                 output = {"sha256": packet["sha256"], "content": packet["content"]}
@@ -249,7 +254,10 @@ def main():
                 from .tabular_data import fetch_abalone
                 output = fetch_abalone(args.out)
             elif args.tabular_command == "prepare":
-                output = prepare(args.data, args.out)
+                output = prepare(args.data, args.out, args.data_review, args.intended_use)
+            elif args.tabular_command == "preflight":
+                from .tabular_baseline import preflight
+                output = preflight(args.review)
             elif args.tabular_command == "verify":
                 packet, _ = load_review(args.review)
                 output = {'review_integrity_ok': True, 'sha256': packet['sha256'], 'counts': packet['content']['counts'],

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.23.0
+
+- Record user acceptance of C4 and require accepted metadata qualification plus explicit intended use before either public baseline prepare command reads real data. Embed the private evidence/decision snapshot and bind it to adapter identity, dataset revision, frozen partitions and the unchanged baseline recipe.
+- Enforce admission on new baseline approval and execution; add read-only `airfoil preflight` / `tabular preflight`. Recheck the entire review and approval after environment/isolation probes, before reserving or starting a worker. Legacy real-data bundles remain readable for historical audits but cannot bypass admission for new execution.
+- Add 11 synthetic integration tests and exercise both existing isolated baseline workers with admitted synthetic records. No new real research experiment, model call, data source or generic executor; all scientific thresholds and historical artifacts remain unchanged.
+
 ## 0.22.0
 
 - Add offline `data-review` template, prepare, inspect and exact-hash human decision commands. Require all eight metadata criteria and referenced evidence; unresolved cases block and incompatible cases stop data qualification. Acceptance permits protocol design only, never execution.

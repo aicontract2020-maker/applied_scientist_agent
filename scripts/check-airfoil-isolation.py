@@ -6,14 +6,17 @@ import tempfile
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from research_harness import airfoil_baseline as ab
+from examples.data_qualification.baseline import qualification, USE
 
 root=Path(__file__).resolve().parents[1]; (root/'runs').mkdir(exist_ok=True)
 rows=[{'id':f'fixture-{i:03}-{j}','features':[float(500*(j+1)),float(i),.1+.001*i,30.+i,.003],
        'target':100.+i*.2+j} for i in range(150) for j in range(3)]
 with tempfile.TemporaryDirectory(prefix='airfoil fixture ',dir=root/'runs') as tmp:
     folder=Path(tmp)/'review'; memory=Path(tmp)/'checkout'
-    review=ab.prepare_rows(rows,folder)
+    snapshot=qualification(Path(tmp)/'qualification',ab.ADAPTER,ab.FIXTURE)
+    review=ab.prepare_rows(rows,folder,qualification=snapshot,intended_use=USE)
     ab.approve(folder,review['sha256'],'SOFTWARE FIXTURE ONLY; NOT USER APPROVAL',root=memory)
+    assert ab.preflight(folder,root=memory)['data_admission']['execution_authorized'] is False
     result=ab.execute(folder,root=memory)
     if not result['measurement_valid']:
         err=folder/'run/output/stderr.log'
@@ -23,7 +26,7 @@ with tempfile.TemporaryDirectory(prefix='airfoil fixture ',dir=root/'runs') as t
     try: ab.execute(folder,root=memory)
     except ValueError as exc: assert 'reserved' in str(exc)
     else: raise AssertionError('Repeat allowed')
-    second=Path(tmp)/'another'; ab.prepare_rows(rows,second)
+    second=Path(tmp)/'another'; ab.prepare_rows(rows,second,qualification=snapshot,intended_use=USE)
     try: ab.approve(second,review['sha256'],'fixture',root=memory)
     except ValueError as exc: assert 'reserved' in str(exc)
     else: raise AssertionError('Copied qualification allowed')
@@ -33,4 +36,4 @@ with tempfile.TemporaryDirectory(prefix='airfoil fixture ',dir=root/'runs') as t
     except ValueError: pass
     else: raise AssertionError('Tampered predictions accepted')
     print(json.dumps({'synthetic_only':True,'actual_isolated_fits':15,'strict_audit_passed':True,
-        'tamper_rejected':True,'repeat_and_copy_rejected':True,'model_calls':0,'real_data_scored':False},indent=2))
+        'tamper_rejected':True,'repeat_and_copy_rejected':True,'data_admission_checked':True,'model_calls':0,'real_data_scored':False},indent=2))
