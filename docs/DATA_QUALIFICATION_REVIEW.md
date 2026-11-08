@@ -18,6 +18,7 @@
 - 实际 CLI 演示得到 BLOCKED、数据资格 STOP、待人工审查、模拟接受四种预期状态，始终 `execution_authorized: false`；没有创建研究工作区或消耗留出。
 - 首次同时运行两套完整测试时触发既有 checkout 互斥锁，出现两项锁冲突。未修改锁或研究代码，改为串行后全部通过。这是软件测试调度问题，不是重跑研究实验。
 - CI 增加 Linux/macOS × Python 3.10/3.12 的离线模块检查；远端结果另行核验，本页不把配置完成当作验证通过。
+- 首次远端 macOS 任务因 `macos-14` 托管镜像不再可用而未启动测试；依据 [GitHub 官方镜像列表](https://github.com/actions/runner-images/blob/main/README.md)改用 `macos-15`。这只修正软件验证环境，不改研究条件。
 
 未运行新研究实验、未新增模型调用、未下载数据、未联系其他人。Delft 数据仍待作者回复，A2 外部复现仍未注册/未运行；D1 仍未开展人工效率对照。
 
