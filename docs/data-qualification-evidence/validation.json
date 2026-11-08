@@ -1,0 +1,69 @@
+{
+  "kind": "research-harness-software-validation",
+  "version": 1,
+  "synthetic_only": true,
+  "new_research_experiments": 0,
+  "code_commit": "4faabc95d361589cfcaa43c2c78baa4bc8239f6d",
+  "local_checks": [
+    {
+      "environment": "macOS Python 3.12.14 full SR environment",
+      "tests": 192,
+      "skipped": 0,
+      "result": "PASS",
+      "execution": "serial"
+    },
+    {
+      "environment": "Python 3.12.13 tabular environment, new module only",
+      "tests": 15,
+      "skipped": 0,
+      "result": "PASS"
+    },
+    {
+      "environment": "system Python 3.9.6 optional-dependency smoke check, below supported minimum",
+      "tests": 192,
+      "skipped": 9,
+      "result": "PASS_WITH_SKIPS"
+    }
+  ],
+  "ci": {
+    "run_id": 42492095411,
+    "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/42492095411",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 128766480696,
+        "name": "linux-x86_64",
+        "conclusion": "success"
+      },
+      {
+        "id": 128766480847,
+        "name": "data-review-portability (macos-15, 3.12)",
+        "conclusion": "success"
+      },
+      {
+        "id": 128766480904,
+        "name": "data-review-portability (ubuntu-24.04, 3.12)",
+        "conclusion": "success"
+      },
+      {
+        "id": 128766480970,
+        "name": "data-review-portability (ubuntu-24.04, 3.10)",
+        "conclusion": "success"
+      },
+      {
+        "id": 128766481053,
+        "name": "data-review-portability (macos-15, 3.10)",
+        "conclusion": "success"
+      }
+    ],
+    "linux_full_tests": 192,
+    "linux_full_skipped": 0,
+    "linux_kernel_and_synthetic_isolation_checks": "PASS"
+  },
+  "notes": [
+    "Software verification only; no real dataset qualified or experiment approved.",
+    "Initial parallel local suites contended on the existing checkout lock; serial full suite passed without modifying locks.",
+    "Initial macOS 14 CI jobs did not start because the hosted image was retired; corrected to macOS 15.",
+    "Historical research records and frozen scientific criteria unchanged; no evidence of commercial value or human time savings."
+  ]
+}
