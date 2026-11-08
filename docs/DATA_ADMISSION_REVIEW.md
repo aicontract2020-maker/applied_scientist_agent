@@ -17,7 +17,7 @@
 - macOS 完整环境 **203 项全部通过**；基础环境 203 项中 194 项通过、9 项因可选依赖缺失跳过。
 - 实际 macOS 隔离检查通过：仅合成记录，Abalone 固定三模型三 seed、Airfoil 固定十五次拟合，均走新资格绑定；标签隔离、严格审计、篡改和重复拒绝检查通过。不是公开数据研究，也不是科学效果证据。
 - 第一次实际隔离探针被外层工具环境阻止，未进入真实 worker；获准在真实系统环境检查后通过，没有弱化隔离或改数值门槛。
-- 远端 Linux/macOS 兼容性及 Linux 完整隔离检查将在发布验证记录中注明，配置本身不算验证通过。
+- [远端检查 42530903580](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/42530903580)全部通过，对应代码提交 `07df0e82fcc71a2dda41722015099c8646a1e15c`：Linux 完整 **203 项无跳过**，实际内核/隔离检查通过，两个基线合成流程均记录 `data_admission_checked: true`；Linux/macOS × Python 3.10/3.12 四组 C4/C5 检查全部通过。见[结构化验证记录](data-admission-evidence/validation.json)。
 
 本轮没有下载新数据、调用研究模型或发信；没有执行 A2 外部复现，也没有重跑历史研究。软件测试里的资格接受/执行批准都明确标记为合成 fixture。
 

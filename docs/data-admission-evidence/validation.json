@@ -1,0 +1,71 @@
+{
+  "kind": "research-harness-software-validation",
+  "version": 1,
+  "synthetic_only": true,
+  "new_research_experiments": 0,
+  "code_commit": "07df0e82fcc71a2dda41722015099c8646a1e15c",
+  "local_checks": {
+    "full_suite": {
+      "tests": 203,
+      "skipped": 0,
+      "result": "PASS"
+    },
+    "base_suite": {
+      "tests": 203,
+      "skipped": 9,
+      "result": "PASS_WITH_SKIPS"
+    },
+    "new_admission_tests": 11,
+    "macos_actual_isolation": {
+      "result": "PASS",
+      "adapters": [
+        "abalone-baseline-v1",
+        "airfoil-baseline-v1"
+      ],
+      "data_admission_checked": true,
+      "real_data_scored": false
+    }
+  },
+  "ci": {
+    "run_id": 42530903580,
+    "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/42530903580",
+    "conclusion": "success",
+    "linux_full_tests": 203,
+    "linux_full_skipped": 0,
+    "linux_actual_isolation": "PASS",
+    "jobs": [
+      {
+        "id": 128884645246,
+        "name": "linux-x86_64",
+        "conclusion": "success"
+      },
+      {
+        "id": 128884645373,
+        "name": "data-review-portability (macos-15, 3.12)",
+        "conclusion": "success"
+      },
+      {
+        "id": 128884645454,
+        "name": "data-review-portability (ubuntu-24.04, 3.12)",
+        "conclusion": "success"
+      },
+      {
+        "id": 128884645504,
+        "name": "data-review-portability (macos-15, 3.10)",
+        "conclusion": "success"
+      },
+      {
+        "id": 128884645512,
+        "name": "data-review-portability (ubuntu-24.04, 3.10)",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "limits": [
+    "Only new baseline reviews for two existing closed adapters consume admission; no generic new dataset execution.",
+    "Data qualification acceptance remains separate from exact experiment approval.",
+    "Legacy real-data bundles remain audit-readable; they cannot execute without admission.",
+    "Internal synthetic fixture seams remain available for software checks, not public raw-data intake.",
+    "Existing scientific thresholds and historical task artifacts unchanged; no new research result or commercial evidence."
+  ]
+}
