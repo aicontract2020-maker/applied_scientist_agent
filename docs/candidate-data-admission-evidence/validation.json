@@ -1,0 +1,84 @@
+{
+  "kind": "research-harness-software-validation",
+  "version": 1,
+  "synthetic_only": true,
+  "new_research_experiments": 0,
+  "code_commit": "6baf38a2366e38610e86708a5249e0d8a0148d23",
+  "local_checks": {
+    "full_suite": {
+      "tests": 217,
+      "skipped": 0,
+      "result": "PASS"
+    },
+    "base_suite": {
+      "tests": 217,
+      "skipped": 9,
+      "result": "PASS_WITH_SKIPS"
+    },
+    "new_candidate_tests": 14,
+    "macos_actual_candidate_isolation": {
+      "result": "PASS",
+      "adapters": [
+        "abalone-candidate-v1",
+        "airfoil-candidate-v1"
+      ],
+      "candidate_data_admission_checked": true,
+      "private_tabular_evidence_and_memory_handoff": true,
+      "real_data_scored": false
+    },
+    "recipe_and_evaluator_comparison": {
+      "against_commit": "df999e8f47d23d09688779223200a9f026cae348",
+      "method": "AST comparison of both RECIPE constants and evaluator functions",
+      "unchanged": true
+    }
+  },
+  "ci": {
+    "run_id": 42657603777,
+    "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/42657603777",
+    "status": "completed",
+    "checked_at_utc": "2026-11-09T16:54:08Z",
+    "linux_full_tests": 217,
+    "linux_full_skipped": 0,
+    "linux_actual_candidate_isolation": "PASS",
+    "jobs": [
+      {
+        "id": 129300204229,
+        "name": "linux-x86_64",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129300204478,
+        "name": "data-review-portability (macos-15, 3.10)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129300204568,
+        "name": "data-review-portability (ubuntu-24.04, 3.12)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129300204710,
+        "name": "data-review-portability (ubuntu-24.04, 3.10)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129300204787,
+        "name": "data-review-portability (macos-15, 3.12)",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "conclusion": "success"
+  },
+  "limits": [
+    "The macOS 3.10 hosted job initially waited for a runner and subsequently passed; no check was skipped or weakened.",
+    "Only the existing two candidate adapters and the tabular proposal call chain consume candidate admission.",
+    "Candidate data acceptance cannot replace exact execution approval or override consumed holdout/stopped-route memory.",
+    "Legacy real candidate bundles remain audit-readable but cannot execute without candidate admission.",
+    "No new scientific result, dataset adapter, automatic model call, identity signature or global checkout lock."
+  ]
+}

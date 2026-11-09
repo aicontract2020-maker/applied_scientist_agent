@@ -20,16 +20,16 @@
 
 ## 准备与检查命令
 
-以下是将来**单独获准的新候选**的操作方法，不是对当前已停止/已消费数据的运行授权。
+以下是将来**单独获准的新候选**的操作方法，不是对当前已停止/已消费数据的运行授权。真实候选流程要精确审计历史基线，须先按安装说明准备项目固定的 Python 3.12 表格环境；下面使用 `.venv-tabular/bin/python`，不要依赖系统默认 Python。
 
 ```sh
-python3 -m research_harness tabular prepare-trial \
+.venv-tabular/bin/python -m research_harness tabular prepare-trial \
   --baseline PATH_TO_AUDITED_BASELINE --proposal PATH_TO_PROPOSAL \
   --literature PATH_TO_RETRIEVED_PAPERS --out reviews/new-candidate \
   --data-review PATH_TO_ACCEPTED_CANDIDATE_PACKET \
   --intended-use '与候选资格包完全一致的用途'
 
-python3 -m research_harness airfoil prepare-trial \
+.venv-tabular/bin/python -m research_harness airfoil prepare-trial \
   --baseline PATH_TO_AUDITED_BASELINE --proposal PATH_TO_PROPOSAL \
   --out reviews/new-airfoil-candidate \
   --data-review PATH_TO_ACCEPTED_CANDIDATE_PACKET \
@@ -39,8 +39,8 @@ python3 -m research_harness airfoil prepare-trial \
 人审时必须阅读 `REVIEW.md` 以及 `trial.json` 内完整资格证据。获得精确执行批准并记录后，可运行：
 
 ```sh
-python3 -m research_harness tabular preflight-trial --review reviews/new-candidate
-python3 -m research_harness airfoil preflight-trial --review reviews/new-airfoil-candidate
+.venv-tabular/bin/python -m research_harness tabular preflight-trial --review reviews/new-candidate
+.venv-tabular/bin/python -m research_harness airfoil preflight-trial --review reviews/new-airfoil-candidate
 ```
 
 通过输出 `PRECHECK_PASSED`、`read_only: true`、`memory_checked: true`，同时保留 `execution_authorized: false` 和 `isolation_checked: false`。静态检查本身不是新的批准，也不证明当前系统隔离可用。失败退出 1，不自动换候选或修订协议。
@@ -48,7 +48,7 @@ python3 -m research_harness airfoil preflight-trial --review reviews/new-airfoil
 统一提案入口也需要候选资格，并在创建研究输出、预留和调用 actor 前检查：
 
 ```sh
-python3 -m research_harness research --task tabular-regression --stage propose \
+.venv-tabular/bin/python -m research_harness research --task tabular-regression --stage propose \
   --id NEW_STUDY --baseline PATH_TO_AUDITED_BASELINE \
   --data-review PATH_TO_ACCEPTED_CANDIDATE_PACKET --intended-use '完全一致的用途'
 ```
