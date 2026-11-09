@@ -1,0 +1,68 @@
+{
+  "version": "0.25.0",
+  "phase": "C7",
+  "scope": "Software validation only; no new scientific experiment",
+  "local": {
+    "full_suite": {
+      "python": "3.12.14",
+      "tests": 235,
+      "skipped": 0,
+      "passed": true
+    },
+    "system_python_extra_check": {
+      "python": "3.9.6",
+      "tests": 235,
+      "skipped": 9,
+      "passed": true,
+      "supported_minimum_python": "3.10"
+    },
+    "new_data_blocks_tests": 18,
+    "macos_tabular_isolation": {
+      "synthetic_only": true,
+      "actual_isolated_six_fit_trial": true,
+      "strict_audit_passed": true,
+      "tampering_rejected": true,
+      "repeat_execution_rejected": true,
+      "private_evidence_and_memory_handoff": true,
+      "data_pause_and_additive_handoff_checked": true,
+      "historical_audit_after_pause": true,
+      "candidate_data_admission_checked": true,
+      "real_data_scored": false,
+      "model_calls": 0
+    },
+    "macos_airfoil_isolation": {
+      "synthetic_only": true,
+      "isolated_candidate_fits": 6,
+      "baseline_reproduction_passed": true,
+      "strict_audit_passed": true,
+      "tampering_rejected": true,
+      "repeat_and_copy_rejected": true,
+      "synthetic_model_predictions_changed": true,
+      "candidate_data_admission_checked": true,
+      "data_pause_preserves_historical_audit": true,
+      "paused_preparation_rejected": true,
+      "real_data_scored": false,
+      "model_calls": 0
+    },
+    "recipe_and_evaluator_ast_unchanged_from": "17c18c3f73cd49a479a9a50f7f172028bae3b593",
+    "historical_task_files_modified": false,
+    "initial_findings": [
+      "macOS root aliases canonicalized before rejecting links inside state directory",
+      "Parallel full suites contended on existing checkout lock; rerun sequentially without changing lock policy"
+    ]
+  },
+  "remote_ci": {
+    "status": "PENDING_AFTER_PUSH"
+  },
+  "limits": [
+    "No permission discovery or reviewer identity authentication",
+    "Exact dataset identity only; no alias inference",
+    "Offline additive state exchange; no cross-checkout live coordination",
+    "No unblock or running-process cancellation",
+    "SR and generic run outside scope",
+    "Data block packets must be transferred separately from exclusion memory and evidence"
+  ],
+  "new_real_research_experiments": 0,
+  "research_model_calls": 0,
+  "author_messages_sent": 0
+}

@@ -70,6 +70,19 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     try: load_trial(copied)
     except ValueError as exc: assert 'review-only' in str(exc)
     else: raise AssertionError('Evidence copy is executable')
+    from research_harness import data_blocks
+    qualification_packet=work/'qualification/packet.json'
+    qualification_sha=json.loads(qualification_packet.read_text())['sha256']
+    data_blocks.block(qualification_packet,qualification_sha,'SOFTWARE FIXTURE','Synthetic post-run pause',root=work)
+    assert audit_trial(trial)['audit_ok']  # Current pause must not erase historical verification.
+    pauses=work/'data-blocks.json'; data_blocks.export(pauses,root=work)
+    assert data_blocks.import_blocks(pauses,root=clone)['added']==1
+    assert data_blocks.import_blocks(pauses,root=clone)['added']==0
+    assert audit_trial(copied)['audit_ok']
+    from research_harness.data_admission import assert_source_allowed
+    try: assert_source_allowed(FIXTURE,clone)
+    except ValueError as exc: assert 'DATA_USE_BLOCKED' in str(exc)
+    else: raise AssertionError('Transferred data pause did not block use')
     if args.export_fixture:
         target=Path(args.export_fixture); target.mkdir(mode=0o700,parents=True,exist_ok=False)
         shutil.copyfile(evidence,target/'synthetic-evidence.json'); (target/'synthetic-evidence.json').chmod(0o600)
@@ -82,4 +95,5 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     path.write_text(json.dumps(value)); assert not audit_trial(trial)['audit_ok']
     print(json.dumps({'synthetic_only':True,'actual_isolated_six_fit_trial':True,'strict_audit_passed':True,
                       'tampering_rejected':True,'repeat_execution_rejected':True,'private_evidence_and_memory_handoff':True,
+                      'data_pause_and_additive_handoff_checked':True,'historical_audit_after_pause':True,
                       'candidate_data_admission_checked':True,'real_data_scored':False,'model_calls':0},indent=2))

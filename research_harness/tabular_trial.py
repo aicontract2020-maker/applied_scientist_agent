@@ -74,7 +74,7 @@ def prepare(baseline, proposal_path, output, literature, root=ROOT, *, data_revi
     """Freeze a concrete review. Only syntax/synthetic probes; no real feature evaluation."""
     packet,parts,result,_=validated_baseline(baseline)
     if result['status']!='CONTINUE' or result['selected_baseline']!='hgb': raise ValueError('Qualified HGB required')
-    snapshot=admission.trial_snapshot(packet,ADAPTER,FIXTURE,data_review,intended_use)
+    snapshot=admission.trial_snapshot(packet,ADAPTER,FIXTURE,data_review,intended_use,root=root)
     proposal=read_json(proposal_path); gate=validate_proposal(proposal)
     from .tabular_memory import assert_available
     assert_available(packet,parts,root,candidate=proposal['candidate_source'])
@@ -199,6 +199,7 @@ def _available(folder,envelope,parts,root):
     base=read_json(folder/'baseline/bundle.json')
     if base['sha256']!=envelope['content']['baseline_sha256'] or digest(base['content'])!=base['sha256']:
         raise ValueError('Baseline changed during availability check')
+    admission.assert_source_allowed(base['content']['source'], root)
     assert_available(base,parts,root,candidate=envelope['content']['proposal']['candidate_source'])
     return base
 

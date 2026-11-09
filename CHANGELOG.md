@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.25.0
+
+- Record C6 user acceptance. Add local dataset-use blocks keyed by exact dataset id/version/source, independent of qualification packet, intended use or baseline/candidate adapter. Preserve historical evidence and scientific decisions; a data pause is not scientific STOP.
+- Check blocks during baseline/candidate preparation, approval and execution, and before tabular proposal work. Recheck after isolation probes, before reservation or worker/actor launch. Existing scientific recipes, evaluator thresholds and isolation remain unchanged.
+- Add `data-blocks` status/add/export/import with exact-hash human recording, strict bounded envelopes, atomic local writes and additive idempotent handoff. Corrupt state fails closed; no unblock, permission inference, automatic revocation discovery or cross-checkout synchronization. Software fixtures only; no new research experiment.
+
 ## 0.24.0
 
 - Record C5 user acceptance; require separately accepted candidate-scoped data qualification for the existing Abalone and Airfoil candidate stages. Bind evidence and use to the complete proposal, recipe, exact audited baseline and all partitions; baseline qualification cannot authorize candidate use.

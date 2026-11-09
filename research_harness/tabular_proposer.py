@@ -92,7 +92,7 @@ def propose(baseline, output, root=ROOT, recover_launch=None, *, data_review=Non
         if result['status']!='CONTINUE' or result['selected_baseline']!='hgb': raise ValueError('Qualified HGB required')
         from .data_admission import trial_snapshot
         from .tabular_trial import ADAPTER,FIXTURE
-        trial_snapshot(packet,ADAPTER,FIXTURE,data_review,intended_use)
+        trial_snapshot(packet,ADAPTER,FIXTURE,data_review,intended_use,root=root)
         from .tabular_memory import assert_available
         assert_available(packet,parts,root)
         scope=scope_for(packet); folder=Path(output).absolute()
@@ -112,6 +112,8 @@ def propose(baseline, output, root=ROOT, recover_launch=None, *, data_review=Non
         elif reservation.exists():
             raise ValueError('Proposal session already reserved; preserve failure, no automatic retry')
         probe=isolation_probe(check_login=True)
+        trial_snapshot(packet,ADAPTER,FIXTURE,data_review,intended_use,root=root)
+        assert_available(packet,parts,root)
         context={'task':'Predict UCI Abalone rings; engineering benchmark, not commercial proof',
             'columns':['sex M','sex F','sex I','length','diameter','height','whole weight','shucked weight','viscera weight','shell weight'],
             'baseline_mae':result['mean_validation_mae'],'baseline_parameters':packet['content']['recipe']['baseline_parameters']['hgb'],

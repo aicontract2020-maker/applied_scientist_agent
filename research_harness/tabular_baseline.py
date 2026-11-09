@@ -55,14 +55,15 @@ def source_hashes():
     return {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
 
 
-def prepare(data, output, data_review=None, intended_use=None):
-    snapshot = admission.accepted_snapshot(data_review, ADAPTER, SOURCE, intended_use)
-    return prepare_rows(parse_abalone(data), output, SOURCE, qualification=snapshot, intended_use=intended_use)
+def prepare(data, output, data_review=None, intended_use=None, *, root=ROOT):
+    snapshot = admission.accepted_snapshot(data_review, ADAPTER, SOURCE, intended_use, root=root)
+    return prepare_rows(parse_abalone(data), output, SOURCE, qualification=snapshot, intended_use=intended_use, root=root)
 
 
-def prepare_rows(rows, output, source, *, qualification=None, intended_use=None):
+def prepare_rows(rows, output, source, *, qualification=None, intended_use=None, root=ROOT):
     """Internal fixture seam. Public CLI only accepts the pinned UCI raw file."""
     if source not in (SOURCE, FIXTURE): raise ValueError('Unsupported dataset provenance')
+    admission.assert_source_allowed(source, root)
     if source == SOURCE and qualification is None: raise ValueError('Real data requires accepted data qualification')
     parts = split_rows(rows)
     content = {'recipe': RECIPE, 'source': source, 'files': {name: digest(parts[name]) for name in FILES},
@@ -143,9 +144,10 @@ def load_review(folder, *, require_current_sources=True):
     return packet, parts
 
 
-def approve(folder, expected_hash, reviewer):
-    with research_lock(ROOT):
+def approve(folder, expected_hash, reviewer, root=ROOT):
+    with research_lock(root):
         packet, _ = load_review(folder)
+        admission.assert_source_allowed(packet['content']['source'], root)
         if packet['sha256'] != expected_hash or not isinstance(reviewer, str) or not reviewer.strip():
             raise ValueError('Approval requires exact content hash and reviewer name')
         if (Path(folder)/'run').exists(): raise ValueError('Attempt already exists; no new approval')
@@ -197,8 +199,9 @@ def qualify(output, targets):
             'conclusion': RECIPE['go'] if passed else RECIPE['stop'], 'final_holdout_scored': False}
 
 
-def _approved_review(folder):
+def _approved_review(folder, root=ROOT):
     packet, parts = load_review(folder)
+    admission.assert_source_allowed(packet['content']['source'], root)
     approval = read_json(Path(folder)/'approval.json')
     if (not isinstance(approval, dict) or set(approval) != {'sha256', 'reviewer', 'scope'}
             or approval['sha256'] != packet['sha256'] or not isinstance(approval['reviewer'], str) or not approval['reviewer'].strip()
@@ -209,24 +212,24 @@ def _approved_review(folder):
     return packet, parts, approval
 
 
-def preflight(folder):
-    packet, _, _ = _approved_review(folder)
+def preflight(folder, root=ROOT):
+    packet, _, _ = _approved_review(folder, root)
     return {'status': 'PRECHECK_PASSED', 'read_only': True, 'sha256': packet['sha256'],
             'data_admission': admission.verify(packet['content'], ADAPTER, required=packet['content']['source'] == SOURCE),
             'execution_authorized': False, 'isolation_checked': False,
             'note': 'Execution still rechecks exact approval, data and environment, then probes isolation.'}
 
 
-def execute(folder):
+def execute(folder, root=ROOT):
     from .tabular_sandbox import isolation_probe, isolated_worker
-    with research_lock(ROOT):
+    with research_lock(root):
         folder = Path(folder).absolute()
-        packet, parts, approval = _approved_review(folder)
+        packet, parts, approval = _approved_review(folder, root)
         run = folder/'run'
         python = ROOT/'.venv-tabular/bin/python'
         env = environment(python)
         probe = isolation_probe(ROOT, python)
-        if _approved_review(folder) != (packet, parts, approval):
+        if _approved_review(folder, root) != (packet, parts, approval):
             raise ValueError('Review or approval changed during preflight; no execution')
         run.mkdir(mode=0o700, exist_ok=False)
         Workspace.append(run, {'event': 'REGISTER', 'review_sha256': packet['sha256']})

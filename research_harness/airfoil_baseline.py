@@ -60,13 +60,14 @@ RECIPE = {
 }
 
 
-def prepare(data, output, data_review=None, intended_use=None):
-    snapshot = admission.accepted_snapshot(data_review, ADAPTER, SOURCE, intended_use)
-    return prepare_rows(parse(data),output,SOURCE,raw=Path(data).read_bytes(),qualification=snapshot,intended_use=intended_use)
+def prepare(data, output, data_review=None, intended_use=None, *, root=ROOT):
+    snapshot = admission.accepted_snapshot(data_review, ADAPTER, SOURCE, intended_use, root=root)
+    return prepare_rows(parse(data),output,SOURCE,raw=Path(data).read_bytes(),qualification=snapshot,intended_use=intended_use,root=root)
 
 
-def prepare_rows(rows, output, source=FIXTURE, raw=None, *, qualification=None, intended_use=None):
+def prepare_rows(rows, output, source=FIXTURE, raw=None, *, qualification=None, intended_use=None, root=ROOT):
     if source not in (SOURCE,FIXTURE): raise ValueError('Unsupported Airfoil source')
+    admission.assert_source_allowed(source, root)
     if source==SOURCE and (raw is None or hashlib.sha256(raw).hexdigest()!=SOURCE['raw_sha256']):
         raise ValueError('Real review requires pinned raw bytes')
     if source == SOURCE and qualification is None: raise ValueError('Real data requires accepted data qualification')
@@ -140,6 +141,7 @@ def reservation(root,packet):
 def approve(folder, expected_hash, reviewer, root=ROOT):
     with research_lock(root):
         packet,_=load_review(folder)
+        admission.assert_source_allowed(packet['content']['source'], root)
         if packet['sha256']!=expected_hash or not isinstance(reviewer,str) or not reviewer.strip():
             raise ValueError('Exact hash and reviewer required')
         if (Path(folder)/'run').exists() or reservation(root,packet).exists(): raise ValueError('Attempt already reserved; no retry')
@@ -207,6 +209,7 @@ def worker_request(parts):
 
 def _approved_review(folder, root):
     packet, parts = load_review(folder)
+    admission.assert_source_allowed(packet['content']['source'], root)
     approval = read_json(Path(folder)/'approval.json'); _keys(approval, ('sha256','reviewer','scope'))
     if approval['sha256'] != packet['sha256'] or approval['scope'] != SCOPE or not isinstance(approval['reviewer'], str) or not approval['reviewer'].strip():
         raise ValueError('Missing/stale Airfoil-only approval')

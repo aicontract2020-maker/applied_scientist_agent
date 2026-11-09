@@ -8,6 +8,7 @@ import json
 
 from . import data_qualification as dq
 from .core import digest
+from .portable import ROOT
 
 KIND = 'research-harness-baseline-data-admission'
 TRIAL_KIND = 'research-harness-candidate-data-admission'
@@ -44,10 +45,17 @@ def validate_snapshot(snapshot, expected):
         raise ValueError('Data qualification task, dataset/version or intended use differs')
 
 
-def accepted_snapshot(path, adapter, source, intended_use):
+def assert_source_allowed(source, root=ROOT):
+    from .data_blocks import assert_allowed
+    assert_allowed({'id': source['id'], 'version': '1',
+                    'source': source.get('url', source['id'])}, root)
+
+
+def accepted_snapshot(path, adapter, source, intended_use, *, root=ROOT):
     if path is None:
         raise ValueError('Accepted data qualification is required before preparing real data')
     expected = context(adapter, source, intended_use)
+    assert_source_allowed(source, root)
     snapshot = {'packet': dq.load_packet(path), 'decision': dq._load_envelope(dq._decision_path(path))}
     validate_snapshot(snapshot, expected)
     return snapshot
@@ -81,13 +89,14 @@ def verify(content, adapter, *, required):
             'adapter': adapter, 'execution_authorized': False}
 
 
-def trial_snapshot(baseline, adapter, fixture, path, intended_use):
+def trial_snapshot(baseline, adapter, fixture, path, intended_use, *, root=ROOT):
     if adapter not in TRIAL_ADAPTERS:
         raise ValueError('Candidate qualification requires a candidate adapter')
     source = baseline['content']['source']
+    assert_source_allowed(source, root)
     if source == fixture and path is None and intended_use is None:
         return None  # Internal software fixtures only; never public raw-data intake.
-    return accepted_snapshot(path, adapter, source, intended_use)
+    return accepted_snapshot(path, adapter, source, intended_use, root=root)
 
 
 def _trial_recipe(content, baseline):

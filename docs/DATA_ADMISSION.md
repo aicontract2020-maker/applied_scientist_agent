@@ -66,3 +66,7 @@ python3 -m research_harness airfoil preflight --review reviews/new-baseline
 - 包包含私人元数据和标签，继续留在私有审查目录，不能直接推到公开 Git。原始证据不进入 worker 请求。
 
 下一步接入候选或新数据 adapter 时，必须重新明确任务范围、数据映射、停止记忆与执行批准；本模块没有替它们提供许可或科研有效性。
+
+## 当前数据暂停记录
+
+0.25 起，Abalone/Airfoil 的准备、批准、提案和执行另检查本地[数据使用暂停](DATA_USE_BLOCKS.md)。暂停包须单独随原记忆／证据交接并导入接收方实际执行的 checkout；旧批准和本页的交接文件不能解除或隐式同步暂停。历史只读审计保留。

@@ -68,6 +68,7 @@ def history_path(root,packet):
 
 
 def assert_available(root,packet):
+    admission.assert_source_allowed(packet['content']['source'], root)
     if history_path(root,packet).exists(): raise ValueError('Airfoil holdout already reserved; no alternate ID/candidate/retry')
     path=Path(root)/'tasks/airfoil_noise/trial-history.json'
     if path.exists() or path.is_symlink():
@@ -102,7 +103,7 @@ def validate_proposal(proposal):
 def prepare(base,proposal_path,output,root=ROOT,*,data_review=None,intended_use=None):
     with research_lock(root):
         packet,parts,_=qualified(base); assert_available(root,packet)
-        snapshot=admission.trial_snapshot(packet,ADAPTER,baseline.FIXTURE,data_review,intended_use)
+        snapshot=admission.trial_snapshot(packet,ADAPTER,baseline.FIXTURE,data_review,intended_use,root=root)
         proposal=read_json(proposal_path); gate=validate_proposal(proposal)
         c={'recipe':RECIPE,'proposal':proposal,'feature_review':gate,'baseline_sha256':packet['sha256'],
            'scope':scope(packet),'counts':baseline.counts(parts),'sources':source_hashes(),'status':'AWAITING_RESEARCH_REVIEW'}

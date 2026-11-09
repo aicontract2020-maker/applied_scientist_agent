@@ -39,6 +39,17 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
                     data_review=folder/'qualification/packet.json',intended_use=USE)
     except ValueError as e: assert 'reserved' in str(e)
     else: raise AssertionError('Copied holdout allowed')
+    from research_harness import data_blocks
+    qualification_packet=folder/'qualification/packet.json'
+    qualification_sha=json.loads(qualification_packet.read_text())['sha256']
+    data_blocks.block(qualification_packet,qualification_sha,'SOFTWARE FIXTURE','Synthetic post-run pause',root=memory)
+    assert at.audit(trial)['audit_ok']
+    assert ab.audit(base)['audit_ok']
+    try: at.prepare(base,root/'tasks/airfoil_noise/a2/proposal.json',folder/'blocked-copy',root=memory,
+                    data_review=qualification_packet,intended_use=USE)
+    except ValueError as e: assert 'DATA_USE_BLOCKED' in str(e)
+    else: raise AssertionError('Paused data allowed candidate preparation')
+    assert not (folder/'blocked-copy').exists()
     p=trial/'trial-run/output/predictions.json';raw=json.loads(p.read_text())
     raw['results'][0]['validation_predictions'][0]+=1;p.write_text(json.dumps(raw))
     try: at.audit(trial)
@@ -47,4 +58,5 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
     print(json.dumps({'synthetic_only':True,'isolated_candidate_fits':6,'baseline_reproduction_passed':True,
         'strict_audit_passed':True,'tampering_rejected':True,'repeat_and_copy_rejected':True,
         'synthetic_model_predictions_changed':True,'candidate_data_admission_checked':True,
+        'data_pause_preserves_historical_audit':True,'paused_preparation_rejected':True,
         'real_data_scored':False,'model_calls':0},indent=2))

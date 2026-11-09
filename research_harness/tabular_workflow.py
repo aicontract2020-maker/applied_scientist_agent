@@ -19,7 +19,7 @@ def research(name,stage,baseline=None,review=None,root=ROOT,*,data_review=None,i
         packet,parts,_,_=validated_baseline(baseline)
         from .data_admission import trial_snapshot
         from .tabular_trial import ADAPTER,FIXTURE
-        trial_snapshot(packet,ADAPTER,FIXTURE,data_review,intended_use)
+        trial_snapshot(packet,ADAPTER,FIXTURE,data_review,intended_use,root=root)
         assert_available(packet,parts,root)  # Before any output, preflight or model call.
         output=Path(root)/'runs'/name
         output.mkdir(mode=0o700,parents=True,exist_ok=False)

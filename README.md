@@ -4,7 +4,7 @@
 
 当前完整任务是 **固定 SwinIR-S ×2 图像超分的确定性后处理研究**，不是任意领域的通用科学家。基础工作流无需模型；完整研究使用你自己的 Codex 登录与额度。
 
-0.24.0 将已验收的基线资格接入扩展到[候选阶段](docs/CANDIDATE_DATA_ADMISSION.md)：候选资格单独接受，绑定候选、基线和分区；基线接受不能扩大授权。新增只读 `preflight-trial`，执行时在隔离探针后重查批准与停止/占用记忆；[C6 工程验收](docs/CANDIDATE_DATA_ADMISSION_REVIEW.md)待审。原有两类研究工作流保留：超分的完整自主周期，以及回归的自主提案 → 人工审核 → 单次隔离执行。回归已接入统一分阶段入口、排除记忆和私有证据交接；其 v1 数值评价契约保持不变。查看 [研发路线图](docs/ROADMAP.md)、[任务接口](docs/TASK_CONTRACTS.md) 和 [回归交接说明](docs/TABULAR_HANDOFF.md)。
+0.25.0 在已验收的基线／候选数据资格基础上增加[数据使用暂停](docs/DATA_USE_BLOCKS.md)：后续发现问题时，暂停同一数据版本的新提案与执行；旧批准不能覆盖暂停，离线交接只能增加记录。原有隔离、预注册、停止规则和历史审计保留。[C7 工程验收](docs/DATA_USE_BLOCKS_REVIEW.md)待审。原有两类研究工作流保留：超分的完整自主周期，以及回归的自主提案 → 人工审核 → 单次隔离执行。回归已接入统一分阶段入口、排除记忆和私有证据交接；其 v1 数值评价契约保持不变。查看 [研发路线图](docs/ROADMAP.md)、[任务接口](docs/TASK_CONTRACTS.md) 和 [回归交接说明](docs/TABULAR_HANDOFF.md)。
 
 ```sh
 python3 -m research_harness task list

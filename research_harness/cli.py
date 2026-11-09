@@ -76,6 +76,15 @@ def main():
     dp.add_argument("packet"); dp.add_argument("--sha256", required=True)
     dp.add_argument("--reviewer", required=True); dp.add_argument("--decision", choices=("accept", "reject"), required=True)
     dp.add_argument("--reason", required=True)
+    blocks = sub.add_parser("data-blocks", help="Local dataset pauses; never releases STOP or consumed data")
+    blocks.add_argument("--root", help="Checkout state (default: this installation's checkout)")
+    bc = blocks.add_subparsers(dest="data_blocks_command", required=True)
+    bc.add_parser("status", help="Read-only local pause records")
+    bp = bc.add_parser("add", help="Pause exact dataset identity across all four admission adapters")
+    bp.add_argument("packet"); bp.add_argument("--sha256", required=True)
+    bp.add_argument("--reviewer", required=True); bp.add_argument("--reason", required=True)
+    bc.add_parser("export", help="Review private reasons before sharing").add_argument("--out", required=True)
+    bc.add_parser("import", help="Merge pauses only; never clear local records").add_argument("packet")
     tabular = sub.add_parser("tabular", help="Reviewed baseline/feature trials, exclusion memory and private evidence")
     tabular_commands = tabular.add_subparsers(dest="tabular_command", required=True)
     tabular_fetch = tabular_commands.add_parser("fetch", help="Download pinned public UCI data only; no scoring")
@@ -169,7 +178,14 @@ def main():
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
-        if args.command == "data-review":
+        if args.command == "data-blocks":
+            from . import data_blocks as db
+            options = {'root': args.root} if args.root is not None else {}
+            if args.data_blocks_command == "status": output = db.status(**options)
+            elif args.data_blocks_command == "add": output = db.block(args.packet, args.sha256, args.reviewer, args.reason, **options)
+            elif args.data_blocks_command == "export": output = db.export(args.out, **options)
+            else: output = db.import_blocks(args.packet, **options)
+        elif args.command == "data-review":
             from . import data_qualification as dq
             if args.data_review_command == "template": output = dq.template(args.out)
             elif args.data_review_command == "prepare": output = dq.prepare(args.draft, args.out)

@@ -22,6 +22,7 @@ jobs:
           python -m unittest discover -s tests -p test_data_qualification.py -v
           python -m unittest discover -s tests -p test_data_admission.py -v
           python -m unittest discover -s tests -p test_candidate_admission.py -v
+          python -m unittest discover -s tests -p test_data_blocks.py -v
           python -m examples.data_qualification.workflow --out runs/ci-data-review
   linux-x86_64:
     runs-on: ubuntu-24.04
