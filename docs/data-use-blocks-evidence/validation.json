@@ -52,7 +52,48 @@
     ]
   },
   "remote_ci": {
-    "status": "PENDING_AFTER_PUSH"
+    "status": "completed",
+    "conclusion": "success",
+    "code_commit": "2cc75fe287280a1be83fb03804cf6dd0b9ce0188",
+    "run_id": 42670060095,
+    "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/42670060095",
+    "checked_at": "2026-11-09T18:02:05Z",
+    "jobs": [
+      {
+        "id": 129343916266,
+        "name": "linux-x86_64",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129343917130,
+        "name": "data-review-portability (macos-15, 3.10)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129343920438,
+        "name": "data-review-portability (macos-15, 3.12)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129343921303,
+        "name": "data-review-portability (ubuntu-24.04, 3.10)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129343921321,
+        "name": "data-review-portability (ubuntu-24.04, 3.12)",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "linux_tests": 235,
+    "linux_skipped": 0,
+    "linux_actual_isolation_checks_passed": true,
+    "linux_data_pause_handoff_and_historical_audit_passed": true
   },
   "limits": [
     "No permission discovery or reviewer identity authentication",

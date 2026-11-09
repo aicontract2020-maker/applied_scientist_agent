@@ -19,7 +19,7 @@
 - macOS Python 3.12 完整环境 **235 项全部通过**；系统 Python 3.9 额外检查 235 项、9 项依赖缺失跳过（项目支持下限仍为 3.10）。最初 macOS 目录别名兼容问题已修复；并行测试触发原 checkout 锁后改为顺序验证，未放松锁。
 - 两个候选的真实 macOS 系统隔离**合成**流程通过：各六次固定候选／基线配对拟合，历史复现、标签边界、严格审计与重复拒绝保持；暂停后历史审计通过，数据暂停的独立交接及新准备拒绝通过。
 - 相对 `17c18c3`，四套固定 recipe 与评价函数语法树一致；未修改历史任务文件。
-- 远端 Linux 及四组跨平台检查待推送后记录，见[结构化验证记录](data-use-blocks-evidence/validation.json)。
+- [远端检查 42670060095](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/42670060095)全部通过，对应代码提交 `2cc75fe287280a1be83fb03804cf6dd0b9ce0188`。Linux 完整 **235 项无跳过**，实际内核隔离、两套基线／候选合成流程、暂停后的历史审计及暂停交接通过；Linux/macOS × Python 3.10/3.12 四组检查均通过。详见[结构化验证记录](data-use-blocks-evidence/validation.json)。
 
 这些是软件检查，不是科学性能、研究效率或商业价值证据。没有新的真实数据训练、预测或留出评分，没有研究模型调用、外部发信或 Delft 复现。
 
