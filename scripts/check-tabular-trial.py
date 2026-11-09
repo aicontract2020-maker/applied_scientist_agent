@@ -83,6 +83,23 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     try: assert_source_allowed(FIXTURE,clone)
     except ValueError as exc: assert 'DATA_USE_BLOCKED' in str(exc)
     else: raise AssertionError('Transferred data pause did not block use')
+    from research_harness import tabular_handoff
+    combined=work/'combined-state.json'; tabular_handoff.export(combined,root=work)
+    receiver=work/'combined-receiver'; receiver.mkdir()
+    assert tabular_handoff.verify(combined)['execution_authorized'] is False
+    assert tabular_handoff.import_state(combined,root=receiver)['status']=='IMPORTED'
+    assert tabular_handoff.import_state(combined,root=receiver)['status']=='ALREADY_IMPORTED'
+    combined_review=Path(unpack(evidence,receiver/'evidence')['review'])
+    assert audit_trial(combined_review)['audit_ok']
+    try: assert_available(json.loads((combined_review/'baseline/bundle.json').read_text()),parts,root=receiver)
+    except ValueError as exc: assert 'already reserved' in str(exc)
+    else: raise AssertionError('Combined handoff lost consumed data')
+    try: assert_source_allowed(FIXTURE,receiver)
+    except ValueError as exc: assert 'DATA_USE_BLOCKED' in str(exc)
+    else: raise AssertionError('Combined handoff lost data pause')
+    try: load_trial(combined_review)
+    except ValueError as exc: assert 'review-only' in str(exc)
+    else: raise AssertionError('Combined handoff restored execution approval')
     if args.export_fixture:
         target=Path(args.export_fixture); target.mkdir(mode=0o700,parents=True,exist_ok=False)
         shutil.copyfile(evidence,target/'synthetic-evidence.json'); (target/'synthetic-evidence.json').chmod(0o600)
@@ -96,4 +113,5 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     print(json.dumps({'synthetic_only':True,'actual_isolated_six_fit_trial':True,'strict_audit_passed':True,
                       'tampering_rejected':True,'repeat_execution_rejected':True,'private_evidence_and_memory_handoff':True,
                       'data_pause_and_additive_handoff_checked':True,'historical_audit_after_pause':True,
+                      'combined_state_handoff_checked':True,'combined_receiver_still_review_only':True,
                       'candidate_data_admission_checked':True,'real_data_scored':False,'model_calls':0},indent=2))

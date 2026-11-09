@@ -132,6 +132,13 @@ def main():
     tm.add_parser("export").add_argument("--out",required=True)
     tm.add_parser("import").add_argument("packet")
     tm.add_parser("retain").add_argument("--review",required=True)
+    handoff=tabular_commands.add_parser("handoff",help="One additive transfer of tabular exclusions and data pauses")
+    handoff.add_argument("--root",help="Checkout state; default: this installation's checkout")
+    hc=handoff.add_subparsers(dest="tabular_handoff_command",required=True)
+    hc.add_parser("status")
+    hc.add_parser("export").add_argument("--out",required=True)
+    hc.add_parser("verify").add_argument("packet")
+    hc.add_parser("import").add_argument("packet")
     tab_evidence=tabular_commands.add_parser("evidence",help="PRIVATE full evidence, including labels and paper text; no publishing")
     te=tab_evidence.add_subparsers(dest="tabular_evidence_command",required=True)
     command=te.add_parser("export"); command.add_argument("--review",required=True); command.add_argument("--out",required=True)
@@ -219,7 +226,14 @@ def main():
                 return 0 if output["measurement_valid"] else 1
         elif args.command == "tabular":
             from .tabular_baseline import prepare, load_review, approve as approve_baseline, execute as execute_baseline
-            if args.tabular_command == "memory":
+            if args.tabular_command == "handoff":
+                from . import tabular_handoff as th
+                options={'root':args.root} if args.root is not None else {}
+                if args.tabular_handoff_command=='status': output=th.status(**options)
+                elif args.tabular_handoff_command=='export': output=th.export(args.out,**options)
+                elif args.tabular_handoff_command=='verify': output=th.verify(args.packet)
+                else: output=th.import_state(args.packet,**options)
+            elif args.tabular_command == "memory":
                 from .portable import ROOT
                 from .tabular_memory import snapshot,export_memory,import_memory,retain_trial
                 root=Path(args.root).resolve() if args.root else ROOT

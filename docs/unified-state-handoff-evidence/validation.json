@@ -1,0 +1,55 @@
+{
+  "phase": "C8",
+  "version": "0.26.0",
+  "scope": "Synthetic software checks only",
+  "local": {
+    "new_tests": 18,
+    "full_suite": {
+      "python": "3.12.14",
+      "tests": 253,
+      "skipped": 0,
+      "passed": true
+    },
+    "system_python_extra_check": {
+      "python": "3.9.6",
+      "tests": 253,
+      "skipped": 9,
+      "passed": true,
+      "supported_minimum": "3.10"
+    },
+    "actual_macos_isolation": {
+      "synthetic_only": true,
+      "actual_isolated_six_fit_trial": true,
+      "strict_audit_passed": true,
+      "tampering_rejected": true,
+      "repeat_execution_rejected": true,
+      "private_evidence_and_memory_handoff": true,
+      "data_pause_and_additive_handoff_checked": true,
+      "historical_audit_after_pause": true,
+      "combined_state_handoff_checked": true,
+      "combined_receiver_still_review_only": true,
+      "candidate_data_admission_checked": true,
+      "real_data_scored": false,
+      "model_calls": 0
+    },
+    "scientific_recipe_evaluator_and_task_contract_ast_unchanged_from": "c74e507ea83727eda5d4e4670f1a7443937c559e",
+    "historical_task_files_modified": false,
+    "initial_findings": [
+      "Preserved legacy symlink rejection order/message; existing tests unchanged"
+    ]
+  },
+  "remote_ci": {
+    "status": "PENDING_AFTER_PUSH"
+  },
+  "limitations": [
+    "Tabular trial exclusion memory plus all C7 data blocks only",
+    "No Airfoil/SR or proposer reservations",
+    "Private scientific evidence stays separate",
+    "Offline claims, not identity authentication or live coordination",
+    "Both peers require a compatible version; no unblock policy",
+    "Atomic publication requires hard links; no power-loss durability guarantee"
+  ],
+  "new_real_research_experiments": 0,
+  "research_model_calls": 0,
+  "author_messages_sent": 0
+}

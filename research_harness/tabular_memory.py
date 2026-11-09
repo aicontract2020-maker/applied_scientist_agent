@@ -87,8 +87,8 @@ def envelope(records):
     return {'payload':payload,'sha256':digest(payload)}
 
 
-def load_packet(path):
-    value=read_json(path); _keys(value,('payload','sha256'))
+def validate_packet(value):
+    _keys(value,('payload','sha256'))
     p=value['payload']; _keys(p,('kind','version','records'))
     if p['kind']!=KIND or type(p['version']) is not int or p['version']!=1 or value['sha256']!=digest(p):
         raise ValueError('Invalid tabular memory envelope')
@@ -96,13 +96,19 @@ def load_packet(path):
     return value
 
 
+def load_packet(path):
+    return validate_packet(read_json(path))
+
+
 def snapshot(root=ROOT):
     root=Path(root); groups=[]
+    from .tabular_handoff import packets
     published=root/'tasks/tabular_regression/trial-history.json'
     if published.exists() or published.is_symlink(): groups.append(load_packet(published)['payload']['records'])
     memory=root/'.research-memory'
     for folder in (memory,memory/'tabular-handoff',memory/'tabular-trial'):
         if folder.is_symlink(): raise ValueError('Linked tabular memory directory')
+    groups.extend(p['payload']['tabular_memory']['payload']['records'] for p in packets(root))
     for path in sorted((memory/'tabular-handoff').glob('*.json')):
         packet=load_packet(path)
         if path.stem!=packet['sha256']: raise ValueError('Imported packet filename/hash mismatch')

@@ -61,9 +61,21 @@ def _path(root):
 def _load(root):
     path = _path(root)
     # Only absence means empty. A malformed or nonregular file fails closed.
-    if not path.exists():
-        return []
-    return _validate(dq._json(path))
+    local = _validate(dq._json(path)) if path.exists() else []
+    from .tabular_handoff import packets
+    return merge(local, *(p['payload']['data_blocks']['content']['records'] for p in packets(root)))
+
+
+def merge(*groups):
+    records = {}
+    for group in groups:
+        _validate(_envelope(group))
+        records.update((digest(row), row) for row in group)
+    packet = _envelope(list(records.values()))
+    _validate(packet)
+    if len((json.dumps(packet, indent=2, ensure_ascii=False, allow_nan=False)+'\n').encode('utf-8')) > dq.PACKET_LIMIT:
+        raise ValueError('Merged data-use blocks exceed packet size limit')
+    return packet['content']['records']
 
 
 def _save(root, records):

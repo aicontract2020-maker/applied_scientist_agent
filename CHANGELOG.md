@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.26.0
+
+- Record C7 user acceptance. Add `tabular handoff` status/export/verify/import for one fixed-format snapshot containing tabular exclusion memory and all local data-use blocks. Private full evidence remains separate; Airfoil/SR reservations are outside this format.
+- Validate both components and their local unions before a single atomic, no-overwrite publication. Legacy readers consume both components from the same retained packet; repeated import is idempotent, older snapshots cannot clear blocks or downgrade terminal decisions, and malformed state fails closed.
+- Preserve legacy component commands, isolation, preregistration, scientific recipes and STOP rules. Add synthetic failure/compatibility checks and actual isolated synthetic receiver verification; no new research experiment or model call.
+
 ## 0.25.0
 
 - Record C6 user acceptance. Add local dataset-use blocks keyed by exact dataset id/version/source, independent of qualification packet, intended use or baseline/candidate adapter. Preserve historical evidence and scientific decisions; a data pause is not scientific STOP.

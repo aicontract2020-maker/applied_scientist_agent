@@ -9,7 +9,8 @@ python3 -m research_harness task capabilities tabular-regression
 
 # 仅适用于尚未使用、已通过资格检查的基线；当前 T2 数据会提前拒绝。
 .venv-sr/bin/python -m research_harness research --task tabular-regression \
-  --stage propose --baseline BASELINE_DIR --id NEW_WORKFLOW_ID
+  --stage propose --baseline BASELINE_DIR --id NEW_WORKFLOW_ID \
+  --data-review CANDIDATE_QUALIFICATION.json --intended-use EXACT_ACCEPTED_USE
 
 # 上一步冻结具体候选与 review 后，经人工明确批准精确摘要：
 python3 -m research_harness tabular approve-trial --review REVIEW_DIR --sha256 EXACT_SHA --reviewer REVIEWER
@@ -69,3 +70,10 @@ python3 -m research_harness tabular memory import NEW_MEMORY.json
 ## 当前数据暂停记录
 
 0.25 起，Abalone/Airfoil 的准备、批准、提案和执行另检查本地[数据使用暂停](DATA_USE_BLOCKS.md)。暂停包须单独随原记忆／证据交接并导入接收方实际执行的 checkout；旧批准和本页的交接文件不能解除或隐式同步暂停。历史只读审计保留。
+
+## 0.26 的统一状态交接入口
+
+双方升级到 0.26 后，可使用 [tabular handoff](UNIFIED_STATE_HANDOFF.md) 一次性交接
+回归排除记忆与全部数据暂停，不再需要分别传这两个状态包。旧命令仍可用并读取
+合并状态；完整私有证据仍独立交接。该格式不包含 Airfoil/SR 预留或 proposer
+预留，不是所有任务的完整记忆迁移。旧版接收程序不认识新增状态目录，须先升级。
