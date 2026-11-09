@@ -121,7 +121,8 @@ class AirfoilTrialTests(unittest.TestCase):
         states=[(packet,self.base,self.parts,self.reference),(changed,self.base,self.parts,self.reference)]
         with patch.object(at,'load_trial',side_effect=states),patch.object(at,'environment',return_value={}), \
              patch('research_harness.tabular_sandbox.isolation_probe',return_value={}):
-            with self.assertRaisesRegex(ValueError,'changed during preflight'): at.execute(folder,root=self.root)
+            # Full revalidation now detects the stale approval before comparing snapshots.
+            with self.assertRaisesRegex(ValueError,'stale'): at.execute(folder,root=self.root)
         self.assertFalse((folder/'trial-run').exists()); self.assertFalse(at.history_path(self.root,self.base).exists())
 
     def test_frozen_review_rejects_source_candidate_and_protocol_changes(self):

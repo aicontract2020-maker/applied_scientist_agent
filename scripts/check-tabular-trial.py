@@ -9,7 +9,8 @@ import shutil
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from research_harness.tabular_baseline import prepare_rows,approve,execute
-from research_harness.tabular_trial import prepare,approve_trial,execute_trial,audit_trial
+from research_harness.tabular_trial import prepare,approve_trial,execute_trial,audit_trial,preflight_trial,ADAPTER,FIXTURE
+from examples.data_qualification.baseline import qualification,USE
 from research_harness.tabular_data import write_json
 
 root=Path(__file__).resolve().parents[1]; (root/'runs').mkdir(exist_ok=True)
@@ -37,9 +38,12 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     write_json(work/'proposal.json',proposal)
     write_json(work/'library.json',[{'url':item['url'],'title':'SOFTWARE FIXTURE','full_text':'NOT REAL PAPER CONTENT',
                                    'pdf_sha256':'a'*64} for item in proposal['evidence']])
-    trial=work/'trial'; review=prepare(baseline,work/'proposal.json',trial,work/'library.json')
+    qualification(work/'qualification',ADAPTER,FIXTURE)
+    trial=work/'trial'; review=prepare(baseline,work/'proposal.json',trial,work/'library.json',root=work,
+                                      data_review=work/'qualification/packet.json',intended_use=USE)
     # Fixtures never create approval or reservation in the user's real data scope.
-    approve_trial(trial,review['sha256'],'SOFTWARE FIXTURE ONLY')
+    approve_trial(trial,review['sha256'],'SOFTWARE FIXTURE ONLY',root=work)
+    assert preflight_trial(trial,root=work)['data_admission']['execution_authorized'] is False
     result=execute_trial(trial,root=work)
     if not result['measurement_valid']: raise RuntimeError(json.dumps(result))
     checked=audit_trial(trial)
@@ -78,4 +82,4 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     path.write_text(json.dumps(value)); assert not audit_trial(trial)['audit_ok']
     print(json.dumps({'synthetic_only':True,'actual_isolated_six_fit_trial':True,'strict_audit_passed':True,
                       'tampering_rejected':True,'repeat_execution_rejected':True,'private_evidence_and_memory_handoff':True,
-                      'real_data_scored':False,'model_calls':0},indent=2))
+                      'candidate_data_admission_checked':True,'real_data_scored':False,'model_calls':0},indent=2))

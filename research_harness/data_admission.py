@@ -1,4 +1,4 @@
-"""C4 evidence bound to a closed adapter's new baseline review, never approval.
+"""C4 evidence bound to a closed adapter's baseline or candidate, never approval.
 
 Snapshots are copied into the execution review, not fetched from mutable paths at
 run time. Historical review-only loading does not grant a legacy execution path.
@@ -10,7 +10,13 @@ from . import data_qualification as dq
 from .core import digest
 
 KIND = 'research-harness-baseline-data-admission'
-ADAPTERS = ('abalone-baseline-v1', 'airfoil-baseline-v1')
+TRIAL_KIND = 'research-harness-candidate-data-admission'
+TRIAL_ADAPTERS = ('abalone-candidate-v1', 'airfoil-candidate-v1')
+ADAPTERS = ('abalone-baseline-v1', 'airfoil-baseline-v1', *TRIAL_ADAPTERS)
+
+
+def _kind(adapter):
+    return TRIAL_KIND if adapter in TRIAL_ADAPTERS else KIND
 
 
 def context(adapter, source, intended_use):
@@ -50,7 +56,7 @@ def accepted_snapshot(path, adapter, source, intended_use):
 def bind(snapshot, adapter, source, intended_use, files, recipe):
     expected = context(adapter, source, intended_use)
     validate_snapshot(snapshot, expected)
-    return {'kind': KIND, 'version': 1, 'context': expected,
+    return {'kind': _kind(adapter), 'version': 1, 'context': expected,
             'qualification': deepcopy(snapshot), 'data_files': deepcopy(files), 'recipe_sha256': digest(recipe)}
 
 
@@ -61,7 +67,7 @@ def verify(content, adapter, *, required):
         return None
     entry = content['data_admission']
     dq._keys(entry, ('kind', 'version', 'context', 'qualification', 'data_files', 'recipe_sha256'), 'data admission')
-    if entry['kind'] != KIND or type(entry['version']) is not int or entry['version'] != 1:
+    if entry['kind'] != _kind(adapter) or type(entry['version']) is not int or entry['version'] != 1:
         raise ValueError('Unknown data admission version')
     dq._keys(entry['context'], ('task', 'dataset', 'intended_use'), 'admission context')
     expected = context(adapter, content['source'], entry['context']['intended_use'])
@@ -75,6 +81,38 @@ def verify(content, adapter, *, required):
             'adapter': adapter, 'execution_authorized': False}
 
 
+def trial_snapshot(baseline, adapter, fixture, path, intended_use):
+    if adapter not in TRIAL_ADAPTERS:
+        raise ValueError('Candidate qualification requires a candidate adapter')
+    source = baseline['content']['source']
+    if source == fixture and path is None and intended_use is None:
+        return None  # Internal software fixtures only; never public raw-data intake.
+    return accepted_snapshot(path, adapter, source, intended_use)
+
+
+def _trial_recipe(content, baseline):
+    return {'recipe': content['recipe'], 'proposal': content['proposal'],
+            'baseline_sha256': baseline['sha256']}
+
+
+def bind_trial(snapshot, adapter, baseline, content, intended_use):
+    if adapter not in TRIAL_ADAPTERS:
+        raise ValueError('Candidate qualification requires a candidate adapter')
+    return bind(snapshot, adapter, baseline['content']['source'], intended_use,
+                baseline['content']['files'], _trial_recipe(content, baseline))
+
+
+def verify_trial(content, baseline, adapter, *, required):
+    if adapter not in TRIAL_ADAPTERS:
+        raise ValueError('Candidate qualification requires a candidate adapter')
+    if 'data_admission' not in content:
+        if required: raise ValueError('Real candidate execution requires data admission; legacy trials are audit-only')
+        return None
+    return verify({'data_admission': content['data_admission'], 'source': baseline['content']['source'],
+                   'files': baseline['content']['files'], 'recipe': _trial_recipe(content, baseline)},
+                  adapter, required=True)
+
+
 def check_packet_size(content):
     # Match the baseline writer's ASCII-escaped encoding and reader's 4 MiB limit.
     packet = {'content': content, 'sha256': digest(content)}
@@ -82,12 +120,12 @@ def check_packet_size(content):
         raise ValueError('Combined baseline review exceeds 4 MiB; no output created')
 
 
-def review_note(content):
+def review_note(content, filename='bundle.json'):
     entry = content.get('data_admission')
     if entry is None:
         return ''
     return ('\n## Data qualification (protocol design only)\n\n'
-            'The accepted evidence and decision are embedded in bundle.json. Read their full '
+            f'The accepted evidence and decision are embedded in {filename}. Read their full '
             'content before independently approving this execution. No raw metadata is sent to the worker.\n\n'
             '```json\n' + json.dumps({'context': entry['context'],
                 'qualification_sha256': entry['qualification']['packet']['sha256'],

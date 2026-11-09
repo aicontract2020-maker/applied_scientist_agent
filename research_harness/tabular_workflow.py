@@ -12,11 +12,14 @@ from .tabular_data import write_json
 from .tabular_memory import assert_available
 
 
-def research(name,stage,baseline=None,review=None,root=ROOT):
+def research(name,stage,baseline=None,review=None,root=ROOT,*,data_review=None,intended_use=None):
     if not isinstance(name,str) or not re.fullmatch('[a-z0-9][a-z0-9_-]{0,63}',name): raise ValueError('Invalid workflow ID')
     if stage=='propose':
         if baseline is None or review is not None: raise ValueError('Proposal mode requires --baseline and no --review')
         packet,parts,_,_=validated_baseline(baseline)
+        from .data_admission import trial_snapshot
+        from .tabular_trial import ADAPTER,FIXTURE
+        trial_snapshot(packet,ADAPTER,FIXTURE,data_review,intended_use)
         assert_available(packet,parts,root)  # Before any output, preflight or model call.
         output=Path(root)/'runs'/name
         output.mkdir(mode=0o700,parents=True,exist_ok=False)
@@ -25,9 +28,10 @@ def research(name,stage,baseline=None,review=None,root=ROOT):
         from .tabular_proposer import propose
         from .tabular_trial import prepare
         try:
-            outcome=propose(baseline,output/'proposal',root=root)
+            outcome=propose(baseline,output/'proposal',root=root,data_review=data_review,intended_use=intended_use)
             if outcome['status']=='AWAITING_RESEARCH_REVIEW':
-                prepared=prepare(baseline,output/'proposal/proposal.json',output/'review',output/'proposal/literature.json',root=root)
+                prepared=prepare(baseline,output/'proposal/proposal.json',output/'review',output/'proposal/literature.json',root=root,
+                                 data_review=data_review,intended_use=intended_use)
                 result={'status':'AWAITING_RESEARCH_REVIEW','review':prepared['review'],'sha256':prepared['sha256'],
                         'final_holdout_scored':False,'human_approval_required':True}
             else: result={'status':outcome['status'],'final_holdout_scored':False,'proposal_result':outcome}
@@ -36,6 +40,7 @@ def research(name,stage,baseline=None,review=None,root=ROOT):
         write_json(output/'workflow-result.json',result)
         return result
     if stage=='execute':
+        if data_review is not None or intended_use is not None: raise ValueError('Execution uses frozen qualification; no runtime override')
         if review is None or baseline is not None: raise ValueError('Execution mode requires --review and no --baseline')
         from .tabular_trial import load_trial,execute_trial,audit_trial
         packet,_,_=load_trial(review)

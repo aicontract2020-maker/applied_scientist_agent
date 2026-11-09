@@ -123,7 +123,8 @@ class HandoffTests(unittest.TestCase):
 
     def test_unified_proposal_freezes_review_without_automatic_approval_or_execution(self):
         from research_harness.tabular_workflow import research
-        def actor(baseline,output,root):
+        def actor(baseline,output,root,*,data_review=None,intended_use=None):
+            self.assertIsNone(data_review); self.assertIsNone(intended_use)
             output.mkdir()
             shutil.copyfile(self.root/'proposal.json',output/'proposal.json')
             shutil.copyfile(self.root/'library.json',output/'literature.json')

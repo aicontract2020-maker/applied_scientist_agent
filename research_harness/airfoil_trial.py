@@ -18,6 +18,9 @@ from .portable import ROOT
 from .state_lock import research_lock
 from .tabular_baseline import source_hashes, environment
 from .tabular_data import write_json
+from . import data_admission as admission
+
+ADAPTER='airfoil-candidate-v1'
 
 BASE_FILES=('airfoil_self_noise.dat','approval.json','bundle.json','holdout-targets.json','holdout.json',
     'train.json','validation-targets.json','validation.json','run/inputs/request.json','run/ledger.jsonl',
@@ -96,10 +99,16 @@ def validate_proposal(proposal):
     return feature_review(proposal['candidate_source'])
 
 
-def prepare(base,proposal_path,output,root=ROOT):
+def prepare(base,proposal_path,output,root=ROOT,*,data_review=None,intended_use=None):
     with research_lock(root):
         packet,parts,_=qualified(base); assert_available(root,packet)
+        snapshot=admission.trial_snapshot(packet,ADAPTER,baseline.FIXTURE,data_review,intended_use)
         proposal=read_json(proposal_path); gate=validate_proposal(proposal)
+        c={'recipe':RECIPE,'proposal':proposal,'feature_review':gate,'baseline_sha256':packet['sha256'],
+           'scope':scope(packet),'counts':baseline.counts(parts),'sources':source_hashes(),'status':'AWAITING_RESEARCH_REVIEW'}
+        if snapshot is not None:
+            c['data_admission']=admission.bind_trial(snapshot,ADAPTER,packet,c,intended_use)
+        admission.check_packet_size(c)
         folder=Path(output).absolute(); folder.mkdir(mode=0o700,parents=True,exist_ok=False)
         files=BASE_FILES if packet['content']['source']!=baseline.FIXTURE else tuple(n for n in BASE_FILES if n!='airfoil_self_noise.dat')
         for n in files:
@@ -111,8 +120,6 @@ def prepare(base,proposal_path,output,root=ROOT):
             target=folder/'baseline'/n; target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(p,target)
         copied,_,_=qualified(folder/'baseline')
         if copied!=packet: raise ValueError('Baseline changed during copy')
-        c={'recipe':RECIPE,'proposal':proposal,'feature_review':gate,'baseline_sha256':packet['sha256'],
-           'scope':scope(packet),'counts':baseline.counts(parts),'sources':source_hashes(),'status':'AWAITING_RESEARCH_REVIEW'}
         envelope={'content':c,'sha256':digest(c)}; write_json(folder/'trial.json',envelope)
         (folder/'candidate.py').write_text(SOURCE)
         (folder/'REVIEW.md').write_text('# A2 Strouhal candidate — AWAITING_RESEARCH_REVIEW\n\n'
@@ -121,6 +128,7 @@ def prepare(base,proposal_path,output,root=ROOT):
             'Six paired Extra Trees fits; gain >=0.2 dB at every seed; group 95% lower bound >0; latency <=1.1. '
             'Any valid failed gate STOP; invalid attempts retain reservation. No tuning or retry.\n\n'
             '```json\n'+json.dumps({'proposal':proposal,'recipe':RECIPE,'counts':c['counts']},indent=2)+'\n```\n')
+        with (folder/'REVIEW.md').open('a') as handle: handle.write(admission.review_note(c,'trial.json'))
         return {'status':c['status'],'sha256':envelope['sha256'],'review':str(folder/'REVIEW.md')}
 
 
@@ -128,13 +136,15 @@ def load_trial(folder,current=True):
     folder=Path(folder)
     if folder.is_symlink() or not folder.is_dir() or (folder/'baseline').is_symlink(): raise ValueError('Regular trial directory required')
     p=read_json(folder/'trial.json'); _keys(p,('content','sha256')); c=p['content']
-    _keys(c,('recipe','proposal','feature_review','baseline_sha256','scope','counts','sources','status'))
+    fields={'recipe','proposal','feature_review','baseline_sha256','scope','counts','sources','status'}
+    if not isinstance(c,dict) or set(c) not in (fields,fields|{'data_admission'}): raise ValueError('Invalid trial fields')
     if p['sha256']!=digest(c) or c['recipe']!=RECIPE or c['status']!='AWAITING_RESEARCH_REVIEW': raise ValueError('Changed trial protocol')
     if current and c['sources']!=source_hashes(): raise ValueError('Reviewed source changed')
     if c['feature_review']!=validate_proposal(c['proposal']): raise ValueError('Feature review differs')
     candidate=folder/'candidate.py'
     if candidate.is_symlink() or candidate.read_text()!=SOURCE: raise ValueError('Candidate changed')
     base,parts,raw=qualified(folder/'baseline')
+    admission.verify_trial(c,base,ADAPTER,required=current and base['content']['source']!=baseline.FIXTURE)
     if c['baseline_sha256']!=base['sha256'] or c['scope']!=scope(base) or c['counts']!=baseline.counts(parts): raise ValueError('Baseline binding differs')
     return p,base,parts,raw
 
@@ -207,18 +217,33 @@ def request(parts):
     return {k:parts[k+'.json'] for k in ('train','validation','holdout')}
 
 
+def _approved_trial(folder,root):
+    p,base,parts,reference=load_trial(folder)
+    approval=read_json(Path(folder)/'trial-approval.json'); _keys(approval,('sha256','reviewer','scope'))
+    if approval['sha256']!=p['sha256'] or approval['scope']!=SCOPE or not isinstance(approval['reviewer'],str) or not approval['reviewer'].strip():
+        raise ValueError('Missing/stale trial approval')
+    run=Path(folder)/'trial-run'
+    if run.exists() or run.is_symlink(): raise ValueError('Trial already started')
+    assert_available(root,base)
+    return p,base,parts,reference,approval
+
+
+def preflight(folder,root=ROOT):
+    p,base,_,_,_=_approved_trial(folder,root)
+    return {'status':'PRECHECK_PASSED','read_only':True,'sha256':p['sha256'],
+            'data_admission':admission.verify_trial(p['content'],base,ADAPTER,required=base['content']['source']!=baseline.FIXTURE),
+            'execution_authorized':False,'isolation_checked':False,'memory_checked':True}
+
+
 def execute(folder,root=ROOT):
     from .tabular_sandbox import isolation_probe,isolated_worker
     with research_lock(root):
-        folder=Path(folder).absolute(); p,base,parts,reference=load_trial(folder)
-        approval=read_json(folder/'trial-approval.json'); _keys(approval,('sha256','reviewer','scope'))
-        if approval['sha256']!=p['sha256'] or approval['scope']!=SCOPE or not isinstance(approval['reviewer'],str) or not approval['reviewer'].strip(): raise ValueError('Missing/stale trial approval')
+        folder=Path(folder).absolute(); p,base,parts,reference,approval=_approved_trial(folder,root)
         run=folder/'trial-run'
-        if run.exists() or run.is_symlink(): raise ValueError('Trial already started')
-        assert_available(root,base); python=ROOT/'.venv-tabular/bin/python'
+        python=ROOT/'.venv-tabular/bin/python'
         env=environment(python); probe=isolation_probe(ROOT,python)
-        rechecked=load_trial(folder)
-        if rechecked[0]!=p or rechecked[1]!=base: raise ValueError('Review changed during preflight')
+        if _approved_trial(folder,root)!=(p,base,parts,reference,approval):
+            raise ValueError('Review or approval changed during preflight; no execution')
         history=history_path(root,base); history.mkdir(parents=True,exist_ok=False)
         write_json(history/'reservation.json',{'review_sha256':p['sha256'],'scope':scope(base),'mechanism':MECHANISM,'status':'RESERVED'})
         run.mkdir(mode=0o700); start=time.monotonic(); exposed=False

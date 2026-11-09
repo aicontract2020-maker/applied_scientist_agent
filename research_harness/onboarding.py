@@ -78,11 +78,11 @@ def validate_workflow(destination, *, require_integrity=False):
     return verdict
 
 
-def research(name, task='swinir-s-x2', *, stage=None, baseline=None, review=None):
+def research(name, task='swinir-s-x2', *, stage=None, baseline=None, review=None, data_review=None, intended_use=None):
     if task=='tabular-regression' and stage is not None:
         from .tabular_workflow import research as tabular_research
-        return tabular_research(name,stage,baseline,review)
-    if stage is not None or baseline is not None or review is not None:
+        return tabular_research(name,stage,baseline,review,data_review=data_review,intended_use=intended_use)
+    if stage is not None or baseline is not None or review is not None or data_review is not None or intended_use is not None:
         raise ValueError('Staged workflow arguments require the tabular-regression task')
     from .task_contracts import require_autonomous
     require_autonomous(task)

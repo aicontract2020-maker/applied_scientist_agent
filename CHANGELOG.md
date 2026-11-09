@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.24.0
+
+- Record C5 user acceptance; require separately accepted candidate-scoped data qualification for the existing Abalone and Airfoil candidate stages. Bind evidence and use to the complete proposal, recipe, exact audited baseline and all partitions; baseline qualification cannot authorize candidate use.
+- Add read-only candidate preflight commands and recheck exact approval, review and exclusion memory after isolation probes. Legacy real trials remain audit-only without admission; private evidence handoff retains embedded qualification. Keep all scientific gates and original isolation unchanged.
+- Propagate qualification through the unified tabular proposal workflow and direct proposer before actor calls or research output/reservations; reject runtime qualification overrides during execution. Add 14 synthetic tests and admitted synthetic candidate isolation checks. No new real research experiment or model call.
+
 ## 0.23.0
 
 - Record user acceptance of C4 and require accepted metadata qualification plus explicit intended use before either public baseline prepare command reads real data. Embed the private evidence/decision snapshot and bind it to adapter identity, dataset revision, frozen partitions and the unchanged baseline recipe.

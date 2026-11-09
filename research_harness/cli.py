@@ -56,6 +56,8 @@ def main():
     research.add_argument("--stage",choices=("propose","execute"),help="Explicit tabular workflow stage; proposal stops for human review")
     research.add_argument("--baseline",help="Qualified baseline for tabular proposal stage")
     research.add_argument("--review",help="Exact approved trial for tabular execution stage")
+    research.add_argument("--data-review",help="Candidate-scoped qualification for tabular proposal stage only")
+    research.add_argument("--intended-use",help="Exact candidate intended use; forbidden as an execution override")
     task = sub.add_parser("task", help="Inspect built-in task contracts and supported capabilities (no execution)")
     task_commands = task.add_subparsers(dest="task_command", required=True)
     task_commands.add_parser("list")
@@ -104,10 +106,12 @@ def main():
     proposer=tabular_commands.add_parser("propose", help="One isolated literature/feature proposal; no data rows, training or scoring")
     proposer.add_argument("--baseline",required=True); proposer.add_argument("--out",required=True)
     proposer.add_argument("--recover-launch",help="Explicit one-time recovery of a retained pre-agent Node initialization abort only")
+    proposer.add_argument("--data-review",required=True); proposer.add_argument("--intended-use",required=True)
     trial=tabular_commands.add_parser("prepare-trial", help="Freeze one concrete feature study for human review; no real experiment")
     trial.add_argument("--baseline",required=True); trial.add_argument("--proposal",required=True)
     trial.add_argument("--literature",required=True); trial.add_argument("--out",required=True)
-    for name in ("verify-trial","approve-trial","run-trial","audit-trial"):
+    trial.add_argument("--data-review",required=True); trial.add_argument("--intended-use",required=True)
+    for name in ("verify-trial","approve-trial","run-trial","audit-trial","preflight-trial"):
         command=tabular_commands.add_parser(name)
         command.add_argument("--review",required=True)
         if name=="approve-trial":
@@ -135,7 +139,8 @@ def main():
         if name == "approve":
             ap.add_argument("--sha256", required=True); ap.add_argument("--reviewer", required=True)
     ap=ac.add_parser("prepare-trial"); ap.add_argument("--baseline",required=True); ap.add_argument("--proposal",required=True); ap.add_argument("--out",required=True)
-    for name in ("approve-trial","execute-trial","audit-trial"):
+    ap.add_argument("--data-review",required=True); ap.add_argument("--intended-use",required=True)
+    for name in ("approve-trial","execute-trial","audit-trial","preflight-trial"):
         ap=ac.add_parser(name); ap.add_argument("--review",required=True)
         if name=="approve-trial": ap.add_argument("--sha256",required=True); ap.add_argument("--reviewer",required=True)
     memory = sub.add_parser("memory", help="Exchange conservative research history without models or images")
@@ -174,7 +179,8 @@ def main():
             from . import airfoil_baseline as ab
             if args.airfoil_command.endswith("-trial"):
                 from . import airfoil_trial as at
-                if args.airfoil_command=="prepare-trial": output=at.prepare(args.baseline,args.proposal,args.out)
+                if args.airfoil_command=="prepare-trial": output=at.prepare(args.baseline,args.proposal,args.out,data_review=args.data_review,intended_use=args.intended_use)
+                elif args.airfoil_command=="preflight-trial": output=at.preflight(args.review)
                 elif args.airfoil_command=="approve-trial": output=at.approve(args.review,args.sha256,args.reviewer)
                 elif args.airfoil_command=="audit-trial": output=at.audit(args.review)
                 else:
@@ -219,13 +225,14 @@ def main():
                     return 0 if output['audit_ok'] else 1
             elif args.tabular_command == "propose":
                 from .tabular_proposer import propose
-                output=propose(args.baseline,args.out,recover_launch=args.recover_launch)
+                output=propose(args.baseline,args.out,recover_launch=args.recover_launch,data_review=args.data_review,intended_use=args.intended_use)
             elif args.tabular_command == "prepare-trial":
                 from .tabular_trial import prepare as prepare_trial
-                output=prepare_trial(args.baseline,args.proposal,args.out,args.literature)
-            elif args.tabular_command in ("verify-trial","approve-trial","run-trial","audit-trial"):
-                from .tabular_trial import load_trial,approve_trial,execute_trial,audit_trial
+                output=prepare_trial(args.baseline,args.proposal,args.out,args.literature,data_review=args.data_review,intended_use=args.intended_use)
+            elif args.tabular_command in ("verify-trial","approve-trial","run-trial","audit-trial","preflight-trial"):
+                from .tabular_trial import load_trial,approve_trial,execute_trial,audit_trial,preflight_trial
                 if args.tabular_command=="approve-trial": output=approve_trial(args.review,args.sha256,args.reviewer)
+                elif args.tabular_command=="preflight-trial": output=preflight_trial(args.review)
                 elif args.tabular_command in ("run-trial","audit-trial"):
                     output=(execute_trial if args.tabular_command=="run-trial" else audit_trial)(args.review)
                     print(json.dumps(output,indent=2,ensure_ascii=False))
@@ -316,7 +323,8 @@ def main():
             return 0 if output['ok'] else 1
         elif args.command == "research":
             from .onboarding import research
-            output = research(args.id, task=args.task,stage=args.stage,baseline=args.baseline,review=args.review)
+            output = research(args.id, task=args.task,stage=args.stage,baseline=args.baseline,review=args.review,
+                              data_review=args.data_review,intended_use=args.intended_use)
         elif args.command == "autonomous":
             from .autonomy import AutonomousStudy
             if args.literature:

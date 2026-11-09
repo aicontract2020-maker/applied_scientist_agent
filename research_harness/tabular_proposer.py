@@ -82,7 +82,7 @@ def launch_failure_evidence(folder):
             'limit':'One explicit infrastructure recovery; never after search, proposal, training or scoring'}
 
 
-def propose(baseline, output, root=ROOT, recover_launch=None):
+def propose(baseline, output, root=ROOT, recover_launch=None, *, data_review=None, intended_use=None):
     import sys
     if sys.platform not in ('linux','darwin'): raise ValueError('Proposal actor requires Linux or macOS isolation')
     from .linux_isolation import linux_actor_command
@@ -90,6 +90,9 @@ def propose(baseline, output, root=ROOT, recover_launch=None):
     with research_lock(root):
         packet,parts,result,_=validated_baseline(baseline)
         if result['status']!='CONTINUE' or result['selected_baseline']!='hgb': raise ValueError('Qualified HGB required')
+        from .data_admission import trial_snapshot
+        from .tabular_trial import ADAPTER,FIXTURE
+        trial_snapshot(packet,ADAPTER,FIXTURE,data_review,intended_use)
         from .tabular_memory import assert_available
         assert_available(packet,parts,root)
         scope=scope_for(packet); folder=Path(output).absolute()
