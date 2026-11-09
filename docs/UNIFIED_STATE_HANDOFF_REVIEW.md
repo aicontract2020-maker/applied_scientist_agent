@@ -20,7 +20,7 @@
 - macOS Python 3.12 完整环境 **253 项全部通过**；系统 Python 3.9 的额外检查 253 项、9 项可选依赖跳过，官方支持下限保持 3.10。保留旧链接错误的检查顺序，既有测试未改动。
 - 真实 macOS 系统隔离中的回归**合成**流程通过，包括六次固定候选／基线配对拟合、严格审计、重复拒绝。新接收目录一次导入两类状态后，消费记忆与暂停均有效，私有证据可只读审计，导入批准仍不可执行。
 - 与 `c74e507` 比较，四套 recipe、评价函数及冻结任务契约语法树不变；历史任务文件未修改。新 CLI 能力说明不改变评价契约绑定。
-- 远端 Linux 与四组跨平台检查待推送后记录，见[结构化验证记录](unified-state-handoff-evidence/validation.json)。
+- [远端检查 42689972143](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/42689972143)全部通过，代码提交 `843d9c1e7da45b4bcaba3a868c74c83730005cbb`。Linux 完整 **253 项无跳过**，实际内核隔离、两套基线／候选合成流程及新统一状态交接通过；接收方证据仍只读。Linux/macOS × Python 3.10/3.12 四组检查全部通过，见[结构化验证记录](unified-state-handoff-evidence/validation.json)。
 
 这些是工程验证，不是科学结果或商业价值证据。没有新真实数据训练／评分、研究模型调用、作者发信或外部复现实验。
 

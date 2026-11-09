@@ -39,7 +39,49 @@
     ]
   },
   "remote_ci": {
-    "status": "PENDING_AFTER_PUSH"
+    "status": "completed",
+    "conclusion": "success",
+    "code_commit": "843d9c1e7da45b4bcaba3a868c74c83730005cbb",
+    "run_id": 42689972143,
+    "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/42689972143",
+    "checked_at": "2026-11-09 20:10:30 UTC",
+    "jobs": [
+      {
+        "id": 129406825204,
+        "name": "linux-x86_64",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129406825580,
+        "name": "data-review-portability (macos-15, 3.10)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129406825673,
+        "name": "data-review-portability (ubuntu-24.04, 3.10)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129406825698,
+        "name": "data-review-portability (macos-15, 3.12)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 129406825717,
+        "name": "data-review-portability (ubuntu-24.04, 3.12)",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "linux_tests": 253,
+    "linux_skipped": 0,
+    "linux_actual_isolation_checks_passed": true,
+    "linux_combined_state_handoff_checked": true,
+    "linux_combined_receiver_still_review_only": true
   },
   "limitations": [
     "Tabular trial exclusion memory plus all C7 data blocks only",
