@@ -1,6 +1,6 @@
 # C9 工程验收：Airfoil 记忆与统一交接 v2
 
-2026-11-11，0.27.0，**AWAITING_ENGINEERING_REVIEW**。C8 已由用户验收。本轮不运行
+2026-11-11，0.27.0，**AWAITING_ENGINEERING_REVIEW — REMOTE_CI_PENDING**。C8 已由用户验收。本轮不运行
 新的研究实验，仅完成状态迁移与执行前约束接入。
 
 ## 交付
@@ -19,7 +19,8 @@ v1 继续可读，但显式标明 Airfoil 未包含。新增 `handoff` 入口；
 - macOS Python 3.12 完整环境 **270 项全部通过**；系统 Python 3.9 额外检查 270 项、9 项可选依赖跳过，官方支持下限仍为 3.10。C8 旧导出测试仅更新为 v2 必需第三组件，原固定字节检查顺序保留。
 - 真实 macOS 系统隔离中的两套**合成**候选流程通过，各六次固定配对拟合。Airfoil 基线／候选两条终局记录随 v2 导入新目录后仍阻止消费；暂停、历史复现、严格审计、重复拒绝及原回归私有证据只读边界保持。
 - 四套 recipe、评价函数及任务契约相对 `3ac39fa` 的语法树不变，历史任务文件未修改。最后的 v1 原始字节上限补强另由完整回归覆盖。
-- 远端 Linux 和四组跨平台检查待推送后补齐，见[结构化验证记录](airfoil-memory-handoff-evidence/validation.json)。
+- 独立 Ubuntu 24.04 ARM64、Python 3.12.3：**270 项全部通过**；真实内核隔离探针及 Airfoil／回归两套合成流程通过。验证的是最终代码提交 `531eb79`，628 个跟踪文件校验一致；复用已有环境，验证后虚拟机恢复停止。见 [Linux 验证记录](airfoil-memory-handoff-evidence/linux-validation.json)。
+- **远端矩阵尚未验证通过**：[GitHub 运行](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/43095781469)截至 2026-11-11 20:46 UTC 仍报告排队、无任务。一度取消请求返回“已完成”，后续读取仍排队；未成功取消、未重跑。Linux/macOS × Python 3.10/3.12 四组结果（包括 Linux x86_64）仍待取得，独立 ARM64 验证不替代这些结果。见[结构化验证记录](airfoil-memory-handoff-evidence/validation.json)。
 
 这些是工程检查，不构成新的科学结果或效率／商业证据。没有真实数据的新训练、预测或评分，没有研究模型调用、对作者发信或外部复现实验。
 
@@ -29,6 +30,7 @@ v1 继续可读，但显式标明 Airfoil 未包含。新增 `handoff` 入口；
 科学 STOP、停止机制不能借新数据重开、三组件原子交接、v1 缺项显式披露**。
 
 工程验收不授权新的研究实验，也不解除任何旧暂停、停止路线或已用数据。
+本次交付实现与已有验证供审查，完整跨平台验收仍保留上述远端检查缺口。
 
 ## 未覆盖
 

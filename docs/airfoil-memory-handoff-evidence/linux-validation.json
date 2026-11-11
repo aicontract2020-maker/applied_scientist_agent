@@ -1,0 +1,70 @@
+{
+  "code_commit": "531eb7976530691c01aabd575bd722d2df000039",
+  "archive_sha256": "139a03cd0a4d101380bdc8936fa1dd7d381d150db7542e821e73b29128db0fd5",
+  "verified_source_files": 628,
+  "all_tracked_source_files_unchanged": true,
+  "platform": "Linux",
+  "architecture": "aarch64",
+  "python": "3.12.3",
+  "tests": 270,
+  "skipped": 0,
+  "passed": true,
+  "kernel": {
+    "kernel_probes_passed": true,
+    "real_model_or_login_test": false,
+    "results": {
+      "actor": {
+        "repo_read": "DENIED",
+        "control_read": "DENIED",
+        "symlink_escape": "DENIED",
+        "outside_write": "DENIED",
+        "response_write": "DENIED",
+        "host_pid_hidden": true
+      },
+      "candidate": {
+        "repo_read": "DENIED",
+        "control_read": "DENIED",
+        "symlink_escape": "DENIED",
+        "outside_write": "DENIED",
+        "response_write": "DENIED",
+        "imports": "OK",
+        "input_write": "DENIED",
+        "network": "DENIED",
+        "network_namespace_isolated": true,
+        "host_pid_hidden": true
+      },
+      "actor_cli": "codex-cli 0.144.0"
+    }
+  },
+  "airfoil": {
+    "synthetic_only": true,
+    "isolated_candidate_fits": 6,
+    "baseline_reproduction_passed": true,
+    "strict_audit_passed": true,
+    "tampering_rejected": true,
+    "repeat_and_copy_rejected": true,
+    "synthetic_model_predictions_changed": true,
+    "candidate_data_admission_checked": true,
+    "data_pause_preserves_historical_audit": true,
+    "paused_preparation_rejected": true,
+    "airfoil_baseline_and_candidate_handoff_checked": true,
+    "v2_handoff_includes_airfoil": true,
+    "real_data_scored": false,
+    "model_calls": 0
+  },
+  "tabular": {
+    "synthetic_only": true,
+    "actual_isolated_six_fit_trial": true,
+    "strict_audit_passed": true,
+    "tampering_rejected": true,
+    "repeat_execution_rejected": true,
+    "private_evidence_and_memory_handoff": true,
+    "data_pause_and_additive_handoff_checked": true,
+    "historical_audit_after_pause": true,
+    "combined_state_handoff_checked": true,
+    "combined_receiver_still_review_only": true,
+    "candidate_data_admission_checked": true,
+    "real_data_scored": false,
+    "model_calls": 0
+  }
+}

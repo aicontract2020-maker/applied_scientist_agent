@@ -58,7 +58,16 @@
     ]
   },
   "remote_ci": {
-    "status": "PENDING_AFTER_PUSH"
+    "status": "QUEUED_NO_JOBS_OBSERVED",
+    "observed_at_utc": "2026-11-11T20:46:48Z",
+    "code_commit": "531eb7976530691c01aabd575bd722d2df000039",
+    "run_id": 43095781469,
+    "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/43095781469",
+    "jobs": [],
+    "verified_pass": false,
+    "reruns_requested": 0,
+    "cancellation_attempt": "One cancellation request returned Cannot cancel a workflow run that is completed; subsequent reads still reported queued with no jobs. No successful cancellation or rerun.",
+    "pending_coverage": "GitHub Linux/macOS x Python 3.10/3.12 matrix, including Linux x86_64; independent Linux ARM64 results are separate."
   },
   "limitations": [
     "No SR/proposer reservation transfer",
@@ -70,5 +79,18 @@
   ],
   "new_real_research_experiments": 0,
   "research_model_calls": 0,
-  "author_messages_sent": 0
+  "author_messages_sent": 0,
+  "code_commit": "531eb7976530691c01aabd575bd722d2df000039",
+  "independent_linux": {
+    "report": "linux-validation.json",
+    "platform": "Ubuntu 24.04 aarch64",
+    "python": "3.12.3",
+    "tests": 270,
+    "skipped": 0,
+    "passed": true,
+    "kernel_isolation_passed": true,
+    "airfoil_and_tabular_synthetic_flows_passed": true,
+    "tracked_source_files_verified": 628,
+    "existing_vm_restored_to_stopped": true
+  }
 }
