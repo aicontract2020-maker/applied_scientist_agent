@@ -139,6 +139,13 @@ def main():
     hc.add_parser("export").add_argument("--out",required=True)
     hc.add_parser("verify").add_argument("packet")
     hc.add_parser("import").add_argument("packet")
+    handoff_root=sub.add_parser("handoff",help="Atomic regression/Airfoil exclusions and data pauses; no execution")
+    handoff_root.add_argument("--root",help="Checkout state; default: this installation's checkout")
+    rhc=handoff_root.add_subparsers(dest="handoff_command",required=True)
+    rhc.add_parser("status")
+    rhc.add_parser("export").add_argument("--out",required=True)
+    rhc.add_parser("verify").add_argument("packet")
+    rhc.add_parser("import").add_argument("packet")
     tab_evidence=tabular_commands.add_parser("evidence",help="PRIVATE full evidence, including labels and paper text; no publishing")
     te=tab_evidence.add_subparsers(dest="tabular_evidence_command",required=True)
     command=te.add_parser("export"); command.add_argument("--review",required=True); command.add_argument("--out",required=True)
@@ -185,7 +192,14 @@ def main():
     args = parser.parse_args()
     workspace = Workspace(args.workspace)
     try:
-        if args.command == "data-blocks":
+        if args.command == "handoff":
+            from . import tabular_handoff as th
+            options={'root':args.root} if args.root is not None else {}
+            if args.handoff_command=='status': output=th.status(**options)
+            elif args.handoff_command=='export': output=th.export(args.out,**options)
+            elif args.handoff_command=='verify': output=th.verify(args.packet)
+            else: output=th.import_state(args.packet,**options)
+        elif args.command == "data-blocks":
             from . import data_blocks as db
             options = {'root': args.root} if args.root is not None else {}
             if args.data_blocks_command == "status": output = db.status(**options)

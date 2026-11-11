@@ -69,7 +69,7 @@ def capabilities(task_id):
     return {'task':task_id,'full_autonomous_cycle':False,'human_reviewed_workflow':True,
             'stages':['propose','execute'],'proposal_entry':'research --task tabular-regression --stage propose --baseline BASE --id ID',
             'execution_entry':'research --task tabular-regression --stage execute --review REVIEW --id FROZEN_PROPOSAL_ID',
-            'handoff':'tabular handoff (exclusions + data pauses) / tabular evidence','evaluation_binding':binding(task_id),
+            'handoff':'handoff (regression/Airfoil exclusions + data pauses) / tabular evidence','evaluation_binding':binding(task_id),
             'limits':'Pinned qualified Abalone/HGB feature pilot only; exact human approval, fresh data and closed-language review remain required'}
 
 

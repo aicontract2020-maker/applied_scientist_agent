@@ -50,6 +50,17 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
     except ValueError as e: assert 'DATA_USE_BLOCKED' in str(e)
     else: raise AssertionError('Paused data allowed candidate preparation')
     assert not (folder/'blocked-copy').exists()
+    from research_harness import tabular_handoff,airfoil_memory
+    combined=folder/'handoff.json'; tabular_handoff.export(combined,root=memory)
+    receiver=folder/'receiver'; tabular_handoff.import_state(combined,root=receiver)
+    assert len(airfoil_memory.snapshot(receiver))==2
+    assert tabular_handoff.verify(combined)['airfoil_records']==2
+    for phase,identity in (('baseline',ab.scope(json.loads((base/'bundle.json').read_text()))),
+                           ('candidate',at.scope(json.loads((base/'bundle.json').read_text())))):
+        try: airfoil_memory.assert_available(phase,identity,receiver,at.MECHANISM)
+        except ValueError as e: assert 'reserved/consumed' in str(e)
+        else: raise AssertionError('Airfoil handoff released consumed data')
+    assert at.audit(trial)['audit_ok'] and ab.audit(base)['audit_ok']
     p=trial/'trial-run/output/predictions.json';raw=json.loads(p.read_text())
     raw['results'][0]['validation_predictions'][0]+=1;p.write_text(json.dumps(raw))
     try: at.audit(trial)
@@ -59,4 +70,5 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
         'strict_audit_passed':True,'tampering_rejected':True,'repeat_and_copy_rejected':True,
         'synthetic_model_predictions_changed':True,'candidate_data_admission_checked':True,
         'data_pause_preserves_historical_audit':True,'paused_preparation_rejected':True,
+        'airfoil_baseline_and_candidate_handoff_checked':True,'v2_handoff_includes_airfoil':True,
         'real_data_scored':False,'model_calls':0},indent=2))

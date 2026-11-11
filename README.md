@@ -4,7 +4,7 @@
 
 当前完整任务是 **固定 SwinIR-S ×2 图像超分的确定性后处理研究**，不是任意领域的通用科学家。基础工作流无需模型；完整研究使用你自己的 Codex 登录与额度。
 
-0.26.0 新增[统一状态交接](docs/UNIFIED_STATE_HANDOFF.md)：回归停止／已用数据记录和数据暂停用一个包同步，完整验证后一起生效；旧快照不能解除约束，私有研究证据仍单独保管。[C8 工程验收](docs/UNIFIED_STATE_HANDOFF_REVIEW.md)待审。原有两类研究工作流保留：超分的完整自主周期，以及回归的自主提案 → 人工审核 → 单次隔离执行。回归已接入统一分阶段入口、排除记忆和私有证据交接；其 v1 数值评价契约保持不变。查看 [研发路线图](docs/ROADMAP.md)、[任务接口](docs/TASK_CONTRACTS.md) 和 [回归交接说明](docs/TABULAR_HANDOFF.md)。
+0.27.0 将 [Airfoil 基线／候选记忆](docs/AIRFOIL_MEMORY_HANDOFF.md)纳入统一交接 v2，与回归排除及数据暂停一起生效；换机器后继续拒绝已用数据和已停止机制。旧 v1 包仍可读，并明确标示 Airfoil 未包含。[C9 工程验收](docs/AIRFOIL_MEMORY_HANDOFF_REVIEW.md)待审。原有两类研究工作流保留：超分的完整自主周期，以及回归的自主提案 → 人工审核 → 单次隔离执行。回归已接入统一分阶段入口、排除记忆和私有证据交接；其 v1 数值评价契约保持不变。查看 [研发路线图](docs/ROADMAP.md)、[任务接口](docs/TASK_CONTRACTS.md) 和 [回归交接说明](docs/TABULAR_HANDOFF.md)。
 
 ```sh
 python3 -m research_harness task list

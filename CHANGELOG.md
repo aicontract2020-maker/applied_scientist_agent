@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.27.0
+
+- Record C8 user acceptance. Add conservative Airfoil baseline/candidate memory from published A1/A2 metadata, local reservations and imported state. Carry incomplete reservations without freeing data, keep INVALID separate from scientific STOP, reject conflicting bindings and terminal decisions.
+- Extend unified handoff to v2 with Airfoil memory as a third required component. All components publish atomically; v1 remains readable with explicit missing Airfoil coverage. Add top-level `handoff` while retaining the `tabular handoff` alias. No SR/proposer reservation migration or private evidence transfer.
+- Enforce retained Airfoil consumption and stopped mechanisms during preparation, approval and preflight, including the post-isolation recheck. Preserve scientific recipes, evaluators, task bindings and historical artifacts; synthetic software validation only, no new research experiment.
+
 ## 0.26.0
 
 - Record C7 user acceptance. Add `tabular handoff` status/export/verify/import for one fixed-format snapshot containing tabular exclusion memory and all local data-use blocks. Private full evidence remains separate; Airfoil/SR reservations are outside this format.

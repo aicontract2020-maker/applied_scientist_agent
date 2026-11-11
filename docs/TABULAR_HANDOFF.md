@@ -77,3 +77,10 @@ python3 -m research_harness tabular memory import NEW_MEMORY.json
 回归排除记忆与全部数据暂停，不再需要分别传这两个状态包。旧命令仍可用并读取
 合并状态；完整私有证据仍独立交接。该格式不包含 Airfoil/SR 预留或 proposer
 预留，不是所有任务的完整记忆迁移。旧版接收程序不认识新增状态目录，须先升级。
+
+## 0.27 的覆盖更新
+
+[C9 统一交接 v2](AIRFOIL_MEMORY_HANDOFF.md)已将 Airfoil 基线／候选排除记忆作为
+第三组件纳入；推荐使用 `handoff`，原 `tabular handoff` 别名也导出 v2。上文
+关于 C8 不携带 Airfoil 的限制仅适用于 v1。v1 仍可读但明确标示 Airfoil 缺项；
+双方使用 0.27 或更新的兼容版本。SR/proposer 预留及私有证据仍单独处理。

@@ -79,3 +79,10 @@ python3 -m research_harness data-blocks status
 共同数据池仍须先同步、再串行接手；新暂停发生后应再次同步。只读 `status` 在
 并发写入期间可能观察到不同时间的组件，不能作为未来执行凭证；正式执行仍在
 现有锁内复查当前状态并执行原隔离探针。没有任何新实验授权。
+
+## 0.27 的覆盖更新
+
+[C9 统一交接 v2](AIRFOIL_MEMORY_HANDOFF.md)已将 Airfoil 基线／候选排除记忆作为
+第三组件纳入；推荐使用 `handoff`，原 `tabular handoff` 别名也导出 v2。上文
+关于 C8 不携带 Airfoil 的限制仅适用于 v1。v1 仍可读但明确标示 Airfoil 缺项；
+双方使用 0.27 或更新的兼容版本。SR/proposer 预留及私有证据仍单独处理。

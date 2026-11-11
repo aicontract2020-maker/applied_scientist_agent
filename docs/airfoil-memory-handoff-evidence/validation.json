@@ -1,0 +1,74 @@
+{
+  "phase": "C9",
+  "version": "0.27.0",
+  "user_review_date": "2026-11-11",
+  "scope": "Software validation and read-only historical metadata only",
+  "local": {
+    "new_airfoil_memory_tests": 17,
+    "full_suite": {
+      "python": "3.12.14",
+      "tests": 270,
+      "skipped": 0,
+      "passed": true
+    },
+    "system_python_extra_check": {
+      "python": "3.9.6",
+      "tests": 270,
+      "skipped": 9,
+      "passed": true,
+      "supported_minimum": "3.10"
+    },
+    "actual_macos_airfoil_isolation": {
+      "synthetic_only": true,
+      "isolated_candidate_fits": 6,
+      "baseline_reproduction_passed": true,
+      "strict_audit_passed": true,
+      "tampering_rejected": true,
+      "repeat_and_copy_rejected": true,
+      "synthetic_model_predictions_changed": true,
+      "candidate_data_admission_checked": true,
+      "data_pause_preserves_historical_audit": true,
+      "paused_preparation_rejected": true,
+      "airfoil_baseline_and_candidate_handoff_checked": true,
+      "v2_handoff_includes_airfoil": true,
+      "real_data_scored": false,
+      "model_calls": 0
+    },
+    "actual_macos_tabular_isolation": {
+      "synthetic_only": true,
+      "actual_isolated_six_fit_trial": true,
+      "strict_audit_passed": true,
+      "tampering_rejected": true,
+      "repeat_execution_rejected": true,
+      "private_evidence_and_memory_handoff": true,
+      "data_pause_and_additive_handoff_checked": true,
+      "historical_audit_after_pause": true,
+      "combined_state_handoff_checked": true,
+      "combined_receiver_still_review_only": true,
+      "candidate_data_admission_checked": true,
+      "real_data_scored": false,
+      "model_calls": 0
+    },
+    "scientific_recipe_evaluator_and_task_contract_ast_unchanged_from": "3ac39fa52c3f58a012b4c7990984c2f01f74c31c",
+    "historical_task_files_modified": false,
+    "initial_findings": [
+      "Preserved pinned-byte validation order at internal Airfoil prepare seam",
+      "Updated C8 export assertion for mandatory empty third component in v2",
+      "Kept original v1 raw-byte ceiling while admitting larger v2 envelopes"
+    ]
+  },
+  "remote_ci": {
+    "status": "PENDING_AFTER_PUSH"
+  },
+  "limitations": [
+    "No SR/proposer reservation transfer",
+    "Private scientific evidence stays separate; no new Airfoil evidence unpacking",
+    "Offline claims, not identity authentication or real-time coordination",
+    "v1 does not supply Airfoil state",
+    "Compatible peers required; no unblock or new data adapter",
+    "No new research actor or experiment"
+  ],
+  "new_real_research_experiments": 0,
+  "research_model_calls": 0,
+  "author_messages_sent": 0
+}

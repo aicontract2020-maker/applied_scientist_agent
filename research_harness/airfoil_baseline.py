@@ -62,6 +62,8 @@ RECIPE = {
 
 def prepare(data, output, data_review=None, intended_use=None, *, root=ROOT):
     snapshot = admission.accepted_snapshot(data_review, ADAPTER, SOURCE, intended_use, root=root)
+    from .airfoil_memory import assert_available
+    assert_available('baseline', scope({'content': {'source': SOURCE}}), root)
     return prepare_rows(parse(data),output,SOURCE,raw=Path(data).read_bytes(),qualification=snapshot,intended_use=intended_use,root=root)
 
 
@@ -71,6 +73,8 @@ def prepare_rows(rows, output, source=FIXTURE, raw=None, *, qualification=None, 
     if source==SOURCE and (raw is None or hashlib.sha256(raw).hexdigest()!=SOURCE['raw_sha256']):
         raise ValueError('Real review requires pinned raw bytes')
     if source == SOURCE and qualification is None: raise ValueError('Real data requires accepted data qualification')
+    from .airfoil_memory import assert_available
+    assert_available('baseline', scope({'content': {'source': source}}), root)
     parts=split_rows(rows)
     c={'recipe':RECIPE,'source':source,'files':{n:digest(parts[n]) for n in FILES},
        'counts':counts(parts),'sources':source_hashes(),'status':'AWAITING_REVIEW'}
@@ -145,6 +149,8 @@ def approve(folder, expected_hash, reviewer, root=ROOT):
         if packet['sha256']!=expected_hash or not isinstance(reviewer,str) or not reviewer.strip():
             raise ValueError('Exact hash and reviewer required')
         if (Path(folder)/'run').exists() or reservation(root,packet).exists(): raise ValueError('Attempt already reserved; no retry')
+        from .airfoil_memory import assert_available
+        assert_available('baseline', scope(packet), root)
         write_json(Path(folder)/'approval.json',{'sha256':expected_hash,'reviewer':reviewer.strip(),'scope':SCOPE})
     return {'status':'APPROVED_BASELINE_ONLY','sha256':expected_hash}
 
@@ -215,6 +221,8 @@ def _approved_review(folder, root):
         raise ValueError('Missing/stale Airfoil-only approval')
     run = Path(folder)/'run'; history = reservation(root, packet)
     if run.exists() or run.is_symlink() or history.exists(): raise ValueError('Airfoil qualification already reserved; no retry')
+    from .airfoil_memory import assert_available
+    assert_available('baseline', scope(packet), root)
     return packet, parts, approval
 
 

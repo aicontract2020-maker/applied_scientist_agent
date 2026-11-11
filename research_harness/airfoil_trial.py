@@ -81,6 +81,8 @@ def assert_available(root,packet):
                 raise ValueError('Invalid history state')
             if r['scope']==scope(packet) or (r['mechanism']==MECHANISM and r['status']=='STOP'):
                 raise ValueError('Published consumed holdout/stopped Strouhal route')
+    from .airfoil_memory import assert_available as memory_available
+    memory_available('candidate', scope(packet), root, MECHANISM)
 
 
 def validate_proposal(proposal):
