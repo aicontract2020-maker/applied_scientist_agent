@@ -23,8 +23,13 @@
   恢复拒绝、已有提案审查和批准后六拟合、历史只读审计。
 - 实际 macOS Airfoil 合成隔离流程通过；四套研究配方、评价函数、任务契约、
   提案提示与原启动失败判据的语法树不变，历史任务和工作进程隔离代码未改。
-- 远端检查推送后补入[结构化验证记录](proposal-memory-handoff-evidence/validation.json)。
-  尚未取得的结果不计为通过。软件检查不能证明科学效果或节省人工。
+- [远端运行](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/43669241796)
+  在代码提交 `5b75ec3` 上五项全部通过：Linux/macOS × Python 3.10/3.12 四组
+  兼容性检查，以及 Linux x86_64 完整安装、**288 项测试无跳过**、内核隔离、
+  预注册拒绝、四套基线/候选合成流程。见[结构化记录](proposal-memory-handoff-evidence/validation.json)
+  及[远端任务证据](proposal-memory-handoff-evidence/remote-validation.json)。
+- 当前 checkout 的只读状态检查：新旧命令入口一致，识别已有一条提案占用；
+  没有重新启动该提案或写入历史研究。软件检查不能证明科学效果或节省人工。
 
 首次并发运行两个测试环境触发了现有 checkout 锁；串行完整复测通过。实际隔离
 首次被当前执行环境拒绝启动，在宿主使用脚本原有隔离后通过，未降低隔离要求。

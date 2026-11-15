@@ -72,9 +72,24 @@
     "Nested macOS isolation was denied before worker execution; actual synthetic checks passed on host with the original isolation profile."
   ],
   "remote_ci": {
-    "status": "PENDING_AFTER_PUSH"
+    "status": "PASSED",
+    "verified_pass": true,
+    "passed_jobs": 5,
+    "run_id": 43669241796,
+    "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/43669241796",
+    "report": "remote-validation.json",
+    "linux_x86_64_tests": 288,
+    "linux_x86_64_skipped": 0,
+    "kernel_and_four_synthetic_flows_passed": true
   },
   "new_real_research_experiments": 0,
   "research_model_calls": 0,
-  "author_messages_sent": 0
+  "author_messages_sent": 0,
+  "code_commit": "5b75ec362708d8a879af6b110bba21cb68c3824b",
+  "existing_checkout_read_only_check": {
+    "top_level_and_legacy_alias_agree": true,
+    "version": 3,
+    "proposal_records": 1,
+    "execution_authorized": false
+  }
 }
