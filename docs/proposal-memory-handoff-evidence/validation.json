@@ -1,0 +1,80 @@
+{
+  "phase": "C10",
+  "version": "0.28.0",
+  "date": "2026-11-14",
+  "scope": "Software fixtures only; no new research experiments",
+  "local": {
+    "new_tests": 18,
+    "python_3_12_full_suite": {
+      "tests": 288,
+      "skipped": 0,
+      "passed": true
+    },
+    "system_python_3_9_extra_check": {
+      "tests": 288,
+      "skipped": 9,
+      "passed": true,
+      "supported_minimum": "3.10"
+    },
+    "macos_tabular": {
+      "synthetic_only": true,
+      "actual_isolated_six_fit_trial": true,
+      "strict_audit_passed": true,
+      "tampering_rejected": true,
+      "repeat_execution_rejected": true,
+      "private_evidence_and_memory_handoff": true,
+      "data_pause_and_additive_handoff_checked": true,
+      "historical_audit_after_pause": true,
+      "combined_state_handoff_checked": true,
+      "combined_receiver_still_review_only": true,
+      "proposal_occupancy_handoff_checked": true,
+      "proposal_occupancy_preserves_review_and_execution": true,
+      "candidate_data_admission_checked": true,
+      "real_data_scored": false,
+      "model_calls": 0
+    },
+    "macos_airfoil": {
+      "synthetic_only": true,
+      "isolated_candidate_fits": 6,
+      "baseline_reproduction_passed": true,
+      "strict_audit_passed": true,
+      "tampering_rejected": true,
+      "repeat_and_copy_rejected": true,
+      "synthetic_model_predictions_changed": true,
+      "candidate_data_admission_checked": true,
+      "data_pause_preserves_historical_audit": true,
+      "paused_preparation_rejected": true,
+      "airfoil_baseline_and_candidate_handoff_checked": true,
+      "v2_handoff_includes_airfoil": true,
+      "real_data_scored": false,
+      "model_calls": 0
+    }
+  },
+  "unchanged_ast_from": "c0748d77e0b14a8cc431d506d57d678977d5c100",
+  "unchanged_ast": [
+    "research_harness/tabular_baseline.py:RECIPE",
+    "research_harness/tabular_baseline.py:qualify",
+    "research_harness/airfoil_baseline.py:RECIPE",
+    "research_harness/airfoil_baseline.py:qualify",
+    "research_harness/tabular_trial.py:RECIPE",
+    "research_harness/tabular_trial.py:evaluate_trial",
+    "research_harness/airfoil_trial.py:RECIPE",
+    "research_harness/airfoil_trial.py:evaluate",
+    "research_harness/task_contracts.py:_CONTRACTS",
+    "research_harness/tabular_proposer.py:PROMPT",
+    "research_harness/tabular_proposer.py:SCHEMA",
+    "research_harness/tabular_proposer.py:launch_failure_evidence",
+    "research_harness/tabular_proposer.py:actor_executable"
+  ],
+  "historical_tasks_and_worker_isolation_unchanged": true,
+  "initial_validation_conditions": [
+    "Two concurrent test suites contested the shared checkout lock; full Python 3.12 suite passed serially without code change.",
+    "Nested macOS isolation was denied before worker execution; actual synthetic checks passed on host with the original isolation profile."
+  ],
+  "remote_ci": {
+    "status": "PENDING_AFTER_PUSH"
+  },
+  "new_real_research_experiments": 0,
+  "research_model_calls": 0,
+  "author_messages_sent": 0
+}

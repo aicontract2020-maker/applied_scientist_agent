@@ -1,5 +1,8 @@
 # C9 工程验收：Airfoil 记忆与统一交接 v2
 
+2026-11-14，用户已明确验收通过，并要求先补齐远端验证，再继续工程研发。
+以下保留 2026-11-11 交付时的验证快照；远端补验记录见文末。
+
 2026-11-11，0.27.0，**AWAITING_ENGINEERING_REVIEW — REMOTE_CI_PENDING**。C8 已由用户验收。本轮不运行
 新的研究实验，仅完成状态迁移与执行前约束接入。
 
@@ -37,3 +40,14 @@ v1 继续可读，但显式标明 Airfoil 未包含。新增 `handoff` 入口；
 SR/proposer 预留迁移、跨机器实时协调、签名、数据别名识别、暂停恢复和通用新
 数据 adapter 尚未实现。私有研究证据仍独立；没有新增 Airfoil 证据解包或研究
 actor。Delft 独立复现与 D1 人类效率对照仍未执行。
+
+## 2026-11-14 远端补验完成
+
+**USER_ACCEPTED / REMOTE_VALIDATION_PASSED**。原运行仍无可用结果，重跑和取消
+接口返回互相矛盾的状态。增加 `workflow_dispatch` 入口后，以提交 `c0748d7`
+运行相同检查；相对 C9 的 `531eb79`，实现、测试、脚本和依赖声明完全不变。
+[补验运行](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/43668561353)
+五项任务全部成功：Linux/macOS × Python 3.10/3.12 四组兼容检查，以及 Linux
+x86_64 安装、270 项完整测试、内核隔离、预注册拒绝及四套基线/候选合成流程。
+记录见 [remote-validation.json](airfoil-memory-handoff-evidence/remote-validation.json)。
+这是同实现的新运行验证，不改写旧排队运行的结果；无新研究实验或模型调用。

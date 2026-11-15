@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.28.0
+
+- Complete C9 remote validation on unchanged implementation: four platform/Python checks and Linux x86_64 installation, full software suite and actual synthetic isolation all pass. Add a manual CI trigger after the original queued run could neither rerun nor cancel.
+- Add conservative tabular proposal occupancy to unified handoff v3. Empty reservations stay occupied, baseline conflicts fail closed, and all four components publish atomically; v1/v2 remain readable with explicit missing proposer coverage and original size ceilings.
+- Check retained proposal occupancy before direct/unified actor work and after isolation probes. Preserve evidence-bound local launch recovery; imports never authorize recovery. Proposal occupancy does not assert scientific STOP or consume holdout, and existing candidates remain reviewable under the original execution gates.
+- Add 18 synthetic software checks and model-free occupancy coverage to the actual isolated tabular fixture. No new research experiment, model call or scientific threshold change. C10 awaits engineering review.
+
 ## 0.27.0
 
 - Record C8 user acceptance. Add conservative Airfoil baseline/candidate memory from published A1/A2 metadata, local reservations and imported state. Carry incomplete reservations without freeing data, keep INVALID separate from scientific STOP, reject conflicting bindings and terminal decisions.

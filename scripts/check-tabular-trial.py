@@ -38,6 +38,15 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     write_json(work/'proposal.json',proposal)
     write_json(work/'library.json',[{'url':item['url'],'title':'SOFTWARE FIXTURE','full_text':'NOT REAL PAPER CONTENT',
                                    'pdf_sha256':'a'*64} for item in proposal['evidence']])
+    # Model-free occupancy fixture: an existing proposal must still be reviewable
+    # and executable once approved; only another proposal session is forbidden.
+    from research_harness.tabular_trial import scope_for
+    from research_harness import proposal_memory
+    baseline_packet=json.loads((baseline/'bundle.json').read_text())
+    proposal_scope=scope_for(baseline_packet)
+    reservation=work/'.research-memory/tabular-proposer'/proposal_scope
+    reservation.mkdir(parents=True)
+    write_json(reservation/'reservation.json',{'scope':proposal_scope,'baseline_sha256':baseline_packet['sha256'],'status':'RESERVED'})
     qualification(work/'qualification',ADAPTER,FIXTURE)
     trial=work/'trial'; review=prepare(baseline,work/'proposal.json',trial,work/'library.json',root=work,
                                       data_review=work/'qualification/packet.json',intended_use=USE)
@@ -89,6 +98,13 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     assert tabular_handoff.verify(combined)['execution_authorized'] is False
     assert tabular_handoff.import_state(combined,root=receiver)['status']=='IMPORTED'
     assert tabular_handoff.import_state(combined,root=receiver)['status']=='ALREADY_IMPORTED'
+    assert tabular_handoff.verify(combined)['version']==3
+    assert tabular_handoff.verify(combined)['proposal_records']==1
+    assert proposal_memory.snapshot(receiver)==proposal_memory.snapshot(work)
+    for recovery in (False,True):
+        try: proposal_memory.assert_available(proposal_scope,receiver,local_recovery=recovery)
+        except ValueError as exc: assert 'Imported proposal' in str(exc)
+        else: raise AssertionError('Imported occupancy allowed proposal retry/recovery')
     combined_review=Path(unpack(evidence,receiver/'evidence')['review'])
     assert audit_trial(combined_review)['audit_ok']
     try: assert_available(json.loads((combined_review/'baseline/bundle.json').read_text()),parts,root=receiver)
@@ -114,4 +130,5 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
                       'tampering_rejected':True,'repeat_execution_rejected':True,'private_evidence_and_memory_handoff':True,
                       'data_pause_and_additive_handoff_checked':True,'historical_audit_after_pause':True,
                       'combined_state_handoff_checked':True,'combined_receiver_still_review_only':True,
+                      'proposal_occupancy_handoff_checked':True,'proposal_occupancy_preserves_review_and_execution':True,
                       'candidate_data_admission_checked':True,'real_data_scored':False,'model_calls':0},indent=2))

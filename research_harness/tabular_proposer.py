@@ -82,6 +82,25 @@ def launch_failure_evidence(folder):
             'limit':'One explicit infrastructure recovery; never after search, proposal, training or scoring'}
 
 
+def checked_attempt(packet, root, recover_launch):
+    """Recheck occupancy and the existing local-only recovery before actor work."""
+    import sys
+    from .proposal_memory import assert_available
+    scope=scope_for(packet)
+    assert_available(scope,root,local_recovery=recover_launch is not None)
+    reservation=Path(root)/'.research-memory/tabular-proposer'/scope
+    recovery=None
+    if recover_launch is not None:
+        if sys.platform!='darwin': raise ValueError('This observed launcher recovery applies only to macOS')
+        recovery=launch_failure_evidence(recover_launch)
+        prior=read_json(reservation/'reservation.json')
+        if (prior.get('baseline_sha256')!=packet['sha256'] or prior.get('scope')!=scope
+                or read_json(reservation/'decision.json')!=read_json(Path(recover_launch)/'result.json')
+                or (reservation/'launch-recovery.json').exists() or (reservation/'launch-recovery.json').is_symlink()):
+            raise ValueError('Recovery does not match the retained failed attempt or was already consumed')
+    return reservation,recovery
+
+
 def propose(baseline, output, root=ROOT, recover_launch=None, *, data_review=None, intended_use=None):
     import sys
     if sys.platform not in ('linux','darwin'): raise ValueError('Proposal actor requires Linux or macOS isolation')
@@ -97,23 +116,12 @@ def propose(baseline, output, root=ROOT, recover_launch=None, *, data_review=Non
         assert_available(packet,parts,root)
         scope=scope_for(packet); folder=Path(output).absolute()
         if folder.exists() or folder.is_symlink(): raise ValueError('Proposal output exists; no retries')
-        reservation=Path(root)/'.research-memory/tabular-proposer'/scope
-        if any(p.is_symlink() for p in (reservation,reservation.parent,reservation.parent.parent)):
-            raise ValueError('Linked proposal reservation')
-        recovery=None
-        if recover_launch is not None:
-            if sys.platform!='darwin': raise ValueError('This observed launcher recovery applies only to macOS')
-            recovery=launch_failure_evidence(recover_launch)
-            prior=read_json(reservation/'reservation.json')
-            if (prior.get('baseline_sha256')!=packet['sha256'] or prior.get('scope')!=scope
-                    or read_json(reservation/'decision.json')!=read_json(Path(recover_launch)/'result.json')
-                    or (reservation/'launch-recovery.json').exists()):
-                raise ValueError('Recovery does not match the retained failed attempt or was already consumed')
-        elif reservation.exists():
-            raise ValueError('Proposal session already reserved; preserve failure, no automatic retry')
+        reservation,recovery=checked_attempt(packet,root,recover_launch)
         probe=isolation_probe(check_login=True)
         trial_snapshot(packet,ADAPTER,FIXTURE,data_review,intended_use,root=root)
         assert_available(packet,parts,root)
+        if checked_attempt(packet,root,recover_launch)!=(reservation,recovery):
+            raise ValueError('Proposal recovery evidence changed during preflight')
         context={'task':'Predict UCI Abalone rings; engineering benchmark, not commercial proof',
             'columns':['sex M','sex F','sex I','length','diameter','height','whole weight','shucked weight','viscera weight','shell weight'],
             'baseline_mae':result['mean_validation_mae'],'baseline_parameters':packet['content']['recipe']['baseline_parameters']['hgb'],

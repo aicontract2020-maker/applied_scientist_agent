@@ -21,6 +21,9 @@ def research(name,stage,baseline=None,review=None,root=ROOT,*,data_review=None,i
         from .tabular_trial import ADAPTER,FIXTURE
         trial_snapshot(packet,ADAPTER,FIXTURE,data_review,intended_use,root=root)
         assert_available(packet,parts,root)  # Before any output, preflight or model call.
+        from .proposal_memory import assert_available as proposal_available
+        from .tabular_trial import scope_for
+        proposal_available(scope_for(packet),root)
         output=Path(root)/'runs'/name
         output.mkdir(mode=0o700,parents=True,exist_ok=False)
         write_json(output/'workflow-start.json',{'kind':'tabular-reviewed-workflow','version':1,

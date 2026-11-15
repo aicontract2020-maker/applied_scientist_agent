@@ -98,7 +98,7 @@ class AirfoilMemoryTests(unittest.TestCase):
         self.assertIsNone(th.verify(v1)['airfoil_records']); self.assertIn('NOT_INCLUDED',th.verify(v1)['scope'])
         th.import_state(v1,receiver); self.assertEqual(am.snapshot(receiver),[self.record(state='STOP')])
         out=self.root/'new.json'; th.export(out,receiver)
-        self.assertEqual(th.verify(out)['version'],2); self.assertEqual(th.verify(out)['airfoil_records'],1)
+        self.assertEqual(th.verify(out)['version'],3); self.assertEqual(th.verify(out)['airfoil_records'],1)
 
     def test_airfoil_conflict_prevents_importing_new_pause(self):
         path,_=self.packet([self.record(state='STOP')]); receiver=self.root/'receiver'; th.import_state(path,receiver)
@@ -189,7 +189,7 @@ class AirfoilMemoryTests(unittest.TestCase):
                 else: at.prepare(folder/'baseline','proposal-never-read',output,root=root)
             self.assertFalse(output.exists())
 
-    def test_top_level_cli_and_legacy_alias_share_v2_state(self):
+    def test_top_level_cli_and_legacy_alias_share_current_state(self):
         path,_=self.packet([self.record()]); repo=str(Path(__file__).resolve().parents[1]); receiver=self.root/'cli-receiver'
         def cli(*args):
             return subprocess.run([sys.executable,'-m','research_harness',*args],cwd=self.root,
