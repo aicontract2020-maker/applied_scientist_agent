@@ -52,7 +52,10 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
     assert not (folder/'blocked-copy').exists()
     from research_harness import tabular_handoff,airfoil_memory
     combined=folder/'handoff.json'; tabular_handoff.export(combined,root=memory)
-    receiver=folder/'receiver'; tabular_handoff.import_state(combined,root=receiver)
+    receiver=folder/'receiver'; preview=tabular_handoff.preview(combined,root=receiver)
+    assert not receiver.exists()
+    imported=tabular_handoff.import_state(combined,root=receiver,expect_preview=preview['preview_sha256'])
+    assert imported['preview_checked'] and imported['merged_state']==preview['merged_state']
     assert len(airfoil_memory.snapshot(receiver))==2
     assert tabular_handoff.verify(combined)['airfoil_records']==2
     for phase,identity in (('baseline',ab.scope(json.loads((base/'bundle.json').read_text()))),
@@ -71,4 +74,5 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
         'synthetic_model_predictions_changed':True,'candidate_data_admission_checked':True,
         'data_pause_preserves_historical_audit':True,'paused_preparation_rejected':True,
         'airfoil_baseline_and_candidate_handoff_checked':True,'v2_handoff_includes_airfoil':True,
+        'read_only_preview_and_bound_import_checked':True,
         'real_data_scored':False,'model_calls':0},indent=2))

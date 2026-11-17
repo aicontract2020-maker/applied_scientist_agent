@@ -96,7 +96,15 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     combined=work/'combined-state.json'; tabular_handoff.export(combined,root=work)
     receiver=work/'combined-receiver'; receiver.mkdir()
     assert tabular_handoff.verify(combined)['execution_authorized'] is False
-    assert tabular_handoff.import_state(combined,root=receiver)['status']=='IMPORTED'
+    preview=tabular_handoff.preview(combined,root=receiver)
+    assert preview['read_only'] and not preview['execution_authorized']
+    assert list(receiver.iterdir())==[]
+    imported=tabular_handoff.import_state(combined,root=receiver,expect_preview=preview['preview_sha256'])
+    assert imported['status']=='IMPORTED' and imported['preview_checked']
+    assert imported['merged_state']==preview['merged_state']
+    try: tabular_handoff.import_state(combined,root=receiver,expect_preview=preview['preview_sha256'])
+    except ValueError as exc: assert 'preview changed' in str(exc)
+    else: raise AssertionError('Stale preview was accepted')
     assert tabular_handoff.import_state(combined,root=receiver)['status']=='ALREADY_IMPORTED'
     assert tabular_handoff.verify(combined)['version']==3
     assert tabular_handoff.verify(combined)['proposal_records']==1
@@ -131,4 +139,5 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
                       'data_pause_and_additive_handoff_checked':True,'historical_audit_after_pause':True,
                       'combined_state_handoff_checked':True,'combined_receiver_still_review_only':True,
                       'proposal_occupancy_handoff_checked':True,'proposal_occupancy_preserves_review_and_execution':True,
+                      'read_only_preview_and_bound_import_checked':True,'stale_preview_rejected':True,
                       'candidate_data_admission_checked':True,'real_data_scored':False,'model_calls':0},indent=2))

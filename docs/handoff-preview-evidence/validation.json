@@ -1,0 +1,77 @@
+{
+  "phase": "C11",
+  "version": "0.29.0",
+  "date": "2026-11-17",
+  "scope": "Software and synthetic fixtures only",
+  "local": {
+    "new_tests": 19,
+    "full_python_3_12": {
+      "tests": 307,
+      "skipped": 0,
+      "passed": true
+    },
+    "system_python_3_9_extra_check": {
+      "tests": 307,
+      "skipped": 9,
+      "passed": true,
+      "supported_minimum": "3.10"
+    },
+    "actual_macos_tabular_isolation": {
+      "synthetic_only": true,
+      "actual_isolated_six_fit_trial": true,
+      "strict_audit_passed": true,
+      "tampering_rejected": true,
+      "repeat_execution_rejected": true,
+      "private_evidence_and_memory_handoff": true,
+      "data_pause_and_additive_handoff_checked": true,
+      "historical_audit_after_pause": true,
+      "combined_state_handoff_checked": true,
+      "combined_receiver_still_review_only": true,
+      "proposal_occupancy_handoff_checked": true,
+      "proposal_occupancy_preserves_review_and_execution": true,
+      "read_only_preview_and_bound_import_checked": true,
+      "stale_preview_rejected": true,
+      "candidate_data_admission_checked": true,
+      "real_data_scored": false,
+      "model_calls": 0
+    },
+    "actual_macos_airfoil_isolation": {
+      "synthetic_only": true,
+      "isolated_candidate_fits": 6,
+      "baseline_reproduction_passed": true,
+      "strict_audit_passed": true,
+      "tampering_rejected": true,
+      "repeat_and_copy_rejected": true,
+      "synthetic_model_predictions_changed": true,
+      "candidate_data_admission_checked": true,
+      "data_pause_preserves_historical_audit": true,
+      "paused_preparation_rejected": true,
+      "airfoil_baseline_and_candidate_handoff_checked": true,
+      "v2_handoff_includes_airfoil": true,
+      "read_only_preview_and_bound_import_checked": true,
+      "real_data_scored": false,
+      "model_calls": 0
+    }
+  },
+  "unchanged_from": "09cc76aaca956e2a685338c5b9c98f5140a2ece7",
+  "only_changed_runtime_modules": [
+    "research_harness/cli.py",
+    "research_harness/tabular_handoff.py"
+  ],
+  "unchanged_handoff_function_ast": [
+    "envelope",
+    "validate",
+    "load_packet",
+    "packets",
+    "_snapshot",
+    "_publish"
+  ],
+  "scientific_evaluators_recipes_prompts_isolation_and_task_contract_files_unchanged": true,
+  "historical_task_files_unchanged": true,
+  "remote_ci": {
+    "status": "PENDING_AFTER_PUSH"
+  },
+  "new_real_research_experiments": 0,
+  "research_model_calls": 0,
+  "author_messages_sent": 0
+}

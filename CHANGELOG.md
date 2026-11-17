@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.29.0
+
+- Record C10 user acceptance. Add read-only `handoff preview` (and the existing tabular alias) with shared full merge validation, component deltas, explicit legacy coverage gaps, and local proposal recovery restrictions even when aggregate counts do not change.
+- Add optional `import --expect-preview SHA`: recompute inside the existing checkout lock and reject changed packets, receiver state, import provenance or checkout before publication. Preserve unguarded legacy import compatibility, packet v1/v2/v3, size limits and atomic publication.
+- Add 19 synthetic software checks and preview-bound imports to the actual isolated tabular/Airfoil fixtures. No new research experiments, model calls, scientific threshold changes or recovery authority. C11 awaits engineering review.
+
 ## 0.28.0
 
 - Complete C9 remote validation on unchanged implementation: four platform/Python checks and Linux x86_64 installation, full software suite and actual synthetic isolation all pass. Add a manual CI trigger after the original queued run could neither rerun nor cancel.

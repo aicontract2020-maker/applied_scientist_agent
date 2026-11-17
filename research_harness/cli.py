@@ -138,14 +138,18 @@ def main():
     hc.add_parser("status")
     hc.add_parser("export").add_argument("--out",required=True)
     hc.add_parser("verify").add_argument("packet")
-    hc.add_parser("import").add_argument("packet")
+    hc.add_parser("preview",help="Read-only local merge and restriction preview").add_argument("packet")
+    hi=hc.add_parser("import"); hi.add_argument("packet")
+    hi.add_argument("--expect-preview",help="Require the exact preview SHA before atomic import")
     handoff_root=sub.add_parser("handoff",help="Atomic regression/Airfoil exclusions and data pauses; no execution")
     handoff_root.add_argument("--root",help="Checkout state; default: this installation's checkout")
     rhc=handoff_root.add_subparsers(dest="handoff_command",required=True)
     rhc.add_parser("status")
     rhc.add_parser("export").add_argument("--out",required=True)
     rhc.add_parser("verify").add_argument("packet")
-    rhc.add_parser("import").add_argument("packet")
+    rhc.add_parser("preview",help="Read-only local merge and restriction preview").add_argument("packet")
+    hi=rhc.add_parser("import"); hi.add_argument("packet")
+    hi.add_argument("--expect-preview",help="Require the exact preview SHA before atomic import")
     tab_evidence=tabular_commands.add_parser("evidence",help="PRIVATE full evidence, including labels and paper text; no publishing")
     te=tab_evidence.add_subparsers(dest="tabular_evidence_command",required=True)
     command=te.add_parser("export"); command.add_argument("--review",required=True); command.add_argument("--out",required=True)
@@ -198,7 +202,8 @@ def main():
             if args.handoff_command=='status': output=th.status(**options)
             elif args.handoff_command=='export': output=th.export(args.out,**options)
             elif args.handoff_command=='verify': output=th.verify(args.packet)
-            else: output=th.import_state(args.packet,**options)
+            elif args.handoff_command=='preview': output=th.preview(args.packet,**options)
+            else: output=th.import_state(args.packet,expect_preview=args.expect_preview,**options)
         elif args.command == "data-blocks":
             from . import data_blocks as db
             options = {'root': args.root} if args.root is not None else {}
@@ -246,7 +251,8 @@ def main():
                 if args.tabular_handoff_command=='status': output=th.status(**options)
                 elif args.tabular_handoff_command=='export': output=th.export(args.out,**options)
                 elif args.tabular_handoff_command=='verify': output=th.verify(args.packet)
-                else: output=th.import_state(args.packet,**options)
+                elif args.tabular_handoff_command=='preview': output=th.preview(args.packet,**options)
+                else: output=th.import_state(args.packet,expect_preview=args.expect_preview,**options)
             elif args.tabular_command == "memory":
                 from .portable import ROOT
                 from .tabular_memory import snapshot,export_memory,import_memory,retain_trial
