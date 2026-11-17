@@ -1,0 +1,546 @@
+{
+  "code_commit": "853c2760a44c85099bc5aa0c89aa05b9d14983e3",
+  "date": "2026-11-17",
+  "primary_run_url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44139096620",
+  "manual_recovery_run_url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44141038775",
+  "manual_dispatches": 1,
+  "recovery_reason": "Primary macOS jobs remained queued without a runner for over ten minutes; one same-commit dispatch, identical workflow and tests. No test or threshold changes.",
+  "primary_jobs": [
+    {
+      "id": 134236631540,
+      "name": "linux-x86_64",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 44139096620,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "OS tools and tested Codex CLI (no login)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Check rootless namespaces; configure only bwrap if needed",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Fresh CPU-only Python environment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Software tests (synthetic only)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Actual kernel boundary probes (no credentials or model calls)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Actual preregistration rejection probes (no images or model calls)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Offline reviewed workflow",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Task catalog and second-domain software fixture (no model or assets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Independent tabular environment and actual isolated synthetic baseline",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27
+        }
+      ]
+    },
+    {
+      "id": 134236631928,
+      "name": "data-review-portability (macos-15, 3.12)",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "run_id": 44139096620,
+      "logs_url": null,
+      "steps": null
+    },
+    {
+      "id": 134236631957,
+      "name": "data-review-portability (macos-15, 3.10)",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "run_id": 44139096620,
+      "logs_url": null,
+      "steps": null
+    },
+    {
+      "id": 134236632028,
+      "name": "data-review-portability (ubuntu-24.04, 3.12)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 44139096620,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Offline data qualification software checks (no extra dependencies)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        }
+      ]
+    },
+    {
+      "id": 134236632316,
+      "name": "data-review-portability (ubuntu-24.04, 3.10)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 44139096620,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Offline data qualification software checks (no extra dependencies)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        }
+      ]
+    }
+  ],
+  "recovery_jobs": [
+    {
+      "id": 134243583296,
+      "name": "data-review-portability (macos-15, 3.12)",
+      "status": "queued",
+      "conclusion": null,
+      "run_id": 44141038775,
+      "logs_url": null,
+      "steps": null
+    },
+    {
+      "id": 134243583867,
+      "name": "data-review-portability (ubuntu-24.04, 3.12)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 44141038775,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Offline data qualification software checks (no extra dependencies)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        }
+      ]
+    },
+    {
+      "id": 134243583896,
+      "name": "data-review-portability (ubuntu-24.04, 3.10)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 44141038775,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Offline data qualification software checks (no extra dependencies)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        }
+      ]
+    },
+    {
+      "id": 134243583914,
+      "name": "data-review-portability (macos-15, 3.10)",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 44141038775,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Offline data qualification software checks (no extra dependencies)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        }
+      ]
+    },
+    {
+      "id": 134243583964,
+      "name": "linux-x86_64",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 44141038775,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "OS tools and tested Codex CLI (no login)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Check rootless namespaces; configure only bwrap if needed",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Fresh CPU-only Python environment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Software tests (synthetic only)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Actual kernel boundary probes (no credentials or model calls)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Actual preregistration rejection probes (no images or model calls)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Offline reviewed workflow",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Task catalog and second-domain software fixture (no model or assets)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Independent tabular environment and actual isolated synthetic baseline",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27
+        }
+      ]
+    }
+  ],
+  "linux_full_suite": {
+    "tests": 307,
+    "skipped": 0,
+    "passed": true
+  },
+  "linux_kernel_probes_passed": true,
+  "linux_four_synthetic_flows_passed": true,
+  "read_only_preview_and_bound_import_checked": true,
+  "stale_preview_rejected": true,
+  "new_real_research_experiments": 0,
+  "research_model_calls": 0,
+  "status": "PARTIAL_MACOS_312_PENDING",
+  "verified_pass": false,
+  "primary_observed_at_utc": "2026-11-17T17:54:31Z",
+  "recovery_observed_at_utc": "2026-11-17T17:56:05Z",
+  "cancellation_requests_made": 0,
+  "original_macos_jobs_later_cancelled_reason": null,
+  "pending_job": {
+    "id": 134243583296,
+    "name": "data-review-portability (macos-15, 3.12)",
+    "status": "queued",
+    "conclusion": null
+  }
+}

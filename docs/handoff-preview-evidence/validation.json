@@ -51,6 +51,15 @@
       "read_only_preview_and_bound_import_checked": true,
       "real_data_scored": false,
       "model_calls": 0
+    },
+    "independent_python_3_10": {
+      "python": "3.10.20",
+      "platform": "macOS 26.5.1 aarch64",
+      "tests": 307,
+      "skipped": 9,
+      "passed": true,
+      "environment": "Temporary Python runtime; no project or system dependency changes",
+      "not_a_substitute_for_github_macos_15_jobs": true
     }
   },
   "unchanged_from": "09cc76aaca956e2a685338c5b9c98f5140a2ece7",
@@ -69,9 +78,29 @@
   "scientific_evaluators_recipes_prompts_isolation_and_task_contract_files_unchanged": true,
   "historical_task_files_unchanged": true,
   "remote_ci": {
-    "status": "PENDING_AFTER_PUSH"
+    "status": "PARTIAL_MACOS_312_PENDING",
+    "verified_pass": false,
+    "report": "remote-validation.json",
+    "primary_run_id": 44139096620,
+    "manual_recovery_run_id": 44141038775,
+    "code_commit": "853c2760a44c85099bc5aa0c89aa05b9d14983e3",
+    "linux_x86_64_tests": 307,
+    "linux_x86_64_skipped": 0,
+    "linux_kernel_and_four_synthetic_flows_passed": true,
+    "portability_passed": [
+      "ubuntu-24.04 Python 3.10",
+      "ubuntu-24.04 Python 3.12",
+      "macos-15 Python 3.10"
+    ],
+    "portability_pending": [
+      "macos-15 Python 3.12"
+    ],
+    "manual_dispatches": 1,
+    "cancellation_requests_made": 0,
+    "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44141038775"
   },
   "new_real_research_experiments": 0,
   "research_model_calls": 0,
-  "author_messages_sent": 0
+  "author_messages_sent": 0,
+  "code_commit": "853c2760a44c85099bc5aa0c89aa05b9d14983e3"
 }

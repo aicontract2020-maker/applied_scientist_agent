@@ -1,6 +1,6 @@
 # C11 工程验收：只读交接预览与绑定导入
 
-2026-11-17，0.29.0，**AWAITING_ENGINEERING_REVIEW**。C10 已由用户验收。
+2026-11-17，0.29.0，**AWAITING_ENGINEERING_REVIEW — REMOTE_MACOS_312_PENDING**。C10 已由用户验收。
 本轮只做框架研发和软件合成验证，不运行新的研究实验。
 
 ## 交付
@@ -26,8 +26,19 @@ v1/v2/v3、限额、停止规则和一次原子发布保持。见 [操作说明]
   过期预览拒绝；没有研究模型调用或真实数据评分。
 - 相对 C10，运行模块仅修改 CLI 和统一交接；配方、评价器、任务契约、提示、
   隔离和历史任务文件未改。包格式/校验及原子发布函数的语法树完全保持。
-- [结构化验证记录](handoff-preview-evidence/validation.json)已包含本地结果；
-  远端检查推送后补入，尚未取得的结果不计为通过。
+- 临时 macOS 26.5.1 ARM64 Python 3.10.20 环境也完成 307 项检查，9 项因可选
+  科学依赖缺失跳过；没有修改系统 Python 或项目依赖，不替代托管 macOS 15。
+- 远端同一代码提交 `853c276` 的 Linux x86_64 完整安装、**307 项测试无跳过**、
+  内核隔离、预注册拒绝及四套基线/候选合成流程通过。四组兼容检查已有三组
+  通过：Linux Python 3.10/3.12、macOS 15 Python 3.10。
+- **macOS 15 Python 3.12 远端结果仍缺失**。截至 2026-11-17 17:56 UTC，
+  [单次手动补验](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44141038775)
+  中该任务仍排队。原运行的两项 macOS 任务长时间未分配机器，后变为取消，
+  接口未给原因；本轮没有发出取消请求。补验固定同一提交、相同工作流，未改
+  测试或标准；不将本地结果冒充远端通过。
+
+详见[结构化验证记录](handoff-preview-evidence/validation.json)与[远端任务快照](handoff-preview-evidence/remote-validation.json)。
+实现与已有证据供审查，完整跨平台验收保留上述缺口，未标记全部通过。
 
 ## 请审查
 
