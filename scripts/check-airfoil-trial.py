@@ -64,6 +64,21 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
         except ValueError as e: assert 'reserved/consumed' in str(e)
         else: raise AssertionError('Airfoil handoff released consumed data')
     assert at.audit(trial)['audit_ok'] and ab.audit(base)['audit_ok']
+    from research_harness import airfoil_evidence
+    evidence=folder/'private-airfoil-evidence.json'
+    airfoil_evidence.export(trial,evidence)
+    assert airfoil_evidence.verify(evidence)['audit_ok']
+    received=airfoil_evidence.unpack(evidence,folder/'private-review')
+    copied=Path(received['review'])
+    assert at.audit(copied)['audit_ok'] and ab.audit(copied/'baseline')['audit_ok']
+    assert not (folder/'private-review/.research-memory').exists()
+    for operation in (lambda: at.preflight(copied,root=receiver),
+                      lambda: ab.preflight(copied/'baseline',root=receiver),
+                      lambda: at.prepare(copied/'baseline','unused',folder/'forbidden',root=receiver)):
+        try: operation()
+        except ValueError as e: assert 'read-only' in str(e)
+        else: raise AssertionError('Imported Airfoil evidence enabled active work')
+    assert len(airfoil_memory.snapshot(receiver))==2
     p=trial/'trial-run/output/predictions.json';raw=json.loads(p.read_text())
     raw['results'][0]['validation_predictions'][0]+=1;p.write_text(json.dumps(raw))
     try: at.audit(trial)
@@ -75,4 +90,5 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
         'data_pause_preserves_historical_audit':True,'paused_preparation_rejected':True,
         'airfoil_baseline_and_candidate_handoff_checked':True,'v2_handoff_includes_airfoil':True,
         'read_only_preview_and_bound_import_checked':True,
+        'private_airfoil_evidence_roundtrip_audited':True,'imported_approvals_rejected':True,
         'real_data_scored':False,'model_calls':0},indent=2))

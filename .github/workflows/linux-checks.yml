@@ -9,7 +9,9 @@ jobs:
   data-review-portability:
     strategy:
       matrix:
-        os: [ubuntu-24.04, macos-15]
+        # Standard Intel pool: ARM capacity prevented prior jobs acquiring runners.
+        # Keep both Python versions and the same macOS major/test contract.
+        os: [ubuntu-24.04, macos-15-intel]
         python: ['3.10', '3.12']
     runs-on: ${{ matrix.os }}
     timeout-minutes: 5
@@ -28,6 +30,7 @@ jobs:
           python -m unittest discover -s tests -p test_airfoil_memory.py -v
           python -m unittest discover -s tests -p test_proposal_memory.py -v
           python -m unittest discover -s tests -p test_handoff_preview.py -v
+          python -m unittest discover -s tests -p test_airfoil_evidence.py -v
           python -m examples.data_qualification.workflow --out runs/ci-data-review
   linux-x86_64:
     runs-on: ubuntu-24.04

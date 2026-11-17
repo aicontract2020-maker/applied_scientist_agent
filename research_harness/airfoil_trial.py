@@ -104,6 +104,7 @@ def validate_proposal(proposal):
 
 def prepare(base,proposal_path,output,root=ROOT,*,data_review=None,intended_use=None):
     with research_lock(root):
+        baseline.require_live_review(base)
         packet,parts,_=qualified(base); assert_available(root,packet)
         snapshot=admission.trial_snapshot(packet,ADAPTER,baseline.FIXTURE,data_review,intended_use,root=root)
         proposal=read_json(proposal_path); gate=validate_proposal(proposal)
@@ -137,6 +138,9 @@ def prepare(base,proposal_path,output,root=ROOT,*,data_review=None,intended_use=
 
 def load_trial(folder,current=True):
     folder=Path(folder)
+    if current:
+        baseline.require_live_review(folder)
+        baseline.require_live_review(folder/'baseline')
     if folder.is_symlink() or not folder.is_dir() or (folder/'baseline').is_symlink(): raise ValueError('Regular trial directory required')
     p=read_json(folder/'trial.json'); _keys(p,('content','sha256')); c=p['content']
     fields={'recipe','proposal','feature_review','baseline_sha256','scope','counts','sources','status'}

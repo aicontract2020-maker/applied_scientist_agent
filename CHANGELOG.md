@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.30.0
+
+- Record C11 acceptance and complete original-commit macOS Python 3.12 remote validation on standard Intel runners; retain the original ARM capacity failure/queue as a separate fact. Add exact-commit manual recovery and move the regular macOS matrix to the Intel pool without dropping either Python version or tests.
+- Add private Airfoil evidence export, offline verification and review-only unpack with fixed source-dependent inventories, bounded strict JSON, staged trusted audits, source-change detection and private no-overwrite outputs. Carried code is never executed; valid STOP outputs remain final.
+- Block imported candidate and embedded baseline approvals at active entry points, including new candidate preparation. Preserve historical audit, unified v3 exclusions, preregistration, evaluators and stopping rules.
+- Add synthetic software checks and actual isolated synthetic evidence roundtrip coverage. No new scientific experiment, real data scoring or research model call. C12 awaits engineering review.
+
 ## 0.29.0
 
 - Record C10 user acceptance. Add read-only `handoff preview` (and the existing tabular alias) with shared full merge validation, component deltas, explicit legacy coverage gaps, and local proposal recovery restrictions even when aggregate counts do not change.

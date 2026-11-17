@@ -157,6 +157,10 @@ def main():
     command=te.add_parser("unpack"); command.add_argument("packet"); command.add_argument("--out",required=True)
     airfoil = sub.add_parser("airfoil", help="Pinned condition-grouped public task; baseline qualification requires review")
     ac = airfoil.add_subparsers(dest="airfoil_command", required=True)
+    ae = ac.add_parser("evidence", help="Private read-only Airfoil audit evidence; no execution or memory import").add_subparsers(dest="airfoil_evidence_command", required=True)
+    ap = ae.add_parser("export"); ap.add_argument("--review", required=True); ap.add_argument("--out", required=True)
+    ae.add_parser("verify").add_argument("packet")
+    ap = ae.add_parser("unpack"); ap.add_argument("packet"); ap.add_argument("--out", required=True)
     ac.add_parser("fetch").add_argument("--out", required=True)
     ap = ac.add_parser("prepare"); ap.add_argument("--data", required=True); ap.add_argument("--out", required=True)
     ap.add_argument("--data-review", required=True, help="Accepted C4 metadata packet; not execution approval")
@@ -219,7 +223,12 @@ def main():
             else: output = dq.decide(args.packet, args.sha256, args.reviewer, args.decision, args.reason)
         elif args.command == "airfoil":
             from . import airfoil_baseline as ab
-            if args.airfoil_command.endswith("-trial"):
+            if args.airfoil_command == "evidence":
+                from . import airfoil_evidence as ae
+                if args.airfoil_evidence_command == "export": output = ae.export(args.review, args.out)
+                elif args.airfoil_evidence_command == "unpack": output = ae.unpack(args.packet, args.out)
+                else: output = ae.verify(args.packet)
+            elif args.airfoil_command.endswith("-trial"):
                 from . import airfoil_trial as at
                 if args.airfoil_command=="prepare-trial": output=at.prepare(args.baseline,args.proposal,args.out,data_review=args.data_review,intended_use=args.intended_use)
                 elif args.airfoil_command=="preflight-trial": output=at.preflight(args.review)

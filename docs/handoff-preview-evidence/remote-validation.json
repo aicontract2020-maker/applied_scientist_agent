@@ -542,5 +542,28 @@
     "name": "data-review-portability (macos-15, 3.12)",
     "status": "queued",
     "conclusion": null
+  },
+  "completion_followup": {
+    "date": "2026-11-17",
+    "user_accepted_c11": true,
+    "original_arm_job_status": "queued after one targeted rerun",
+    "original_cancel_reason": [
+      "The job was not acquired by Runner of type hosted even after multiple attempts",
+      "Due to capacity constraints, jobs targeting macOS arm64 runners may experience longer queue times."
+    ],
+    "recovery_run_url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44146265622",
+    "workflow_commit": "6facc51416bcb82aa4397368fcb2412eddefbeab",
+    "tested_commit": "853c2760a44c85099bc5aa0c89aa05b9d14983e3",
+    "runner": "macos-15-intel",
+    "platform": "macOS-15.7.9-x86_64-i386-64bit",
+    "python": "3.12.10",
+    "job_id": 134262128669,
+    "original_portability_checks": "success: 130 tests, no skips, plus offline fixture",
+    "additional_full_suite": {
+      "tests": 307,
+      "skipped": 6,
+      "status": "success"
+    },
+    "limitation": "Intel remote completion does not claim original ARM Python 3.12 success."
   }
 }

@@ -1,0 +1,75 @@
+{
+  "date": "2026-11-17",
+  "synthetic_only": true,
+  "research_model_calls": 0,
+  "real_data_scored": false,
+  "new_research_experiments": 0,
+  "local_full_python312": {
+    "tests": 320,
+    "skipped": 0,
+    "status": "success"
+  },
+  "local_python310": {
+    "tests": 320,
+    "skipped": 16,
+    "status": "success",
+    "skip_reason": "7 exact Python 3.12 Airfoil audits plus 9 preexisting optional/runtime checks"
+  },
+  "macos_actual_isolation": {
+    "synthetic_only": true,
+    "isolated_candidate_fits": 6,
+    "baseline_reproduction_passed": true,
+    "strict_audit_passed": true,
+    "tampering_rejected": true,
+    "repeat_and_copy_rejected": true,
+    "synthetic_model_predictions_changed": true,
+    "candidate_data_admission_checked": true,
+    "data_pause_preserves_historical_audit": true,
+    "paused_preparation_rejected": true,
+    "airfoil_baseline_and_candidate_handoff_checked": true,
+    "v2_handoff_includes_airfoil": true,
+    "read_only_preview_and_bound_import_checked": true,
+    "private_airfoil_evidence_roundtrip_audited": true,
+    "imported_approvals_rejected": true,
+    "real_data_scored": false,
+    "model_calls": 0
+  },
+  "baseline_commit": "6b3ad6be5d0974e987b56b0bc3b2fb4c722d6945",
+  "unchanged_scientific_ast": {
+    "research_harness/airfoil_baseline.py:RECIPE": true,
+    "research_harness/airfoil_baseline.py:qualify": true,
+    "research_harness/airfoil_baseline.py:audit": true,
+    "research_harness/airfoil_baseline.py:execute": true,
+    "research_harness/airfoil_baseline.py:worker_request": true,
+    "research_harness/airfoil_trial.py:RECIPE": true,
+    "research_harness/airfoil_trial.py:evaluate": true,
+    "research_harness/airfoil_trial.py:audit": true,
+    "research_harness/airfoil_trial.py:execute": true,
+    "research_harness/airfoil_trial.py:validate_proposal": true,
+    "research_harness/airfoil_trial.py:request": true
+  },
+  "unchanged_files": [
+    "research_harness/airfoil_data.py",
+    "research_harness/airfoil_candidate.py",
+    "research_harness/airfoil_worker.py",
+    "research_harness/airfoil_trial_worker.py",
+    "research_harness/tabular_handoff.py",
+    "research_harness/tabular_sandbox.py",
+    "research_harness/linux_isolation.py"
+  ],
+  "tasks_unchanged": true,
+  "logs": {
+    "full": {
+      "sha256": "bbc800b7f399d61a86a08a4b933559a4664b0919f7dd2d50efee4510a5c329b4",
+      "bytes": 51490
+    },
+    "python310": {
+      "sha256": "b30963609a00f2d2cf8840f157a55eb60940c7a928576109a1739e3932c02ce1",
+      "bytes": 34100
+    },
+    "airfoil-isolation": {
+      "sha256": "4edd858ac2b9f7dc2a599398c714c2c78289b008deafcf534c5a88857f2acd60",
+      "bytes": 670
+    }
+  }
+}

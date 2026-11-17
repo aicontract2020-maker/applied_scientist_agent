@@ -4,7 +4,7 @@
 
 当前完整任务是 **固定 SwinIR-S ×2 图像超分的确定性后处理研究**，不是任意领域的通用科学家。基础工作流无需模型；完整研究使用你自己的 Codex 登录与额度。
 
-0.29.0 新增[交接前只读预览](docs/HANDOFF_PREVIEW.md)，展示本地合并变化与恢复限制；可按预览摘要绑定导入，状态变化时拒绝沿用旧预览。原有 v3 四类记录及旧包兼容保持。C10 已验收，[C11 工程验收](docs/HANDOFF_PREVIEW_REVIEW.md)待审。原有两类研究工作流保留：超分的完整自主周期，以及回归的自主提案 → 人工审核 → 单次隔离执行。回归已接入统一分阶段入口、排除记忆和私有证据交接；其 v1 数值评价契约保持不变。查看 [研发路线图](docs/ROADMAP.md)、[任务接口](docs/TASK_CONTRACTS.md) 和 [回归交接说明](docs/TABULAR_HANDOFF.md)。
+0.30.0 新增 [Airfoil 私有证据交接](docs/AIRFOIL_EVIDENCE.md)：完整历史记录离线复算，导入批准只供查看。C11 已验收并补齐 macOS Python 3.12 Intel 远端验证；[C12 工程验收](docs/AIRFOIL_EVIDENCE_REVIEW.md)待审。既有[交接前只读预览](docs/HANDOFF_PREVIEW.md)，展示本地合并变化与恢复限制；可按预览摘要绑定导入，状态变化时拒绝沿用旧预览。原有 v3 四类记录及旧包兼容保持。原有两类研究工作流保留：超分的完整自主周期，以及回归的自主提案 → 人工审核 → 单次隔离执行。回归已接入统一分阶段入口、排除记忆和私有证据交接；其 v1 数值评价契约保持不变。查看 [研发路线图](docs/ROADMAP.md)、[任务接口](docs/TASK_CONTRACTS.md) 和 [回归交接说明](docs/TABULAR_HANDOFF.md)。
 
 ```sh
 python3 -m research_harness task list

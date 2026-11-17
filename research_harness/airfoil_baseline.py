@@ -96,8 +96,16 @@ def prepare_rows(rows, output, source=FIXTURE, raw=None, *, qualification=None, 
     return {'status':'AWAITING_REVIEW','review':str(folder/'REVIEW.md'),'sha256':packet['sha256'],'counts':c['counts']}
 
 
+def require_live_review(folder):
+    marker = Path(folder) / 'EVIDENCE_ONLY.json'
+    if marker.exists() or marker.is_symlink():
+        raise ValueError('Imported Airfoil evidence is read-only; execution/preparation forbidden')
+
+
 def load_review(folder, current=True):
     folder=Path(folder)
+    if current:
+        require_live_review(folder)
     if folder.is_symlink() or not folder.is_dir(): raise ValueError('Regular Airfoil review directory required')
     packet=read_json(folder/'bundle.json'); _keys(packet,('content','sha256')); c=packet['content']
     fields = {'recipe','source','files','counts','sources','status'}
