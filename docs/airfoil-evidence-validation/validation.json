@@ -71,5 +71,13 @@
       "sha256": "4edd858ac2b9f7dc2a599398c714c2c78289b008deafcf534c5a88857f2acd60",
       "bytes": 670
     }
+  },
+  "code_commit": "405aeadd7a7d39f5cb7a07d3e512b1e3d362d11e",
+  "remote_validation": "remote-validation.json",
+  "additional_system_python39": {
+    "tests": 320,
+    "skipped": 16,
+    "status": "success",
+    "official_support_minimum": "3.10"
   }
 }

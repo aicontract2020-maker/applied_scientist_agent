@@ -3,7 +3,7 @@
 2026-11-17，0.30.0，**AWAITING_ENGINEERING_REVIEW**。C11 已由用户验收，
 其原提交在 [macOS 15 Intel / Python 3.12 定向补验](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44146265622)
 通过：原 130 项兼容检查无跳过，额外完整集 307 项、6 项可选依赖跳过。
-原 ARM 任务因容量不足取消后重跑仍排队；不计作 ARM Python 3.12 远端通过。
+原 ARM 任务重跑后仍因容量不足被取消，未执行测试；不计作 ARM Python 3.12 远端通过。
 
 ## 本次交付
 
@@ -26,7 +26,12 @@ Python 3.10 完整集 320 项、16 项因固定 3.12 审计或可选依赖跳过
 隔离合成流程通过，包含完整证据往返审计、两个层级的活动入口拒绝以及占用保留。
 研究配方、评价/审计/执行函数的语法树与上一版一致；隔离、分区、工作进程、
 统一交接与真实任务文件保持原样。[结构化验证记录](airfoil-evidence-validation/validation.json)。
-远端验证待本轮推送后补齐。仅合成软件记录及实际隔离合成流程；没有
+[远端同一代码提交 `405aead` 的五项任务全部通过](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44147687838)：
+Linux/macOS Intel × Python 3.10/3.12 四组兼容检查（每组 143 项，3.10 版本
+跳过 7 项固定 3.12 审计）；Linux x86_64 从零安装、320 项完整测试无跳过、
+实际内核隔离、预注册拒绝以及四套基线/候选合成流程。Airfoil 证据往返审计和
+导入批准拒绝也在 Linux 实际隔离中通过。[远端记录](airfoil-evidence-validation/remote-validation.json)。
+仅合成软件记录及实际隔离合成流程；没有
 新的研究实验、真实 A1/A2 数据评分、真实证据包导出、研究模型调用或外部复现。
 
 ## 请审查

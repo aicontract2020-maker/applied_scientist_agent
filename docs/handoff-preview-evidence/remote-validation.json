@@ -546,7 +546,7 @@
   "completion_followup": {
     "date": "2026-11-17",
     "user_accepted_c11": true,
-    "original_arm_job_status": "queued after one targeted rerun",
+    "original_arm_job_status": "cancelled after one targeted rerun; no steps executed",
     "original_cancel_reason": [
       "The job was not acquired by Runner of type hosted even after multiple attempts",
       "Due to capacity constraints, jobs targeting macOS arm64 runners may experience longer queue times."
@@ -564,6 +564,9 @@
       "skipped": 6,
       "status": "success"
     },
-    "limitation": "Intel remote completion does not claim original ARM Python 3.12 success."
+    "limitation": "Intel remote completion does not claim original ARM Python 3.12 success.",
+    "targeted_rerun_job_id": 134259123887,
+    "targeted_reruns": 1,
+    "intel_manual_dispatches": 1
   }
 }
