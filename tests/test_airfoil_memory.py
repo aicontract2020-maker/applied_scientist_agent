@@ -98,7 +98,7 @@ class AirfoilMemoryTests(unittest.TestCase):
         self.assertIsNone(th.verify(v1)['airfoil_records']); self.assertIn('NOT_INCLUDED',th.verify(v1)['scope'])
         th.import_state(v1,receiver); self.assertEqual(am.snapshot(receiver),[self.record(state='STOP')])
         out=self.root/'new.json'; th.export(out,receiver)
-        self.assertEqual(th.verify(out)['version'],3); self.assertEqual(th.verify(out)['airfoil_records'],1)
+        self.assertEqual(th.verify(out)['version'],4); self.assertEqual(th.verify(out)['airfoil_records'],1)
 
     def test_airfoil_conflict_prevents_importing_new_pause(self):
         path,_=self.packet([self.record(state='STOP')]); receiver=self.root/'receiver'; th.import_state(path,receiver)

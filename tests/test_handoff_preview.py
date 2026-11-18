@@ -45,8 +45,9 @@ class HandoffPreviewTests(unittest.TestCase):
         with patch.object(th,'research_lock',side_effect=AssertionError('Preview must not take a writing lock')):
             preview=th.preview(path,self.receiver)
         self.assertFalse(self.receiver.exists()); self.assertTrue(preview['read_only'])
-        self.assertFalse(preview['execution_authorized']); self.assertEqual(preview['missing_components'],[])
-        self.assertTrue(all(v['before']==0 and v['after']==1 and len(v['added'])==1 and not v['updated'] for v in preview['changes'].values()))
+        self.assertFalse(preview['execution_authorized']); self.assertEqual(preview['missing_components'],['sr_memory'])
+        self.assertTrue(all(v['before']==0 and v['after']==1 and len(v['added'])==1 and not v['updated'] for k,v in preview['changes'].items() if k!='sr_memory'))
+        self.assertEqual(preview['changes']['sr_memory'],{'before':0,'after':0,'added':[],'updated':[]})
         result=th.import_state(path,self.receiver,expect_preview=preview['preview_sha256'])
         self.assertTrue(result['preview_checked']); self.assertEqual(result['merged_state'],preview['merged_state'])
         self.assertEqual(th.status(self.receiver)['sha256'],preview['merged_state']['sha256'])
@@ -90,7 +91,7 @@ class HandoffPreviewTests(unittest.TestCase):
 
     def test_legacy_missing_components_do_not_suggest_deleting_local_records(self):
         full,_=self.packet(); th.import_state(full,self.receiver)
-        for version,missing in ((1,['airfoil_memory','proposal_memory']),(2,['proposal_memory'])):
+        for version,missing in ((1,['airfoil_memory','proposal_memory','sr_memory']),(2,['proposal_memory','sr_memory'])):
             path,_=self.packet(version=version,name=f'v{version}.json',trials=[],blocks=[],airfoil=[])
             result=th.preview(path,self.receiver)
             self.assertEqual(result['missing_components'],missing)

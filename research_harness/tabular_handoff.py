@@ -1,6 +1,6 @@
 """One atomic, additive handoff of tabular exclusions and all local data pauses.
 
-Version 3 also carries proposal occupancy; private evidence and SR stay separate. Imported
+Version 4 also carries SR exclusions; private evidence stays separate. Imported
 state is a conservative claim, never authenticated evidence or execution approval.
 """
 import json
@@ -15,39 +15,43 @@ from .state_lock import research_lock
 
 KIND = 'research-harness-tabular-state-handoff'
 COMPONENT_LIMIT = 4*1024*1024
-PACKET_LIMIT = 20*1024*1024
-VERSION_LIMITS = {1: 12*1024*1024, 2: 16*1024*1024, 3: PACKET_LIMIT}
+PACKET_LIMIT = 24*1024*1024
+VERSION_LIMITS = {1: 12*1024*1024, 2: 16*1024*1024, 3: 20*1024*1024, 4: PACKET_LIMIT}
 
 
 def _encoded(value):
     return (json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False)+'\n').encode('utf-8')
 
 
-def envelope(memory, blocks, airfoil=None, proposals=None):
+def envelope(memory, blocks, airfoil=None, proposals=None, sr=None):
     payload = {'kind': KIND, 'version': 1, 'tabular_memory': memory, 'data_blocks': blocks}
     if airfoil is not None:
         payload.update(version=2, airfoil_memory=airfoil)
     if proposals is not None:
         if airfoil is None: raise ValueError('v3 requires Airfoil and proposal components')
         payload.update(version=3, proposal_memory=proposals)
+    if sr is not None:
+        if airfoil is None or proposals is None: raise ValueError('v4 requires all five components')
+        payload.update(version=4, sr_memory=sr)
     return {'payload': payload, 'sha256': digest(payload)}
 
 
 def validate(packet):
-    from . import tabular_memory as tm, data_blocks as db, airfoil_memory as am, proposal_memory as pm
+    from . import tabular_memory as tm, data_blocks as db, airfoil_memory as am, proposal_memory as pm, memory as sm
     dq._keys(packet, ('payload', 'sha256'), 'combined handoff')
     dq._sha(packet['sha256'])
     p = packet['payload']
     if not isinstance(p, dict) or type(p.get('version')) is not int or p['version'] not in VERSION_LIMITS:
         raise ValueError('Unsupported combined handoff kind/version')
-    components = ('tabular_memory', 'data_blocks') + (('airfoil_memory',) if p['version'] >= 2 else ()) + (('proposal_memory',) if p['version'] == 3 else ())
+    components = ('tabular_memory', 'data_blocks') + (('airfoil_memory',) if p['version'] >= 2 else ()) + (('proposal_memory',) if p['version'] >= 3 else ()) + (('sr_memory',) if p['version'] >= 4 else ())
     dq._keys(p, ('kind', 'version', *components), 'combined handoff payload')
     if p['kind'] != KIND:
         raise ValueError('Unsupported combined handoff kind/version')
     tm.validate_packet(p['tabular_memory'])
     db._validate(p['data_blocks'])
     if p['version'] >= 2: am.validate_packet(p['airfoil_memory'])
-    if p['version'] == 3: pm.validate_packet(p['proposal_memory'])
+    if p['version'] >= 3: pm.validate_packet(p['proposal_memory'])
+    if p['version'] >= 4: sm.validate_packet(p['sr_memory'])
     for name in components:
         if len(_encoded(p[name])) > COMPONENT_LIMIT:
             raise ValueError('Combined handoff component exceeds 4 MiB')
@@ -89,9 +93,10 @@ def packets(root):
 
 
 def _snapshot(root):
-    from . import tabular_memory as tm, data_blocks as db, airfoil_memory as am, proposal_memory as pm
+    from . import tabular_memory as tm, data_blocks as db, airfoil_memory as am, proposal_memory as pm, memory as sm
+    from .sr_handoff import snapshot as sr_snapshot
     return validate(envelope(tm.envelope(tm.snapshot(root)), db._envelope(db._load(root)),
-                             am.envelope(am.snapshot(root)), pm.envelope(pm.snapshot(root))))
+                             am.envelope(am.snapshot(root)), pm.envelope(pm.snapshot(root)), sm.envelope(sr_snapshot(root))))
 
 
 def _summary(packet):
@@ -101,11 +106,17 @@ def _summary(packet):
             'tabular_records': len(p['tabular_memory']['payload']['records']),
             'data_block_records': len(p['data_blocks']['content']['records']),
             'airfoil_records': len(p['airfoil_memory']['content']['records']) if p['version'] >= 2 else None,
-            'proposal_records': len(p['proposal_memory']['content']['records']) if p['version'] == 3 else None,
+            'proposal_records': len(p['proposal_memory']['content']['records']) if p['version'] >= 3 else None,
+            'sr_studies': len(p['sr_memory']['payload']['studies']) if p['version'] >= 4 else None,
+            'sr_scored_originals': len(p['sr_memory']['payload']['scored_ids']) if p['version'] >= 4 else None,
+            'sr_reserved_originals': len(p['sr_memory']['payload']['reserved_ids']) if p['version'] >= 4 else None,
+            'sr_papers': len(p['sr_memory']['payload']['paper_ids']) if p['version'] >= 4 else None,
+            'sr_routes': len(p['sr_memory']['payload']['routes']) if p['version'] >= 4 else None,
             'execution_authorized': False, 'authenticity': 'UNVERIFIED',
             'scope': 'Tabular exclusions, data pauses'+(' and Airfoil exclusions' if p['version'] >= 2 else '; Airfoil NOT_INCLUDED')
-                     + ('; tabular proposal occupancy' if p['version'] == 3 else '; proposer NOT_INCLUDED')
-                     + '; no SR reservations, recovery authority or private evidence'}
+                     + ('; tabular proposal occupancy' if p['version'] >= 3 else '; proposer NOT_INCLUDED')
+                     + ('; SR exclusions and reservations' if p['version'] >= 4 else '; SR NOT_INCLUDED')
+                     + '; no recovery authority or private evidence'}
 
 
 def status(root=ROOT):
@@ -121,21 +132,26 @@ def verify(path):
 
 def _records(packet):
     """Missing legacy components are absent claims, never deletions."""
+    from .sr_handoff import records
+    from .memory import merge
     p = packet['payload']
     return {'tabular_memory': p['tabular_memory']['payload']['records'],
             'data_blocks': p['data_blocks']['content']['records'],
             'airfoil_memory': p.get('airfoil_memory', {}).get('content', {}).get('records', []),
-            'proposal_memory': p.get('proposal_memory', {}).get('content', {}).get('records', [])}
+            'proposal_memory': p.get('proposal_memory', {}).get('content', {}).get('records', []),
+            'sr_memory': records(p.get('sr_memory', {}).get('payload', merge()))}
 
 
 def _merge(current, incoming):
     """The same complete validation and union for preview and actual import."""
-    from . import tabular_memory as tm, data_blocks as db, airfoil_memory as am, proposal_memory as pm
+    from . import tabular_memory as tm, data_blocks as db, airfoil_memory as am, proposal_memory as pm, memory as sm
     a, b = _records(current), _records(incoming)
     return validate(envelope(tm.envelope(tm.merge(a['tabular_memory'], b['tabular_memory'])),
                              db._envelope(db.merge(a['data_blocks'], b['data_blocks'])),
                              am.envelope(am.merge(a['airfoil_memory'], b['airfoil_memory'])),
-                             pm.envelope(pm.merge(a['proposal_memory'], b['proposal_memory']))))
+                             pm.envelope(pm.merge(a['proposal_memory'], b['proposal_memory'])),
+                             sm.envelope(sm.merge(current['payload']['sr_memory']['payload'],
+                                 incoming['payload'].get('sr_memory', {}).get('payload', sm.merge())))))
 
 
 def _changes(current, merged):
@@ -204,7 +220,7 @@ def export(output, root=ROOT):
         packet = _snapshot(root)
         _publish(packet, output)
     return {'status': 'EXPORTED', **_summary(packet),
-            'sharing_note': 'Contains route/source text, row fingerprints, reviewer names and pause reasons. Review before sharing.'}
+            'sharing_note': 'Contains route/source text, image IDs, paper IDs, study bindings, row fingerprints, reviewer names and pause reasons. Review before sharing.'}
 
 
 def import_state(path, root=ROOT, *, expect_preview=None):

@@ -68,7 +68,7 @@ class ProposalMemoryTests(unittest.TestCase):
             th.import_state(legacy,receiver)
             self.assertEqual(pm.snapshot(receiver),[self.record])
         out=self.root/'forward.json'; th.export(out,receiver)
-        self.assertEqual(th.verify(out)['version'],3)
+        self.assertEqual(th.verify(out)['version'],4)
         self.assertEqual(th.verify(out)['proposal_records'],1)
 
     def test_conflicting_fourth_component_prevents_new_pause(self):

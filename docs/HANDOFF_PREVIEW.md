@@ -1,16 +1,17 @@
 # 交接导入前预览（C11）
 
 0.29 在不写入本地约束的情况下检查统一交接包与当前 checkout 能否合并，并
-显示会增加/更新的记录。格式保持 v3，继续读取 v1/v2；无需迁移旧包。
+显示会增加/更新的记录。当前 0.31 默认导出 v4，继续读取 v1/v2/v3；
+新增 SR 组件见 [C13 操作说明](SR_UNIFIED_HANDOFF.md)，无需重写旧包。
 
 ```sh
-python3 -m research_harness handoff --root /path/to/receiver preview /private/state-v3.json
+python3 -m research_harness handoff --root /path/to/receiver preview /private/state-v4.json
 # 审阅输出后，将其中的 preview_sha256 原样用于导入
-python3 -m research_harness handoff --root /path/to/receiver import /private/state-v3.json --expect-preview SHA_FROM_PREVIEW
+python3 -m research_harness handoff --root /path/to/receiver import /private/state-v4.json --expect-preview SHA_FROM_PREVIEW
 ```
 
 旧 `tabular handoff` 别名提供相同功能。`verify` 仍只校验外部包的格式和摘要，
-不检查本地合并；`preview` 同时读取当前回归、数据暂停、Airfoil 和提案记录。
+不检查本地合并；`preview` 同时读取当前回归、数据暂停、Airfoil、提案及 SR 记录。
 预览不会创建 checkout、锁文件、记忆、研究目录或批准，只向标准输出显示结果。
 
 ## 阅读预览
@@ -26,7 +27,7 @@ python3 -m research_harness handoff --root /path/to/receiver import /private/sta
 - 上述恢复范围只披露限制，**不认定本机有资格恢复**；预览不读取模型输出、
   失败日志或恢复证据，不放宽原来零事件、无提案、单次本机恢复的条件。
 
-冲突、损坏和超出原合并限额均报错；预览和导入使用同一套四组件合并函数。
+冲突、损坏和超出原合并限额均报错；预览和导入使用同一套五组件合并函数。
 没有部分成功的合并结果或“忽略冲突”选项，仍由操作者核对已有证据。
 
 ## 按预览导入
@@ -50,5 +51,5 @@ python3 -m research_harness handoff --root /path/to/receiver import /private/sta
 或启动任何研究。锁只协调遵守同一 checkout 协议的进程，不是跨机器实时锁，
 也不防御恶意进程绕过文件协议。这里的摘要检查不是签名、身份认证或权限系统。
 
-保持 SR 记忆、完整私有证据独立，既有 STOP、占用、暂停、数据资格、预注册、
+SR 记忆已纳入 v4；完整私有证据仍独立。既有 STOP、占用、暂停、数据资格、预注册、
 人工执行批准和隔离边界均不变。此功能不会开启研究模型、训练、评分或恢复。

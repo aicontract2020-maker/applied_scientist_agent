@@ -106,7 +106,7 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     except ValueError as exc: assert 'preview changed' in str(exc)
     else: raise AssertionError('Stale preview was accepted')
     assert tabular_handoff.import_state(combined,root=receiver)['status']=='ALREADY_IMPORTED'
-    assert tabular_handoff.verify(combined)['version']==3
+    assert tabular_handoff.verify(combined)['version']==4
     assert tabular_handoff.verify(combined)['proposal_records']==1
     assert proposal_memory.snapshot(receiver)==proposal_memory.snapshot(work)
     for recovery in (False,True):

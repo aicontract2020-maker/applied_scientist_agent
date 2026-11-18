@@ -141,7 +141,7 @@ def main():
     hc.add_parser("preview",help="Read-only local merge and restriction preview").add_argument("packet")
     hi=hc.add_parser("import"); hi.add_argument("packet")
     hi.add_argument("--expect-preview",help="Require the exact preview SHA before atomic import")
-    handoff_root=sub.add_parser("handoff",help="Atomic regression/Airfoil exclusions and data pauses; no execution")
+    handoff_root=sub.add_parser("handoff",help="Atomic SR/regression/Airfoil exclusions, proposal occupancy and data pauses; no execution")
     handoff_root.add_argument("--root",help="Checkout state; default: this installation's checkout")
     rhc=handoff_root.add_subparsers(dest="handoff_command",required=True)
     rhc.add_parser("status")

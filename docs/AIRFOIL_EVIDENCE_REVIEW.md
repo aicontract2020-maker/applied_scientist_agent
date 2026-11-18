@@ -1,6 +1,6 @@
 # C12 工程验收：Airfoil 私有证据交接
 
-2026-11-17，0.30.0，**AWAITING_ENGINEERING_REVIEW**。C11 已由用户验收，
+2026-11-17，0.30.0，**ACCEPTED**。C11 已由用户验收，
 其原提交在 [macOS 15 Intel / Python 3.12 定向补验](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44146265622)
 通过：原 130 项兼容检查无跳过，额外完整集 307 项、6 项可选依赖跳过。
 原 ARM 任务重跑后仍因容量不足被取消，未执行测试；不计作 ARM Python 3.12 远端通过。
@@ -41,3 +41,5 @@ Linux/macOS Intel × Python 3.10/3.12 四组兼容检查（每组 143 项，3.10
 
 SR 预留迁移、通用任务适配、跨机器实时协调、Delft 数据资格及 D1 人类效率
 对照仍未完成；本次不宣称研究能力或商业效果已经得到新的实证支持。
+
+2026-11-18，用户明确验收 C12 通过，授权继续框架研发与验证推送；仍不运行新的研究实验。

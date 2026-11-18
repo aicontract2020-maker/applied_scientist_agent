@@ -137,7 +137,10 @@ def envelope(payload):
 
 
 def load_packet(path):
-    value = read_json(path)
+    return validate_packet(read_json(path))
+
+
+def validate_packet(value):
     _keys(value, ('payload', 'sha256'))
     _hash(value['sha256'])
     validate(value['payload'])
@@ -175,14 +178,20 @@ def merge(*payloads):
 
 
 def imported(root):
-    packets = Path(root)/'.research-memory/packets'
+    from .data_qualification import _regular_path, _read
+    from .tabular_handoff import packets as unified_packets
+    packets = _regular_path(Path(root).resolve()/'.research-memory/packets')
     values = []
     if packets.exists():
+        if not packets.is_dir(): raise ValueError('SR memory store must be a directory')
         for path in sorted(packets.glob('*.json')):
+            _read(path, MAX_BYTES)
             packet = load_packet(path)
             if path.stem != packet['sha256']:
                 raise ValueError('Stored research-memory packet name/hash mismatch')
             values.append(packet['payload'])
+    values.extend(p['payload']['sr_memory']['payload'] for p in unified_packets(root)
+                  if 'sr_memory' in p['payload'])
     return merge(*values)
 
 

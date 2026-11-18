@@ -51,6 +51,17 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
     else: raise AssertionError('Paused data allowed candidate preparation')
     assert not (folder/'blocked-copy').exists()
     from research_harness import tabular_handoff,airfoil_memory
+    # Explicit synthetic SR exclusions coexist with this unrelated Airfoil task.
+    from research_harness import memory as sr_memory, tabular_memory, proposal_memory
+    sr_claim=sr_memory.merge()
+    sr_claim['reserved_ids']=['img_100']
+    sr_claim['paper_ids']=['1234.56789']
+    sr_claim['routes']=[sr_memory._route('software-fixture','Synthetic stopped mechanism','STOP')]
+    sr_seed=folder/'synthetic-sr-state.json'
+    sr_seed.write_bytes(tabular_handoff._encoded(tabular_handoff.envelope(
+        tabular_memory.envelope([]),data_blocks._envelope([]),airfoil_memory.envelope([]),
+        proposal_memory.envelope([]),sr_memory.envelope(sr_claim))))
+    tabular_handoff.import_state(sr_seed,root=memory)
     combined=folder/'handoff.json'; tabular_handoff.export(combined,root=memory)
     receiver=folder/'receiver'; preview=tabular_handoff.preview(combined,root=receiver)
     assert not receiver.exists()
@@ -58,6 +69,8 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
     assert imported['preview_checked'] and imported['merged_state']==preview['merged_state']
     assert len(airfoil_memory.snapshot(receiver))==2
     assert tabular_handoff.verify(combined)['airfoil_records']==2
+    assert tabular_handoff.verify(combined)['version']==4
+    assert sr_memory.imported(receiver)==sr_claim
     for phase,identity in (('baseline',ab.scope(json.loads((base/'bundle.json').read_text()))),
                            ('candidate',at.scope(json.loads((base/'bundle.json').read_text())))):
         try: airfoil_memory.assert_available(phase,identity,receiver,at.MECHANISM)
@@ -91,4 +104,5 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
         'airfoil_baseline_and_candidate_handoff_checked':True,'v2_handoff_includes_airfoil':True,
         'read_only_preview_and_bound_import_checked':True,
         'private_airfoil_evidence_roundtrip_audited':True,'imported_approvals_rejected':True,
+        'v4_sr_exclusions_preserved_with_airfoil_and_pause':True,
         'real_data_scored':False,'model_calls':0},indent=2))

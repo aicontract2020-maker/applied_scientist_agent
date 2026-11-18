@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.31.0
+
+- Record C12 acceptance. Extend unified handoff to v4 with the existing SR memory v1 as a fifth component: scored/reserved originals, literature exclusions, route dispositions and frozen study identities. Retain all earlier version byte limits; v4 is bounded at 24 MiB and every component at 4 MiB.
+- Preserve additive SR merge and atomic five-component publication. Existing SR memory/preparation reads unified imports, old packets disclose missing SR, and preview shows individual exclusions and same-count state updates. Imported history grants no execution or recovery authority.
+- Reject incomplete SR template/reservation metadata and linked or non-directory legacy stores during unified intake. Add 16 synthetic tests and SR constraint preservation to the actual isolated Airfoil fixture. No scientific evaluator, preregistration, isolation or real task changes; no new research experiment. C13 awaits engineering review.
+
 ## 0.30.0
 
 - Record C11 acceptance and complete original-commit macOS Python 3.12 remote validation on standard Intel runners; retain the original ARM capacity failure/queue as a separate fact. Add exact-commit manual recovery and move the regular macOS matrix to the Intel pool without dropping either Python version or tests.

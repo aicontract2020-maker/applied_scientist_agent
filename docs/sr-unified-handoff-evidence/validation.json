@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-18",
+  "synthetic_only": true,
+  "new_research_experiments": 0,
+  "research_model_calls": 0,
+  "real_data_scored": false,
+  "baseline_commit": "f986514e0c0ed7281848a4f51e6de92339e6ff93",
+  "local_macos_python312": {
+    "tests": 336,
+    "skipped": 0,
+    "status": "success"
+  },
+  "local_macos_python310": {
+    "tests": 336,
+    "skipped": 16,
+    "status": "success",
+    "skip_reason": "Existing Python 3.12-only audits and optional scientific dependencies"
+  },
+  "unchanged_ast": {
+    "research_harness/memory.py:validate": true,
+    "research_harness/memory.py:merge": true,
+    "research_harness/memory.py:snapshot": true,
+    "research_harness/tabular_handoff.py:_publish": true,
+    "research_harness/tabular_handoff.py:import_state": true,
+    "research_harness/tabular_handoff.py:_preview": true
+  },
+  "unchanged_runtime_files": [
+    "research_harness/portable.py",
+    "research_harness/autonomy.py",
+    "research_harness/onboarding.py",
+    "research_harness/intervention_review.py",
+    "research_harness/sr_evaluation.py",
+    "research_harness/linux_isolation.py",
+    "research_harness/tabular_sandbox.py",
+    "research_harness/airfoil_baseline.py",
+    "research_harness/airfoil_trial.py",
+    "research_harness/tabular_trial.py"
+  ],
+  "tasks_and_templates_unchanged": true,
+  "logs": {
+    "full": {
+      "sha256": "76ae55b2068530bde358360b62e659bcc2c0d3d206fa422f389578a835be5774",
+      "bytes": 54506
+    },
+    "python310": {
+      "sha256": "5cec70cefab35931e6ce220904673c32a2717c5e1d9aeb26b5401d9f1656947b",
+      "bytes": 36049
+    },
+    "airfoil-isolation": {
+      "sha256": "808ed7347c5b6d50799a387a8237068380d650bd88ba07d336aa8acb5de9d4b5",
+      "bytes": 731
+    },
+    "tabular-isolation": {
+      "sha256": "27d6e41ff61787de2aaa2cc9c1187bdb7fec77c75029bf303713a88de37ed6e6",
+      "bytes": 683
+    }
+  },
+  "airfoil-isolation": {
+    "synthetic_only": true,
+    "isolated_candidate_fits": 6,
+    "baseline_reproduction_passed": true,
+    "strict_audit_passed": true,
+    "tampering_rejected": true,
+    "repeat_and_copy_rejected": true,
+    "synthetic_model_predictions_changed": true,
+    "candidate_data_admission_checked": true,
+    "data_pause_preserves_historical_audit": true,
+    "paused_preparation_rejected": true,
+    "airfoil_baseline_and_candidate_handoff_checked": true,
+    "v2_handoff_includes_airfoil": true,
+    "read_only_preview_and_bound_import_checked": true,
+    "private_airfoil_evidence_roundtrip_audited": true,
+    "imported_approvals_rejected": true,
+    "v4_sr_exclusions_preserved_with_airfoil_and_pause": true,
+    "real_data_scored": false,
+    "model_calls": 0
+  },
+  "tabular-isolation": {
+    "synthetic_only": true,
+    "actual_isolated_six_fit_trial": true,
+    "strict_audit_passed": true,
+    "tampering_rejected": true,
+    "repeat_execution_rejected": true,
+    "private_evidence_and_memory_handoff": true,
+    "data_pause_and_additive_handoff_checked": true,
+    "historical_audit_after_pause": true,
+    "combined_state_handoff_checked": true,
+    "combined_receiver_still_review_only": true,
+    "proposal_occupancy_handoff_checked": true,
+    "proposal_occupancy_preserves_review_and_execution": true,
+    "read_only_preview_and_bound_import_checked": true,
+    "stale_preview_rejected": true,
+    "candidate_data_admission_checked": true,
+    "real_data_scored": false,
+    "model_calls": 0
+  }
+}
