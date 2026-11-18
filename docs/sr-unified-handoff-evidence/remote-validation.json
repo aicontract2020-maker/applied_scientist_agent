@@ -1,0 +1,141 @@
+{
+  "date": "2026-11-18",
+  "code_commit": "763d9485261122ab1dab2806b4eacfc6948bf8ec",
+  "run_url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44387286960",
+  "all_five_jobs_success": true,
+  "jobs": [
+    {
+      "id": 135095173206,
+      "name": "linux-x86_64",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 135095173486,
+      "name": "data-review-portability (ubuntu-24.04, 3.12)",
+      "status": "completed",
+      "conclusion": "success",
+      "job_id": 135095173486,
+      "reported_tests": 159,
+      "skipped": 0,
+      "test_module_counts": [
+        15,
+        11,
+        14,
+        18,
+        18,
+        17,
+        18,
+        19,
+        13,
+        16
+      ],
+      "environment": [
+        "2026-11-18T20:05:32.4041705Z Successfully set up CPython (3.12.16)"
+      ],
+      "sr_test_result": [
+        "2026-11-18T20:05:50.5712763Z Ran 16 tests in 1.467s"
+      ]
+    },
+    {
+      "id": 135095173611,
+      "name": "data-review-portability (ubuntu-24.04, 3.10)",
+      "status": "completed",
+      "conclusion": "success",
+      "job_id": 135095173611,
+      "reported_tests": 159,
+      "skipped": 7,
+      "test_module_counts": [
+        15,
+        11,
+        14,
+        18,
+        18,
+        17,
+        18,
+        19,
+        13,
+        16
+      ],
+      "environment": [
+        "2026-11-18T20:05:33.0240115Z Successfully set up CPython (3.10.22)"
+      ],
+      "sr_test_result": [
+        "2026-11-18T20:05:47.2668585Z Ran 16 tests in 2.116s"
+      ]
+    },
+    {
+      "id": 135095173747,
+      "name": "data-review-portability (macos-15-intel, 3.12)",
+      "status": "completed",
+      "conclusion": "success",
+      "job_id": 135095173747,
+      "reported_tests": 159,
+      "skipped": 0,
+      "test_module_counts": [
+        15,
+        11,
+        14,
+        18,
+        18,
+        17,
+        18,
+        19,
+        13,
+        16
+      ],
+      "environment": [
+        "2026-11-18T20:05:26.4529380Z Successfully set up CPython (3.12.10)"
+      ],
+      "sr_test_result": [
+        "2026-11-18T20:07:04.1981080Z Ran 16 tests in 10.372s"
+      ]
+    },
+    {
+      "id": 135095173768,
+      "name": "data-review-portability (macos-15-intel, 3.10)",
+      "status": "completed",
+      "conclusion": "success",
+      "job_id": 135095173768,
+      "reported_tests": 159,
+      "skipped": 7,
+      "test_module_counts": [
+        15,
+        11,
+        14,
+        18,
+        18,
+        17,
+        18,
+        19,
+        13,
+        16
+      ],
+      "environment": [
+        "2026-11-18T20:05:30.4230010Z Successfully set up CPython (3.10.21)"
+      ],
+      "sr_test_result": [
+        "2026-11-18T20:06:30.6454140Z Ran 16 tests in 12.842s"
+      ]
+    }
+  ],
+  "linux": {
+    "full_tests": 336,
+    "skipped": 0,
+    "installation": "fresh CPU-only environment",
+    "software_scope": "Actual kernel isolation, preregistration rejection, offline examples, four synthetic baseline/candidate flows",
+    "log_checks": [
+      "2026-11-18T20:08:49.1349675Z Ran 336 tests in 25.266s",
+      "2026-11-18T20:08:49.1349999Z OK",
+      "2026-11-18T20:09:02.1171128Z   \"actual_kernel_and_fixed_models_passed\": true,",
+      "2026-11-18T20:09:05.1218795Z   \"stale_preview_rejected\": true,",
+      "2026-11-18T20:09:14.4245910Z   \"private_airfoil_evidence_roundtrip_audited\": true,",
+      "2026-11-18T20:09:14.4246266Z   \"imported_approvals_rejected\": true,",
+      "2026-11-18T20:09:14.4246524Z   \"v4_sr_exclusions_preserved_with_airfoil_and_pause\": true,"
+    ]
+  },
+  "remote_macos_architecture": "x86_64",
+  "local_macos_architecture": "arm64",
+  "new_research_experiments": 0,
+  "real_data_scored": false
+}

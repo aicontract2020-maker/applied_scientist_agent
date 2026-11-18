@@ -93,5 +93,13 @@
     "candidate_data_admission_checked": true,
     "real_data_scored": false,
     "model_calls": 0
+  },
+  "code_commit": "763d9485261122ab1dab2806b4eacfc6948bf8ec",
+  "remote_validation": "remote-validation.json",
+  "additional_system_python39": {
+    "tests": 336,
+    "skipped": 16,
+    "status": "success",
+    "official_support_minimum": "3.10"
   }
 }

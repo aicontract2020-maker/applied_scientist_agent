@@ -29,7 +29,14 @@
 
 SR 原校验/合并/快照函数、原子发布与锁内绑定导入函数的语法树保持；研究执行、
 评价、隔离、模板和真实任务文件未改。[结构化记录](sr-unified-handoff-evidence/validation.json)。
-远端验证将在推送后补录；尚未完成的检查不计为通过。
+[远端同一提交 `763d948` 的五项任务全部通过](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44387286960)：
+Linux/macOS Intel × Python 3.10/3.12 每组 159 项检查，3.12 无跳过，3.10
+跳过原有 7 项固定 3.12 的审计。Linux x86_64 从零安装、**336 项完整测试无
+跳过**、实际内核隔离、预注册拒绝及四套基线/候选合成流程通过。新增 SR
+约束共存也在 Linux 实际隔离合成流程中通过。[远端证据](sr-unified-handoff-evidence/remote-validation.json)。
+
+系统 Python 3.9 另完成 336 项软件检查、16 项跳过；官方支持下限仍是 3.10。
+所有验证均为软件/合成检查，无真实图像评分、研究模型调用或新研究实验。
 
 ## 请审查
 
