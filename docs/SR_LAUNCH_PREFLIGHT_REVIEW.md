@@ -26,7 +26,11 @@
 
 原控制器完整类、预注册/运行/评价和隔离函数保持；准备过程仅在最后的 input
 lock 写入处增加 checkout 来源。[结构化记录](sr-launch-preflight-evidence/validation.json)。
-远端验证待推送后完成，不把未完成的任务计为通过。
+[远端同一提交 `c89607f` 的五项任务全部通过](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44805306920)：
+Linux/macOS Intel × Python 3.10/3.12 每组 179 项检查；3.12 无跳过，3.10
+跳过原有 7 项固定 3.12 审计，新增 20 项在所有组合全部执行。Linux x86_64
+从零安装、**356 项完整测试无跳过**、实际内核隔离、预注册拒绝及四套基线/
+候选合成流程通过。[远端证据](sr-launch-preflight-evidence/remote-validation.json)。
 
 ## 请审查
 

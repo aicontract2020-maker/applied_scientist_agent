@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-20",
+  "code_commit": "c89607f2fa66e320f4aa1fab3897898ad374437a",
+  "run_url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44805306920",
+  "all_five_jobs_success": true,
+  "jobs": [
+    {
+      "id": 136527622842,
+      "name": "linux-x86_64",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 136527623008,
+      "name": "data-review-portability (macos-15-intel, 3.12)",
+      "status": "completed",
+      "conclusion": "success",
+      "job_id": 136527623008,
+      "reported_tests": 179,
+      "skipped": 0,
+      "environment": [
+        "2026-11-20T19:46:58.4021020Z Successfully set up CPython (3.12.10)"
+      ],
+      "new_tests": [
+        "2026-11-20T19:48:27.1640450Z Ran 20 tests in 4.891s"
+      ]
+    },
+    {
+      "id": 136527623173,
+      "name": "data-review-portability (macos-15-intel, 3.10)",
+      "status": "completed",
+      "conclusion": "success",
+      "job_id": 136527623173,
+      "reported_tests": 179,
+      "skipped": 7,
+      "environment": [
+        "2026-11-20T19:46:56.5611560Z Successfully set up CPython (3.10.21)"
+      ],
+      "new_tests": [
+        "2026-11-20T19:47:37.4498650Z Ran 20 tests in 2.578s"
+      ]
+    },
+    {
+      "id": 136527623208,
+      "name": "data-review-portability (ubuntu-24.04, 3.10)",
+      "status": "completed",
+      "conclusion": "success",
+      "job_id": 136527623208,
+      "reported_tests": 179,
+      "skipped": 7,
+      "environment": [
+        "2026-11-20T19:47:04.9007343Z Successfully set up CPython (3.10.22)"
+      ],
+      "new_tests": [
+        "2026-11-20T19:47:15.4598149Z Ran 20 tests in 0.349s"
+      ]
+    },
+    {
+      "id": 136527623222,
+      "name": "data-review-portability (ubuntu-24.04, 3.12)",
+      "status": "completed",
+      "conclusion": "success",
+      "job_id": 136527623222,
+      "reported_tests": 179,
+      "skipped": 0,
+      "environment": [
+        "2026-11-20T19:46:58.1631026Z Successfully set up CPython (3.12.16)"
+      ],
+      "new_tests": [
+        "2026-11-20T19:47:22.7295036Z Ran 20 tests in 0.656s"
+      ]
+    }
+  ],
+  "linux": {
+    "full_tests": 356,
+    "skipped": 0,
+    "installation": "fresh CPU-only environment",
+    "scope": "Actual kernel isolation, preregistration rejection, offline workflows, four synthetic baseline/candidate flows",
+    "log_checks": [
+      "2026-11-20T19:48:32.6737582Z Ran 356 tests in 25.806s",
+      "2026-11-20T19:48:32.6737873Z OK",
+      "2026-11-20T19:48:34.0214277Z   \"supported_launch_rejects_unmanaged_fixtures\": true,",
+      "2026-11-20T19:48:45.4636913Z   \"actual_kernel_and_fixed_models_passed\": true,",
+      "2026-11-20T19:48:57.9207498Z   \"private_airfoil_evidence_roundtrip_audited\": true,",
+      "2026-11-20T19:48:57.9208014Z   \"v4_sr_exclusions_preserved_with_airfoil_and_pause\": true,"
+    ]
+  },
+  "local_macos_architecture": "arm64",
+  "remote_macos_architecture": "x86_64",
+  "new_research_experiments": 0,
+  "research_model_calls": 0,
+  "real_data_scored": false
+}

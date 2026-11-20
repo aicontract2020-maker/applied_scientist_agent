@@ -63,5 +63,7 @@
       "sha256": "19d8358f67fcbe9bf819501c333ff0fd74794f17c4266546148e077b46ddf7c7",
       "bytes": 5957
     }
-  }
+  },
+  "code_commit": "c89607f2fa66e320f4aa1fab3897898ad374437a",
+  "remote_validation": "remote-validation.json"
 }
