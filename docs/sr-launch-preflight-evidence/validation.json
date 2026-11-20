@@ -1,0 +1,67 @@
+{
+  "date": "2026-11-20",
+  "baseline_commit": "3e04b16f29339ea117514146ef542a1575551f0c",
+  "new_research_experiments": 0,
+  "real_data_scored": false,
+  "research_model_calls": 0,
+  "local_macos_python312": {
+    "tests": 356,
+    "skipped": 0,
+    "status": "success"
+  },
+  "local_macos_python310": {
+    "tests": 356,
+    "skipped": 16,
+    "status": "success"
+  },
+  "extra_system_python39": {
+    "tests": 356,
+    "skipped": 16,
+    "status": "success",
+    "official_support_minimum": "3.10"
+  },
+  "unchanged_ast": {
+    "research_harness/autonomy.py:AutonomousStudy": true,
+    "research_harness/autonomy.py:actor_profile": true,
+    "research_harness/autonomy.py:candidate_profile": true,
+    "research_harness/autonomy.py:bounded_process": true,
+    "research_harness/onboarding.py:validate_workflow": true
+  },
+  "preparation_before_input_lock_write_unchanged": true,
+  "unchanged_runtime_files": [
+    "research_harness/sr_evaluation.py",
+    "research_harness/intervention_review.py",
+    "research_harness/literature_study.py",
+    "research_harness/linux_isolation.py",
+    "research_harness/tabular_sandbox.py",
+    "research_harness/airfoil_trial.py",
+    "research_harness/airfoil_baseline.py",
+    "research_harness/memory.py",
+    "research_harness/tabular_handoff.py"
+  ],
+  "tasks_and_templates_unchanged": true,
+  "actual_macos_preregistration_probe": {
+    "cases": 13,
+    "actual_isolation_probes": 3,
+    "all_rejected": true,
+    "new_guard_rejects_unmanaged_fixture": true
+  },
+  "logs": {
+    "full": {
+      "sha256": "f841559a1b1793d87cc7f6c42aadb67c54ab755bff24f3ae88b4c63cab7623fb",
+      "bytes": 57860
+    },
+    "python310": {
+      "sha256": "124bfa2b3ca44ca1ddc29b6d95e240e26312609a37f3245acd9a9946c6d45bc5",
+      "bytes": 38282
+    },
+    "system-tests": {
+      "sha256": "7624fe71aa7b884eb27eb9997e7d72bde9ee0b393f100895e073370eaa607311",
+      "bytes": 38282
+    },
+    "prereg-isolation": {
+      "sha256": "19d8358f67fcbe9bf819501c333ff0fd74794f17c4266546148e077b46ddf7c7",
+      "bytes": 5957
+    }
+  }
+}

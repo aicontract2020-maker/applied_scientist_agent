@@ -141,5 +141,5 @@ def _new_study(name, root=ROOT):
     if (root/'.cache/environment.freeze.txt').exists(): files.append(root/'.cache/environment.freeze.txt')
     for image in ids:
         files.extend(root/f'external/SelfExSR/data/Urban100/image_SRF_2/{image}_SRF_2_{kind}.png' for kind in ('LR','HR'))
-    (here/'inputs.lock.json').write_text(json.dumps({'files':{str(p.relative_to(root)):sha(p) for p in files if p.is_file()},'runtime':{'python':sys.version,'executable':str(Path(sys.executable).resolve()),'platform':sys.platform,'architecture':__import__('platform').machine()}},indent=2)+'\n')
+    (here/'inputs.lock.json').write_text(json.dumps({'files':{str(p.relative_to(root)):sha(p) for p in files if p.is_file()},'runtime':{'checkout':str(root),'python':sys.version,'executable':str(Path(sys.executable).resolve()),'platform':sys.platform,'architecture':__import__('platform').machine()}},indent=2)+'\n')
     return here

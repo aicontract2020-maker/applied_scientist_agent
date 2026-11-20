@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.32.0
+
+- Record C13 acceptance. Add read-only `sr-preflight` for locally prepared SR reservations: verify checkout provenance, task identity, frozen inventory, selected originals, unexecuted reservation and unchanged preparation-time constraints. Never refresh stale preparation or release data.
+- Route supported `autonomous`, `research` and direct module startup through locked admission; require explicit study and canonical runs/ID, run existing doctor and recheck before controller creation. Existing controller internals, preregistration, evaluators and isolation remain unchanged; low-level Python primitives are not a permission system.
+- Add checkout provenance to new input-lock runtime metadata, 20 synthetic tests, and formal-entry rejection checks to the existing actual isolation probe. Historical read-only auditing remains supported; no new research experiment or model call. C14 awaits engineering review.
+
 ## 0.31.0
 
 - Record C12 acceptance. Extend unified handoff to v4 with the existing SR memory v1 as a fifth component: scored/reserved originals, literature exclusions, route dispositions and frozen study identities. Retain all earlier version byte limits; v4 is bounded at 24 MiB and every component at 4 MiB.

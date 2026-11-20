@@ -93,7 +93,6 @@ def research(name, task='swinir-s-x2', *, stage=None, baseline=None, review=None
 
 def _research_locked(name):
     from .doctor import doctor
-    from .literature_study import LiteratureStudy
     print("[1/3] Checking environment and isolation (no model call)...", file=sys.stderr, flush=True)
     health=doctor()
     if not health['ok']:
@@ -106,7 +105,8 @@ def _research_locked(name):
     (study/'preflight.json').write_text(json.dumps(health,indent=2)+'\n')
     # preflight.json is diagnostic, not an experimental input; frozen inputs are explicit.
     print(f"[3/3] Running one live agent cycle. Evidence: {output}", file=sys.stderr, flush=True)
-    result=LiteratureStudy(output,study).launch()
+    from .sr_preflight import _launch_locked
+    result=_launch_locked(output,study,literature=True,root=ROOT,checked_health=health)
     verdict=validate_workflow(output, require_integrity=True)
     if not verdict['workflow_completed']:
         raise ValueError(f'Cycle incomplete; no automatic retry. Inspect {output}/workflow.json: {verdict["errors"]}')

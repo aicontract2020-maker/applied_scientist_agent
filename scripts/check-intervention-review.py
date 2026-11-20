@@ -7,6 +7,7 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from research_harness.autonomy import AutonomousStudy, ROOT
 from research_harness.intervention_review import catalog
+from research_harness.sr_preflight import preflight
 
 
 def main():
@@ -22,7 +23,7 @@ def main():
     results=[]
     for name,source in fixtures.items():
         with tempfile.TemporaryDirectory(prefix='review-software-fixture-') as tmp:
-            base=Path(tmp);study=base/'study';study.mkdir()
+            base=Path(tmp).resolve();study=base/'study';study.mkdir()
             policy={'controls':['synthetic fixture only'],'minimum_effect':.05,'max_latency_ratio':2.5,
                     'bootstrap':{'seed':20261103},'observation_ids':[],
                     'limits':{'agent_session_seconds':1200},'intervention_review':{'required':True,'reviewer_seconds':120}}
@@ -30,6 +31,11 @@ def main():
             (study/'inputs.lock.json').write_text('{"files":{}}')
             (study/'literature.json').write_text('[{"url":"https://example.test/software-fixture"}]')
             (study/'intervention-catalog.json').write_text(json.dumps(catalog(ROOT,[])))
+            try: preflight(study,base/'result')
+            except ValueError as exc: assert 'local_studies' in str(exc)
+            else: raise AssertionError('Supported launch admitted an unmanaged software fixture')
+            assert not (base/'result').exists()
+            # Low-level controller is used only for the existing synthetic rejection probe.
             controller=AutonomousStudy(base/'result',study)
             (controller.actor/'candidate.py').write_text(source)
             plan={**policy,'hypothesis':'Software gate fixture, not a scientific hypothesis','mechanism':name,'baseline':'synthetic input',
@@ -50,6 +56,7 @@ def main():
             results.append({'fixture':name,'decision':'REJECTED','reason':result['reason'],
                             'probe':review.get('probe'),'probe_execution':review.get('probe_execution'),
                             'registered':False,'reference_started':False,'model_called':False})
-    print(json.dumps({'scope':'OS-isolated software fixtures, not scientific evidence','platform':sys.platform,'results':results},indent=2))
+    print(json.dumps({'scope':'OS-isolated software fixtures, not scientific evidence','platform':sys.platform,
+                      'supported_launch_rejects_unmanaged_fixtures':True,'results':results},indent=2))
 
 if __name__=='__main__':main()

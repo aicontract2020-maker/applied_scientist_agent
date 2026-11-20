@@ -4,7 +4,7 @@
 
 当前完整任务是 **固定 SwinIR-S ×2 图像超分的确定性后处理研究**，不是任意领域的通用科学家。基础工作流无需模型；完整研究使用你自己的 Codex 登录与额度。
 
-0.31.0 将 [SR 约束纳入统一交接 v4](docs/SR_UNIFIED_HANDOFF.md)，一次保留五类已知约束；旧包缺项明确提示，预留与停止记录不释放。C12 已验收，[C13 工程验收](docs/SR_UNIFIED_HANDOFF_REVIEW.md)待审。[只读预览与绑定导入](docs/HANDOFF_PREVIEW.md)、[Airfoil 私有证据](docs/AIRFOIL_EVIDENCE.md)及原有超分／回归研究流程保持。查看 [研发路线图](docs/ROADMAP.md)、[任务接口](docs/TASK_CONTRACTS.md) 和 [回归交接说明](docs/TABULAR_HANDOFF.md)。
+0.32.0 增加 [SR 启动前复查](docs/SR_LAUNCH_PREFLIGHT.md)：旧准备遇到新约束、已有运行或文件变化，会在研究模型调用前拒绝；正式入口持锁检查并固定一次启动目录。C13 已验收，[C14 工程验收](docs/SR_LAUNCH_PREFLIGHT_REVIEW.md)待审。[统一交接 v4](docs/SR_UNIFIED_HANDOFF.md)、[私有证据](docs/AIRFOIL_EVIDENCE.md)及原科学规则保持。查看 [研发路线图](docs/ROADMAP.md)。
 
 ```sh
 python3 -m research_harness task list

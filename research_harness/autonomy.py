@@ -412,9 +412,10 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--out', required=True)
+    parser.add_argument('--study', required=True)
     args = parser.parse_args()
-    study = AutonomousStudy(args.out)
-    result = study.launch()
+    from .sr_preflight import launch
+    result = launch(args.out, args.study)
     print(json.dumps(result, indent=2))
 
 

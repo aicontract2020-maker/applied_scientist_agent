@@ -57,3 +57,6 @@ python3 -m research_harness handoff --root /path/to/receiver import /private/sta
 导入不授予执行、恢复或重新使用留出的权限。五组件覆盖的是当前已实现的任务
 约束，不是任意任务适配、跨机器实时锁或对旧历史文件所有直接执行方式的新增
 授权检查。既有隔离、预注册、数据资格及单次执行批准保持；没有新的研究实验。
+
+0.32 后续：正式 SR 启动入口也会重新核对准备时与当前约束；详见
+[启动前复查](SR_LAUNCH_PREFLIGHT.md)。低层受信任 Python 控制器边界仍保留。

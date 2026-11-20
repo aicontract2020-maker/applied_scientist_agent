@@ -14,6 +14,9 @@ def main():
     parser = argparse.ArgumentParser(description="ResearchHarness: plan, review, execute, decide")
     parser.add_argument("--workspace", default="runs", help="Local experiment store (default: runs)")
     sub = parser.add_subparsers(dest="command", required=True)
+    srp = sub.add_parser("sr-preflight", help="Read-only frozen SR launch checks; no model or experiment")
+    srp.add_argument("--study", required=True)
+    srp.add_argument("--out", help="Must equal this checkout runs/ID; defaults to that path")
     register = sub.add_parser("register", help="Manually register a trusted protocol; no review provenance")
     register.add_argument("protocol")
     record = sub.add_parser("record", help="Record one paired replication, including all costs")
@@ -385,13 +388,11 @@ def main():
             output = research(args.id, task=args.task,stage=args.stage,baseline=args.baseline,review=args.review,
                               data_review=args.data_review,intended_use=args.intended_use)
         elif args.command == "autonomous":
-            from .autonomy import AutonomousStudy
-            if args.literature:
-                if not args.study: raise ValueError("--literature requires --study")
-                from .literature_study import LiteratureStudy
-                output = LiteratureStudy(args.out, args.study).launch()
-            else:
-                output = AutonomousStudy(args.out, args.study).launch()
+            from .sr_preflight import launch
+            output = launch(args.out, args.study, literature=args.literature)
+        elif args.command == "sr-preflight":
+            from .sr_preflight import preflight
+            output = preflight(args.study, args.out)
         elif args.command == "register":
             output = {"registered": str(workspace.register(json.loads(Path(args.protocol).read_text())))}
         elif args.command == "record":
