@@ -54,5 +54,7 @@
       "bytes": 731
     }
   },
-  "remote_status": "pending"
+  "remote_status": "success",
+  "code_commit": "c9a549b13dcb52f5001cb616bc7bbb0dd3346733",
+  "remote_validation": "remote-validation.json"
 }

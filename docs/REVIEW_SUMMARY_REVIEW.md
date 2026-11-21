@@ -1,6 +1,6 @@
 # C17 工程验收：批准前的冻结材料摘要
 
-2026-11-21，0.35.0，**AWAITING_REMOTE_VALIDATION**。C16 已由用户验收。
+2026-11-21，0.35.0，**AWAITING_ENGINEERING_REVIEW**。C16 已由用户验收。
 本轮只进行框架研发与软件/合成验证，没有新的研究实验。
 
 ## 交付
@@ -29,7 +29,14 @@ CLI 错误，以及原生审计后基线被替换的拒绝。本地 macOS ARM / 
 
 既有运行时代码除 CLI 与目录提示外逐文件保持，统一 preflight 函数 AST
 保持；原加载、审批、执行、隔离、任务及模板不变。
-[本地结构化证据](review-summary-evidence/validation.json)。远端验证待推送后补齐。
+[本地结构化证据](review-summary-evidence/validation.json)。
+
+[同一代码提交 `c9a549b` 的五项远端任务全部通过](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44869294019)。
+Linux/macOS Intel × Python 3.10/3.12 每组 **238 项**检查；3.12 无跳过，
+3.10 跳过原有 7 项固定 3.12 审计，新增 21 项四组全部执行。Linux x86_64
+从零安装、**415 项完整测试无跳过**、实际内核隔离、预注册拒绝探针、安装
+诊断和四套基线/候选合成流程均通过；摘要在每次合成批准前核对。
+[远端结构化证据](review-summary-evidence/remote-validation.json)。
 
 ## 请审查
 
