@@ -14,11 +14,11 @@ macOS Apple Silicon 或 Linux x86_64/aarch64。
 bash scripts/bootstrap-tabular.sh
 
 # 默认仅检查安装。两个入口使用同一套诊断。
-python3 -m research_harness tabular doctor
-python3 -m research_harness airfoil doctor
+.venv-tabular/bin/python -m research_harness tabular doctor
+.venv-tabular/bin/python -m research_harness airfoil doctor
 
 # 可选：显式运行一次原生合成隔离探针。
-python3 -m research_harness airfoil doctor --probe-isolation
+.venv-tabular/bin/python -m research_harness airfoil doctor --probe-isolation
 ```
 
 诊断命令的控制端支持 Python >=3.10；实际被检查的是当前安装所在仓库的

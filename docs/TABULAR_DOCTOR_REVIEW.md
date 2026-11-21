@@ -1,6 +1,6 @@
 # C16 工程验收：固定表格执行环境诊断
 
-2026-11-20，0.34.0，**AWAITING_REMOTE_VALIDATION**。C15 已由用户验收。
+2026-11-20，0.34.0，**AWAITING_ENGINEERING_REVIEW**。C15 已由用户验收。
 本轮只推进框架与软件验证，没有新的研究实验。
 
 ## 交付
@@ -27,7 +27,13 @@
 
 原环境版本检查、原生隔离、执行器、预注册和停止代码逐文件比对保持；统一
 材料检查函数 AST 不变。[本地结构化证据](tabular-doctor-evidence/validation.json)。
-远端兼容矩阵和 Linux 完整隔离验证将在当前提交推送后补齐。
+[同一代码提交 `19b4491` 的五项远端任务全部通过](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44867852251)。
+Linux/macOS Intel × Python 3.10/3.12 每组 **217 项**检查；3.12 无跳过，
+3.10 跳过原有 7 项固定 3.12 审计，新增 20 项四组均全部执行。Linux x86_64
+从零安装、**394 项完整测试无跳过**、实际内核边界和预注册拒绝探针、原四套
+基线/候选合成流程通过。新 tabular doctor 默认模式及 airfoil doctor 显式
+隔离探针均通过，结果明确区分隔离未测试与已验证，均不授权执行。
+[远端结构化证据](tabular-doctor-evidence/remote-validation.json)。
 
 ## 请审查
 
