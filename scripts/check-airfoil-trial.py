@@ -7,6 +7,7 @@ import tempfile
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from research_harness import airfoil_baseline as ab, airfoil_trial as at
+from research_harness.workflows import check
 from examples.data_qualification.baseline import qualification as data_qualification,USE
 
 root=Path(__file__).resolve().parents[1];(root/'runs').mkdir(exist_ok=True)
@@ -15,6 +16,8 @@ rows=[{'id':f'fixture-{i:03}-{j}','features':[500.+500*j,float(i),.1+i*.001,30.+
 with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs') as tmp:
     folder=Path(tmp); base=folder/'baseline'; memory=folder/'checkout'; trial=folder/'trial'
     bp=ab.prepare_rows(rows,base);ab.approve(base,bp['sha256'],'SOFTWARE FIXTURE ONLY',root=memory)
+    memory.mkdir(exist_ok=True)
+    assert check('airfoil-baseline-v1',base,root=memory)['execution_authorized'] is False
     qualification=ab.execute(base,root=memory)
     if not qualification['measurement_valid'] or qualification['selected_baseline']!='extra_trees' or qualification['status']!='CONTINUE':
         raise RuntimeError('Synthetic reference construction failed: '+json.dumps(qualification))
@@ -24,6 +27,7 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
     assert not (trial/'trial-approval.json').exists() and not (trial/'trial-run').exists()
     at.approve(trial,prepared['sha256'],'SOFTWARE FIXTURE ONLY',root=memory)
     assert at.preflight(trial,root=memory)['data_admission']['execution_authorized'] is False
+    assert check('airfoil-candidate-v1',trial,root=memory)['checks']['memory_checked'] is True
     result=at.execute(trial,root=memory)
     if not result['measurement_valid']:
         stderr=trial/'trial-run/output/stderr.log'

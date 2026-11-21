@@ -12,6 +12,7 @@ from research_harness.tabular_baseline import prepare_rows,approve,execute
 from research_harness.tabular_trial import prepare,approve_trial,execute_trial,audit_trial,preflight_trial,ADAPTER,FIXTURE
 from examples.data_qualification.baseline import qualification,USE
 from research_harness.tabular_data import write_json
+from research_harness.workflows import check
 
 root=Path(__file__).resolve().parents[1]; (root/'runs').mkdir(exist_ok=True)
 parser=argparse.ArgumentParser()
@@ -25,6 +26,7 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     work=Path(tmp); baseline=work/'baseline'
     packet=prepare_rows(rows,baseline,{'id':'synthetic-software-fixture'})
     approve(baseline,packet['sha256'],'SOFTWARE FIXTURE ONLY')
+    assert check('abalone-baseline-v1',baseline,root=work)['execution_authorized'] is False
     qualified=execute(baseline)
     if not qualified.get('measurement_valid') or qualified.get('selected_baseline')!='hgb':
         raise RuntimeError('Software fixture baseline failed: '+json.dumps(qualified))
@@ -53,6 +55,7 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     # Fixtures never create approval or reservation in the user's real data scope.
     approve_trial(trial,review['sha256'],'SOFTWARE FIXTURE ONLY',root=work)
     assert preflight_trial(trial,root=work)['data_admission']['execution_authorized'] is False
+    assert check('abalone-candidate-v1',trial,root=work)['checks']['memory_checked'] is True
     result=execute_trial(trial,root=work)
     if not result['measurement_valid']: raise RuntimeError(json.dumps(result))
     checked=audit_trial(trial)

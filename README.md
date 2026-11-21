@@ -4,9 +4,10 @@
 
 当前完整任务是 **固定 SwinIR-S ×2 图像超分的确定性后处理研究**，不是任意领域的通用科学家。基础工作流无需模型；完整研究使用你自己的 Codex 登录与额度。
 
-0.32.0 增加 [SR 启动前复查](docs/SR_LAUNCH_PREFLIGHT.md)：旧准备遇到新约束、已有运行或文件变化，会在研究模型调用前拒绝；正式入口持锁检查并固定一次启动目录。C13 已验收，[C14 工程验收](docs/SR_LAUNCH_PREFLIGHT_REVIEW.md)待审。[统一交接 v4](docs/SR_UNIFIED_HANDOFF.md)、[私有证据](docs/AIRFOIL_EVIDENCE.md)及原科学规则保持。查看 [研发路线图](docs/ROADMAP.md)。
+0.33.0 增加[工作流目录与统一只读检查](docs/WORKFLOWS.md)：集中展示 SR、Abalone 与 Airfoil 五类固定流程，并复用原有执行前检查。检查通过不授予执行权。C14 已验收，[C15 工程验收](docs/WORKFLOWS_REVIEW.md)待验证后审查。原有隔离、预注册、停止规则与[统一交接 v4](docs/SR_UNIFIED_HANDOFF.md)保持。查看[研发路线图](docs/ROADMAP.md)。
 
 ```sh
+python3 -m research_harness task workflows
 python3 -m research_harness task list
 python3 -m research_harness task show tabular-regression
 python3 -m examples.tabular_demo.workflow --out runs/tabular-software-demo

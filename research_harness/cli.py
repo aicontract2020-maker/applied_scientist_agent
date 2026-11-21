@@ -68,6 +68,11 @@ def main():
     task_show.add_argument("id")
     task_caps=task_commands.add_parser("capabilities",help="Workflow capabilities separate from immutable evaluation bindings")
     task_caps.add_argument("id")
+    task_commands.add_parser("workflows", help="List fixed executable workflows, including Airfoil (no execution)")
+    task_check = task_commands.add_parser("check", help="Read-only native preflight; never grants execution permission")
+    task_check.add_argument("--workflow", required=True)
+    task_check.add_argument("--review", required=True, help="Prepared study or review directory")
+    task_check.add_argument("--root", help="Existing checkout state to inspect; default: installation checkout")
     data_review = sub.add_parser("data-review", help="Offline metadata qualification; never authorizes experiments")
     dc = data_review.add_subparsers(dest="data_review_command", required=True)
     dc.add_parser("template", help="Write an unfilled metadata template").add_argument("--out", required=True)
@@ -343,7 +348,14 @@ def main():
                 return 0 if output['measurement_valid'] else 1
         elif args.command == "task":
             from .task_contracts import list_tasks, contract, binding, capabilities
-            output = capabilities(args.id) if args.task_command=='capabilities' else (list_tasks() if args.task_command == "list" else dict(contract(args.id), binding=binding(args.id)))
+            if args.task_command == 'workflows':
+                from .workflows import catalog
+                output = catalog()
+            elif args.task_command == 'check':
+                from .workflows import check
+                output = check(args.workflow, args.review, **({'root': args.root} if args.root else {}))
+            else:
+                output = capabilities(args.id) if args.task_command=='capabilities' else (list_tasks() if args.task_command == "list" else dict(contract(args.id), binding=binding(args.id)))
         elif args.command == "study":
             from .study_inspection import list_studies, run_status, audit_run
             from .portable import ROOT

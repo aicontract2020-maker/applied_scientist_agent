@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-20",
+  "baseline_commit": "c2be40f847b7ef221088022a38fd09509b025936",
+  "new_research_experiments": 0,
+  "real_data_scored": false,
+  "research_model_calls": 0,
+  "local_macos_python312": {
+    "tests": 374,
+    "skipped": 0,
+    "status": "success"
+  },
+  "local_macos_python310": {
+    "tests": 374,
+    "skipped": 16,
+    "status": "success"
+  },
+  "extra_system_python39": {
+    "tests": 374,
+    "skipped": 16,
+    "status": "success",
+    "official_support_minimum": "3.10"
+  },
+  "new_workflow_tests": 18,
+  "actual_macos_isolated_synthetic_flows": [
+    "Abalone baseline and candidate",
+    "Airfoil grouped baseline and candidate"
+  ],
+  "native_preflights_and_execution_unchanged": true,
+  "all_existing_runtime_files_except_cli_unchanged": true,
+  "tasks_and_templates_unchanged": true,
+  "unchanged_file_count": 419,
+  "logs": {
+    "full": {
+      "sha256": "50851934bd648f54b668cc57b803e8cc290631bf7ec5d4be59e6b76f0ba6f20b",
+      "bytes": 60176
+    },
+    "python310": {
+      "sha256": "58485b31408cf6db6954e88935b542576d62f9f609fefdf9295299fffc0397f7",
+      "bytes": 39782
+    },
+    "system-tests": {
+      "sha256": "b3fe1d7a4a254b9279eb44d57c70c5a7cd979809f041d94a229ef24c3b5160af",
+      "bytes": 39782
+    },
+    "tabular-isolation": {
+      "sha256": "27d6e41ff61787de2aaa2cc9c1187bdb7fec77c75029bf303713a88de37ed6e6",
+      "bytes": 683
+    },
+    "airfoil-isolation": {
+      "sha256": "808ed7347c5b6d50799a387a8237068380d650bd88ba07d336aa8acb5de9d4b5",
+      "bytes": 731
+    }
+  },
+  "remote_status": "pending"
+}
