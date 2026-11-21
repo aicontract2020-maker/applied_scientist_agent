@@ -14,7 +14,8 @@ python3 -m research_harness task workflows
 | `airfoil-baseline-v1` | 固定 UCI Airfoil 条件分组基线资格检查 | 数据资格、单独的精确摘要批准 |
 | `airfoil-candidate-v1` | 固定 Strouhal 特征与合格 Extra Trees 基线 | 候选用途数据资格、单独执行批准；没有自主提案 actor |
 
-目录是描述性能力信息，不检查安装、材料或批准。`task list/show` 仍展示旧的
+目录是描述性能力信息，不检查安装、材料或批准。其 preparation/execution
+字段是入口提示，完整参数请查看对应子命令的 `--help`。`task list/show` 仍展示旧的
 数值评价契约；本轮不添加 Airfoil 到那个冻结目录，不改变任何契约摘要。
 通用 `tabular-regression` evaluator 不代表可以接入任意数据。Delft 外部复现
 资格仍未完成；历史 A2 的 CONTINUE 不授予新实验权，已用留出仍不可重跑。

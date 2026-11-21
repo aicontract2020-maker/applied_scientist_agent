@@ -1,6 +1,6 @@
 # C15 工程验收：工作流目录与统一只读检查
 
-2026-11-20，0.33.0，**AWAITING_REMOTE_VALIDATION**。用户已验收 C14。
+2026-11-20，0.33.0，**AWAITING_ENGINEERING_REVIEW**。用户已验收 C14。
 本轮仅框架研发、软件和合成验证，没有新的研究实验。
 
 ## 交付
@@ -25,7 +25,11 @@ Airfoil 候选单元 fixture 替代历史审计，实际隔离脚本独立验证
 
 除 CLI 外，全部既有运行时代码、任务与模板逐文件比对保持不变；原生执行前
 检查和科学执行代码未改。[本地结构化证据](workflows-evidence/validation.json)。
-远端 Linux/macOS 矩阵和 Linux 完整隔离验证待当前提交推送后检查。
+[同一代码提交 `8c26e45` 的五项远端任务全部通过](https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44858249547)。
+Linux/macOS Intel × Python 3.10/3.12 每组 **197 项**，3.12 无跳过，
+3.10 跳过原有 7 项固定 3.12 审计；新增 18 项四组均全部执行。Linux x86_64
+从零 CPU 安装、**374 项完整测试无跳过**、真实内核隔离、预注册拒绝探针、
+四套合成基线/候选流程均通过。[远端结构化证据](workflows-evidence/remote-validation.json)。
 
 ## 请审查
 

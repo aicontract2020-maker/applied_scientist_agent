@@ -1,0 +1,261 @@
+{
+  "date": "2026-11-20",
+  "code_commit": "8c26e45e3f5e19d8ac127ac5d0f41c5261e1a61c",
+  "workflow_run": 44858249547,
+  "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44858249547",
+  "status": "completed",
+  "conclusion": "success",
+  "new_research_experiments": 0,
+  "real_data_scored": false,
+  "research_model_calls": 0,
+  "jobs": [
+    {
+      "id": 136705391447,
+      "name": "data-review-portability (ubuntu-24.04, 3.12)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44858249547/job/136705391447",
+      "tests": 197,
+      "skipped": 0,
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Offline data qualification software checks (no extra dependencies)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 136705391669,
+      "name": "data-review-portability (macos-15-intel, 3.12)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44858249547/job/136705391669",
+      "tests": 197,
+      "skipped": 0,
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Offline data qualification software checks (no extra dependencies)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 136705391690,
+      "name": "data-review-portability (ubuntu-24.04, 3.10)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44858249547/job/136705391690",
+      "tests": 197,
+      "skipped": 7,
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Offline data qualification software checks (no extra dependencies)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 136705391835,
+      "name": "linux-x86_64",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44858249547/job/136705391835",
+      "tests": 374,
+      "skipped": 0,
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "OS tools and tested Codex CLI (no login)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check rootless namespaces; configure only bwrap if needed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fresh CPU-only Python environment",
+          "conclusion": "success"
+        },
+        {
+          "name": "Software tests (synthetic only)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Actual kernel boundary probes (no credentials or model calls)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Actual preregistration rejection probes (no images or model calls)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Offline reviewed workflow",
+          "conclusion": "success"
+        },
+        {
+          "name": "Task catalog and second-domain software fixture (no model or assets)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Independent tabular environment and actual isolated synthetic baseline",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 136705391883,
+      "name": "data-review-portability (macos-15-intel, 3.10)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/aicontract2020-maker/applied_scientist_agent/actions/runs/44858249547/job/136705391883",
+      "tests": 197,
+      "skipped": 7,
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Offline data qualification software checks (no extra dependencies)",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "linux_integration": {
+    "fresh_cpu_install": true,
+    "actual_kernel_isolation": true,
+    "preregistration_rejection_probes": true,
+    "synthetic_flows": [
+      "Abalone baseline",
+      "Abalone candidate",
+      "Airfoil grouped baseline",
+      "Airfoil candidate"
+    ],
+    "unified_preflight_before_each_flow": true
+  },
+  "note": "Synthetic software validation only. Python 3.10 skips 7 existing exact-3.12 Airfoil audit tests; all 18 new workflow tests run in all four matrix jobs. No external scientific evidence."
+}
