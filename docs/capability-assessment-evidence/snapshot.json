@@ -1,0 +1,483 @@
+{
+  "date": "2026-11-21",
+  "reviewed_commit": "da04750d1be589326d7509f545a297b1f005461f",
+  "runtime_version": "0.35.0",
+  "method": "Read existing repository reports, archived ledger/audit metadata and source code. Hash selected files; count archived events and reconcile published selections. No scientific metrics recomputed, no fresh private-evidence audit or new empirical evaluation.",
+  "actions": {
+    "new_features": 0,
+    "new_research_experiments": 0,
+    "research_actor_calls": 0,
+    "new_training_or_inference": 0,
+    "new_scientific_scoring": 0,
+    "mailbox_checked": false,
+    "outbound_messages_sent": 0,
+    "test_suites_rerun": true
+  },
+  "archived_sr_events": [
+    {
+      "study": "g2",
+      "ledger": "tasks/image_super_resolution/g2/evidence/ledger.jsonl",
+      "recorded_event_counts": {
+        "REGISTER": 1,
+        "EXPERIMENT_STARTED": 1,
+        "DECISION": 1,
+        "PRIMARY_READ_COMPLETED": 0
+      },
+      "note": "Counts of archived events, not an execution-authenticity or scientific-quality audit."
+    },
+    {
+      "study": "g3",
+      "ledger": "tasks/image_super_resolution/g3/evidence/ledger.jsonl",
+      "recorded_event_counts": {
+        "REGISTER": 1,
+        "EXPERIMENT_STARTED": 1,
+        "DECISION": 1,
+        "PRIMARY_READ_COMPLETED": 2
+      },
+      "note": "Counts of archived events, not an execution-authenticity or scientific-quality audit."
+    },
+    {
+      "study": "g4",
+      "ledger": "tasks/image_super_resolution/g4/evidence/ledger.jsonl",
+      "recorded_event_counts": {
+        "REGISTER": 1,
+        "EXPERIMENT_STARTED": 1,
+        "DECISION": 1,
+        "PRIMARY_READ_COMPLETED": 2
+      },
+      "note": "Counts of archived events, not an execution-authenticity or scientific-quality audit."
+    },
+    {
+      "study": "g5",
+      "ledger": "tasks/image_super_resolution/g5/evidence/ledger.jsonl",
+      "recorded_event_counts": {
+        "REGISTER": 1,
+        "EXPERIMENT_STARTED": 1,
+        "DECISION": 1,
+        "PRIMARY_READ_COMPLETED": 2
+      },
+      "note": "Counts of archived events, not an execution-authenticity or scientific-quality audit."
+    },
+    {
+      "study": "g6",
+      "ledger": "tasks/image_super_resolution/g6/evidence/ledger.jsonl",
+      "recorded_event_counts": {
+        "REGISTER": 1,
+        "EXPERIMENT_STARTED": 1,
+        "DECISION": 1,
+        "PRIMARY_READ_COMPLETED": 2
+      },
+      "note": "Counts of archived events, not an execution-authenticity or scientific-quality audit."
+    },
+    {
+      "study": "g7",
+      "ledger": "tasks/image_super_resolution/g7/evidence/ledger.jsonl",
+      "recorded_event_counts": {
+        "REGISTER": 1,
+        "EXPERIMENT_STARTED": 1,
+        "DECISION": 1,
+        "PRIMARY_READ_COMPLETED": 2
+      },
+      "note": "Counts of archived events, not an execution-authenticity or scientific-quality audit."
+    }
+  ],
+  "urban100_public_selections": [
+    {
+      "selection": "tasks/image_super_resolution/g3/selection.json",
+      "selected_count": 12
+    },
+    {
+      "selection": "tasks/image_super_resolution/g4/selection.json",
+      "selected_count": 12
+    },
+    {
+      "selection": "docs/portability-evidence/selection.json",
+      "selected_count": 12
+    },
+    {
+      "selection": "docs/linux-evidence/selection.json",
+      "selected_count": 12
+    },
+    {
+      "selection": "tasks/image_super_resolution/g5/selection.json",
+      "selected_count": 12
+    },
+    {
+      "selection": "tasks/image_super_resolution/g6/selection.json",
+      "selected_count": 12
+    },
+    {
+      "selection": "tasks/image_super_resolution/g7/selection.json",
+      "selected_count": 12
+    }
+  ],
+  "published_used_images": 84,
+  "selection_union_matches_public_history": true,
+  "current_unreserved_images": "NOT_CHECKED",
+  "attribution": {
+    "g1": "Actor chose from supplied options; collaborator implemented candidate",
+    "g2": "Actor authored hypothesis and code; literature supplied by collaborator",
+    "g3_g4_g5_g7_and_two_installation_cycles": "Independent research actor within fixed task, protocol, baseline, tools and budget",
+    "g6": "Independent actor completed mechanical workflow; operator identified no-op; scientific new-intervention requirement false",
+    "t2": "Independent proposal actor; fixed Abalone/HGB protocol and expression language; separate human approval before experiment",
+    "a2": "Development-conversation collaborator researched and implemented exact fixed candidate; no independent research actor"
+  },
+  "evidence_gaps": [
+    "No matched human-plus-AI time/cost comparison",
+    "No complete model bills or human active-time records",
+    "No documented low-cost arbitrary-task intake",
+    "No verified customer adoption/payment evidence in reviewed materials",
+    "C3 user acceptance lacks attached receiver logs/timing",
+    "A2 external replication eligibility remains blocked in archived records; inbox not checked in this audit"
+  ],
+  "decision": "Pause untargeted feature expansion; review a bounded research-decision product scope and prerequisites for the next gate. Not a scientific STOP for the entire product.",
+  "next_gate": {
+    "document": "../NEXT_DECISION_GATE.md",
+    "status": "DRAFT_NOT_READY_NOT_AUTHORIZED"
+  },
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "a3547baba6bec3f79191e292516b2eac2f6215c7a192acce03b89dc8f8796967",
+      "bytes": 2187
+    },
+    {
+      "path": "docs/AIRFOIL_CANDIDATE_REVIEW.md",
+      "sha256": "458f3366239286e37991a72b37ee3c4e9111b7dc641bccb57fa74cad6ab42591",
+      "bytes": 8139
+    },
+    {
+      "path": "docs/INDEPENDENT_HANDOFF_REVIEW.md",
+      "sha256": "898dfe13aaf1014101e5068b8d5c9e747458125ba58544a3d5a97e09fd201293",
+      "bytes": 4104
+    },
+    {
+      "path": "docs/LINUX_VALIDATION.md",
+      "sha256": "b25776f9d441cf624d21a2c1cef5f6c52cf99ebf6a9429796dfd7d1839e40037",
+      "bytes": 6097
+    },
+    {
+      "path": "docs/PORTABILITY_VALIDATION.md",
+      "sha256": "5ff0737308f4555c402add5a5a74ee6826a1e99a4bf1ed9ea923219837231613",
+      "bytes": 5770
+    },
+    {
+      "path": "docs/RESEARCH_VALUE_REVIEW.md",
+      "sha256": "928c8b5a68b29100bfcc8bfbdf45f57f30c42abac6e37ae1f6ebfd464ba807bb",
+      "bytes": 4768
+    },
+    {
+      "path": "docs/REVIEW_SUMMARY_REVIEW.md",
+      "sha256": "bd4e55dc739fcf28d608b4e4dd9579fd4ecf53bca0e14d6e003c67d3b9dd68d8",
+      "bytes": 3011
+    },
+    {
+      "path": "docs/linux-evidence/ledger.jsonl",
+      "sha256": "bb9f83b05a568c4b0203f1b10968bba622f42696504674ac7c4043f459054250",
+      "bytes": 6908
+    },
+    {
+      "path": "docs/linux-evidence/selection.json",
+      "sha256": "ef4aae0245ef27191fde7b0b2b2b134e489577d2f90825fd32f988926d524858",
+      "bytes": 895
+    },
+    {
+      "path": "docs/linux-evidence/workflow.json",
+      "sha256": "f3b66b17e9dfd05f6784a4684184a7494b5c111b36683d629db1a62b9f1b23aa",
+      "bytes": 799
+    },
+    {
+      "path": "docs/portability-evidence/ledger.jsonl",
+      "sha256": "438b16a5bdd6ee50514d8dc57c46b084ffb23ca1f80db3db59b9cf6c3bf89c9e",
+      "bytes": 5224
+    },
+    {
+      "path": "docs/portability-evidence/selection.json",
+      "sha256": "84ef2a255066fbb7b1da48016b8854755ea1eff1ffeadf2eab2f7534bd25418b",
+      "bytes": 715
+    },
+    {
+      "path": "docs/portability-evidence/workflow.json",
+      "sha256": "2663903e0e28f881bbfd43158742585c860905f7617f6ee06ea68709e6af6d89",
+      "bytes": 756
+    },
+    {
+      "path": "docs/review-summary-evidence/remote-validation.json",
+      "sha256": "69e91764c1b27e5001dff8e5421eb86760e22a07539daf7ed5e03884f5d78f3c",
+      "bytes": 7658
+    },
+    {
+      "path": "docs/review-summary-evidence/validation.json",
+      "sha256": "098a0eb88f4270aac37baed62f5fca52aeda9e0bc2a891c9dbecac173e1b4ba4",
+      "bytes": 1871
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "384a3f05867000de2b205ed1bf5a443d2753e114f9ec15edc523b6c63fa32b16",
+      "bytes": 411
+    },
+    {
+      "path": "research_harness/airfoil_candidate.py",
+      "sha256": "d6226ec211ce1d9cc5c2a6bea2597b0886e73d666be55dabe95f9b3fb1e34c7f",
+      "bytes": 1773
+    },
+    {
+      "path": "research_harness/airfoil_data.py",
+      "sha256": "951a7c2e29fee8505f13bf2fa88a6423faa47e0ab9e29ee30278710f6e409c38",
+      "bytes": 4771
+    },
+    {
+      "path": "research_harness/data_admission.py",
+      "sha256": "f1dc869b17db18c3d0fd6a5583169f0d021cd9acae0b0481349be8a00d010a26",
+      "bytes": 6984
+    },
+    {
+      "path": "research_harness/onboarding.py",
+      "sha256": "4ce535a937d78a73764803dbac0a0b6bf29fd09cd78c3b6677be29d05b9663ca",
+      "bytes": 8425
+    },
+    {
+      "path": "research_harness/tabular_data.py",
+      "sha256": "3906a4064da20a056f9d0441e048d76c0e2d3cdaf9b0d93353940b5c16b9304f",
+      "bytes": 4550
+    },
+    {
+      "path": "research_harness/tabular_proposer.py",
+      "sha256": "130c49f180c567212424df386000788ad15b6a67c9f57dac2c34b9eb3bde8fa1",
+      "bytes": 12623
+    },
+    {
+      "path": "research_harness/task_contracts.py",
+      "sha256": "493b8a844ce59831237a15e4e82efde3234a2961f8f1742ec3e3c44ae0ea1a9f",
+      "bytes": 5827
+    },
+    {
+      "path": "research_harness/workflows.py",
+      "sha256": "4c089c57d4670f5c5ff82beacbfb05ecd2aa218809a0e44331bccc54d120d1ea",
+      "bytes": 5937
+    },
+    {
+      "path": "tasks/airfoil_noise/a1/REPORT.md",
+      "sha256": "a1c813d8eea06a0434997ed02f53e0d57b1ee9c9e08db555d615cbfed687e121",
+      "bytes": 3208
+    },
+    {
+      "path": "tasks/airfoil_noise/a2/REPORT.md",
+      "sha256": "8dd5aafdb2062ce37490de3966bc94561423827594b9e3080b00840de6196efc",
+      "bytes": 3900
+    },
+    {
+      "path": "tasks/airfoil_noise/a2/audit.json",
+      "sha256": "d17a568c3683c15c5d415d941968d04d0f47b067cc564af5972c9aa6d5b3e14e",
+      "bytes": 191
+    },
+    {
+      "path": "tasks/airfoil_noise/a2/result-summary.json",
+      "sha256": "aed7aaafd6b6e2c0bd5e2b08e44c4ec6ceb0514b4cf564fbda92b2473a3bc469",
+      "bytes": 4238
+    },
+    {
+      "path": "tasks/airfoil_noise/a2_replication/OUTREACH_STATUS.md",
+      "sha256": "ffa2d91d8859c75a509ac7baed2e32e270438c5f9f69eca03f7b64d4ebaf5e8e",
+      "bytes": 3590
+    },
+    {
+      "path": "tasks/image_super_resolution/G0_REPORT.md",
+      "sha256": "ce862e87cacd8a4fa5c393bbbace754faa3a75233315200547351898899c4865",
+      "bytes": 3320
+    },
+    {
+      "path": "tasks/image_super_resolution/g1/REPORT.md",
+      "sha256": "e1758e84313400af96b44c4f50e6a340e0711f314964c8fb9383272c727d0770",
+      "bytes": 11103
+    },
+    {
+      "path": "tasks/image_super_resolution/g2/REPORT.md",
+      "sha256": "3f4f066c1edd591a0d3622996fc9e705d850a1fb3052dbed553edad384314938",
+      "bytes": 4984
+    },
+    {
+      "path": "tasks/image_super_resolution/g2/evidence/ledger.jsonl",
+      "sha256": "ee7bd4085474afe48cc658f0d6003139dd68d0fafa7114c8ea63afe03065d4e3",
+      "bytes": 4135
+    },
+    {
+      "path": "tasks/image_super_resolution/g2/evidence/session.json",
+      "sha256": "f6200ec8681f6e6d8894e8e0c81f9ee52a6c55fc5d3de028f8e75e47c6a57f85",
+      "bytes": 555
+    },
+    {
+      "path": "tasks/image_super_resolution/g2/evidence/workflow-audit.json",
+      "sha256": "9e8d51d0f032bf8b81b6c575e5918668c1848bbde4cff9615323cb629a669ef6",
+      "bytes": 879
+    },
+    {
+      "path": "tasks/image_super_resolution/g3/REPORT.md",
+      "sha256": "0ef9f20ab9a2e2e4b19b36fe326d3ec91f9b4b7d0000c8c89f6fa53f4d301b93",
+      "bytes": 4587
+    },
+    {
+      "path": "tasks/image_super_resolution/g3/evidence/ledger.jsonl",
+      "sha256": "6e0a747dbe28a705cb4546a02776d42aab6df825257303644525176894a6aaec",
+      "bytes": 6222
+    },
+    {
+      "path": "tasks/image_super_resolution/g3/evidence/session.json",
+      "sha256": "0d581fce84cdbfa499154065cd3f3b9344f240c95d94b0a0ddf22dad1103fdcc",
+      "bytes": 555
+    },
+    {
+      "path": "tasks/image_super_resolution/g3/evidence/workflow-audit.json",
+      "sha256": "dc9e10d2aa27fee86c9cb17368c46164142bddd7d320f9c6e7a4d7a70151806f",
+      "bytes": 1053
+    },
+    {
+      "path": "tasks/image_super_resolution/g3/selection.json",
+      "sha256": "212b6dd9fa4d9a128f93443eb7e1ed2cb4861b1d5e5747b4305c1551d8058009",
+      "bytes": 452
+    },
+    {
+      "path": "tasks/image_super_resolution/g4/REPORT.md",
+      "sha256": "674138f4b2261a814a2902e38b80dcc041f6d8b8a903e683b6b5e48808c4675c",
+      "bytes": 5914
+    },
+    {
+      "path": "tasks/image_super_resolution/g4/evidence/ledger.jsonl",
+      "sha256": "b5a54e4e5d615ea3f294e4a0aa63da617fa72d7e0a13672694d0bdad58b587a4",
+      "bytes": 5209
+    },
+    {
+      "path": "tasks/image_super_resolution/g4/evidence/session.json",
+      "sha256": "1ff37749ad6b331252a92f6142b0dedd152f2fb69e866634d1e01ea4ea80451d",
+      "bytes": 553
+    },
+    {
+      "path": "tasks/image_super_resolution/g4/evidence/workflow-audit.json",
+      "sha256": "c325fe7f83e2b6c31af26d0160b412926c9fd88cfc88ee06d98c1b2b14cb510f",
+      "bytes": 1029
+    },
+    {
+      "path": "tasks/image_super_resolution/g4/selection.json",
+      "sha256": "55a4eca1ef3d4f716dbb995d23860399223bce284353583b88ac067135577fc3",
+      "bytes": 666
+    },
+    {
+      "path": "tasks/image_super_resolution/g5/REPORT.md",
+      "sha256": "8c36b19544e3b9cc088242c317b6bdb92be789aecef73d7a02edb38204d763f7",
+      "bytes": 6601
+    },
+    {
+      "path": "tasks/image_super_resolution/g5/evidence/ledger.jsonl",
+      "sha256": "7969e79b9d2c42979cedfbb59afe4d19bf482db957f4a4b40bf1e49adc3cae7c",
+      "bytes": 6895
+    },
+    {
+      "path": "tasks/image_super_resolution/g5/evidence/session.json",
+      "sha256": "b723ef9dd9fd1b16fc86e0afb48c94e019ef836cc849c3405c85e2e0fc4f3914",
+      "bytes": 483
+    },
+    {
+      "path": "tasks/image_super_resolution/g5/selection.json",
+      "sha256": "5f893483541bb5eedd597ff3cb3316184f20e03abe66596c1ac47b93535303e2",
+      "bytes": 1075
+    },
+    {
+      "path": "tasks/image_super_resolution/g6/REPORT.md",
+      "sha256": "6ebd01fb15d9be551e71886f6118c86c73d6a38baf3e5d3b3646d171973326df",
+      "bytes": 5882
+    },
+    {
+      "path": "tasks/image_super_resolution/g6/evidence/ledger.jsonl",
+      "sha256": "d96d250ea0231fa4f31447e2f99e9e48d2d8d4b9b2ce3836d41bfebdedf66fa3",
+      "bytes": 6889
+    },
+    {
+      "path": "tasks/image_super_resolution/g6/evidence/operator-audit.json",
+      "sha256": "6682dc0e744599bd31c8c5ab87a95191a0421579ccbbe94fe511b4cd8c743c67",
+      "bytes": 1356
+    },
+    {
+      "path": "tasks/image_super_resolution/g6/evidence/session.json",
+      "sha256": "680052ccd20b3dcd1f83a63b8aee0f665b0c4f5738009128c574fe7c01f8b82b",
+      "bytes": 484
+    },
+    {
+      "path": "tasks/image_super_resolution/g6/selection.json",
+      "sha256": "fbcfb9a3ecd9cfc346411e200806b68ebe7d3071996edd693d0f1f534e946b01",
+      "bytes": 1255
+    },
+    {
+      "path": "tasks/image_super_resolution/g7/REPORT.md",
+      "sha256": "f9c6d33c3561aed37cac9ee54b746a3643f1d7960c2ad35f3b1d55ca13cb7851",
+      "bytes": 4257
+    },
+    {
+      "path": "tasks/image_super_resolution/g7/evidence/ledger.jsonl",
+      "sha256": "0fd3ae2992bcea5b77101e1729a129e42f2a4ad540949b71638df799b7c0b2a6",
+      "bytes": 8275
+    },
+    {
+      "path": "tasks/image_super_resolution/g7/evidence/operator-audit.json",
+      "sha256": "b3d7a2aea220c90b275d5df783f9827f5cec2f5115629da541bad4bf85b94ba6",
+      "bytes": 1296
+    },
+    {
+      "path": "tasks/image_super_resolution/g7/evidence/session.json",
+      "sha256": "e8b7b5721a7b8e5ad9f57101ab661ae2533a944f37ebbbf4f03cd7794e32976c",
+      "bytes": 483
+    },
+    {
+      "path": "tasks/image_super_resolution/g7/selection.json",
+      "sha256": "2fb7f41ba2e13b1db6ecf654e05b9ef3a7c73c15a029f38a543b599a52be8207",
+      "bytes": 1435
+    },
+    {
+      "path": "tasks/tabular_regression/t1/REPORT.md",
+      "sha256": "9cfd8cd90a37f866049b3b0d2384b02791132b9c9d19bd8450d0ac4bf2f83d09",
+      "bytes": 3135
+    },
+    {
+      "path": "tasks/tabular_regression/t2/REPORT.md",
+      "sha256": "30231b952359f0a3cc415b720b8091c09fee43df8d140fb05dafafb92e985378",
+      "bytes": 3432
+    },
+    {
+      "path": "tasks/tabular_regression/t2/REVIEW.md",
+      "sha256": "44941ab52e90b3bb5e5ee1da648a28c1a198afbfc9a3873b317d52fbb3173b10",
+      "bytes": 5035
+    },
+    {
+      "path": "tasks/tabular_regression/t2/audit.json",
+      "sha256": "0ee91e137aaaf2a6328398c5b85e5cbc1aa6b4ebdfbb37a0f54bcf81f75a03dc",
+      "bytes": 309
+    },
+    {
+      "path": "tasks/tabular_regression/t2/result-summary.json",
+      "sha256": "01878efa6c03d36e4db1e42c958386dbc68ec2f521da35819fa2aa22f456e697",
+      "bytes": 3747
+    },
+    {
+      "path": "tasks/tabular_regression/t2/review-manifest.json",
+      "sha256": "e7ff81e107fd09e1d8a8ea3321e8d47d5e3eb1f536e0492ef662a9151390d1ac",
+      "bytes": 7225
+    },
+    {
+      "path": "templates/sr/history.json",
+      "sha256": "9d9b0c6fbe296cc7c30c3db13c5ec11a166dc453fba86b88491857386af42e3f",
+      "bytes": 2158
+    }
+  ],
+  "documentation_verification": {
+    "source_hashes_and_baseline_bytes_checked": 66,
+    "archived_events_and_disjoint_selection_union_checked": true,
+    "software_tests": {
+      "command": "python3 -m unittest discover -s tests -v",
+      "python": "3.9.6",
+      "tests_run": 415,
+      "skipped": 16,
+      "result": "OK",
+      "scope": "Repository-required local software checks only. Not a supported-version portability certification or new research evidence.",
+      "log_sha256": "ef50392ba87bdb61177b4d850db48720d11176a6e2b690ca62417c934535e6fc"
+    }
+  }
+}
