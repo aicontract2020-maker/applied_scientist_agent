@@ -61,3 +61,11 @@ python3 -m research_harness task check \
 软件测试使用合成材料；实际隔离脚本在生成合成基线与候选后调用该统一入口，
 再运行原有软件验证。它们不评估真实科学效果，不调用研究模型。验收记录见
 [C15 工程验收](WORKFLOWS_REVIEW.md)。
+
+## 按流程检查安装
+
+0.34 的目录增加 `environment_check` 提示。SR 继续使用原 `doctor`；
+Abalone / Airfoil 使用 `tabular doctor` / `airfoil doctor`，检查共享的
+固定 worker 环境，无需 SR 资源或 Codex 登录。默认不测试内核隔离，显式
+`--probe-isolation` 才运行合成探针；不覆盖自主提案 actor。完整说明见
+[表格安装诊断](TABULAR_DOCTOR.md)。安装诊断与材料只读检查均不授权实验。

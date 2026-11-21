@@ -4,7 +4,7 @@
 
 当前完整任务是 **固定 SwinIR-S ×2 图像超分的确定性后处理研究**，不是任意领域的通用科学家。基础工作流无需模型；完整研究使用你自己的 Codex 登录与额度。
 
-0.33.0 增加[工作流目录与统一只读检查](docs/WORKFLOWS.md)：集中展示 SR、Abalone 与 Airfoil 五类固定流程，并复用原有执行前检查。检查通过不授予执行权。C14 已验收，[C15 工程验收](docs/WORKFLOWS_REVIEW.md)待审（本地及远端五项验证均通过）。原有隔离、预注册、停止规则与[统一交接 v4](docs/SR_UNIFIED_HANDOFF.md)保持。查看[研发路线图](docs/ROADMAP.md)。
+0.34.0 增加[Abalone / Airfoil 安装诊断](docs/TABULAR_DOCTOR.md)：无需超分图像或 Codex 登录，检查固定执行环境，并可显式运行合成隔离探针。C15 已验收，[C16 工程验收](docs/TABULAR_DOCTOR_REVIEW.md)待验证后审查。原隔离、预注册和停止规则保持；查看[工作流目录](docs/WORKFLOWS.md)与[研发路线图](docs/ROADMAP.md)。
 
 ```sh
 python3 -m research_harness task workflows

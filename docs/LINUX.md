@@ -1,5 +1,10 @@
 # 在 Linux 服务器上运行
 
+只运行 Abalone / Airfoil 已冻结基线或候选时，可先使用[专用安装诊断](TABULAR_DOCTOR.md)：
+`bash scripts/bootstrap-tabular.sh` 后运行 `python3 -m research_harness tabular doctor`；
+显式添加 `--probe-isolation` 才做合成内核探针。这条 worker 安装路线无需 SR
+图像资源或 Codex 登录；下文完整自主 SR/actor 流程仍需要各自全部依赖。
+
 目标环境：Ubuntu 24.04、Python 3.12、普通用户、x86_64 或 aarch64、CPU 推理。完整实跑与支持范围见 [Linux 验证记录](LINUX_VALIDATION.md)。其他发行版、受限容器或 HPC 环境必须自行通过 `doctor`，不承诺默认可用。Linux 使用 Bubblewrap 用户、挂载、PID 与网络命名空间；不使用无隔离 subprocess 回退。
 
 ## 管理员一次性准备

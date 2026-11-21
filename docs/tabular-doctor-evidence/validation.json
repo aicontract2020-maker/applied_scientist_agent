@@ -1,0 +1,160 @@
+{
+  "date": "2026-11-20",
+  "baseline_commit": "2fc47db5d56df5cacff9edc215e518ef415db1ea",
+  "new_research_experiments": 0,
+  "real_data_scored": false,
+  "research_model_calls": 0,
+  "local_macos_python312": {
+    "tests": 394,
+    "skipped": 0,
+    "status": "success"
+  },
+  "local_macos_python310": {
+    "tests": 394,
+    "skipped": 16,
+    "status": "success"
+  },
+  "extra_system_python39": {
+    "tests": 394,
+    "skipped": 16,
+    "status": "success",
+    "official_support_minimum": "3.10"
+  },
+  "new_diagnostic_tests": 20,
+  "local_macos_diagnostics": {
+    "default": {
+      "status": "ENVIRONMENT_CHECKS_PASSED",
+      "ok": true,
+      "isolation_probe_requested": false,
+      "isolation_probe_attempted": false,
+      "isolation_verified": false,
+      "execution_authorized": false,
+      "research_state_changed": false,
+      "research_data_read": false,
+      "model_call_made": false,
+      "checks": [
+        {
+          "name": "platform",
+          "status": "PASS"
+        },
+        {
+          "name": "interpreter",
+          "status": "PASS"
+        },
+        {
+          "name": "locked_environment",
+          "status": "PASS"
+        },
+        {
+          "name": "scientific_imports",
+          "status": "PASS"
+        },
+        {
+          "name": "isolation_tool",
+          "status": "PASS"
+        },
+        {
+          "name": "actual_isolation",
+          "status": "NOT_REQUESTED"
+        }
+      ],
+      "log_sha256": "9a4017644e9b612c77258fc17ab83de75809e21b124772241674f13fa5731089"
+    },
+    "probe": {
+      "status": "ENVIRONMENT_AND_ISOLATION_CHECKS_PASSED",
+      "ok": true,
+      "isolation_probe_requested": true,
+      "isolation_probe_attempted": true,
+      "isolation_verified": true,
+      "execution_authorized": false,
+      "research_state_changed": false,
+      "research_data_read": false,
+      "model_call_made": false,
+      "checks": [
+        {
+          "name": "platform",
+          "status": "PASS"
+        },
+        {
+          "name": "interpreter",
+          "status": "PASS"
+        },
+        {
+          "name": "locked_environment",
+          "status": "PASS"
+        },
+        {
+          "name": "scientific_imports",
+          "status": "PASS"
+        },
+        {
+          "name": "isolation_tool",
+          "status": "PASS"
+        },
+        {
+          "name": "actual_isolation",
+          "status": "PASS"
+        }
+      ],
+      "log_sha256": "9d26afc42abe0cfc2d423ab0ea635f1b5bdca967ab03c0cf0c4771dbedbe1c58"
+    },
+    "python310": {
+      "status": "ENVIRONMENT_CHECKS_PASSED",
+      "ok": true,
+      "isolation_probe_requested": false,
+      "isolation_probe_attempted": false,
+      "isolation_verified": false,
+      "execution_authorized": false,
+      "research_state_changed": false,
+      "research_data_read": false,
+      "model_call_made": false,
+      "checks": [
+        {
+          "name": "platform",
+          "status": "PASS"
+        },
+        {
+          "name": "interpreter",
+          "status": "PASS"
+        },
+        {
+          "name": "locked_environment",
+          "status": "PASS"
+        },
+        {
+          "name": "scientific_imports",
+          "status": "PASS"
+        },
+        {
+          "name": "isolation_tool",
+          "status": "PASS"
+        },
+        {
+          "name": "actual_isolation",
+          "status": "NOT_REQUESTED"
+        }
+      ],
+      "log_sha256": "9a4017644e9b612c77258fc17ab83de75809e21b124772241674f13fa5731089"
+    }
+  },
+  "native_preflights_execution_isolation_and_environment_check_unchanged": true,
+  "unified_preflight_check_ast_unchanged": true,
+  "all_existing_runtime_except_cli_and_catalog_unchanged": true,
+  "tasks_and_templates_unchanged": true,
+  "unchanged_file_count": 419,
+  "logs": {
+    "full": {
+      "sha256": "16a04591af98b3c9881aeecd90ca47e94a5a4912d9b799a220df43cf9c7559ab",
+      "bytes": 63204
+    },
+    "python310": {
+      "sha256": "d791ab44a153138192e41f0434b0811d3dc05f0966d7e899ca0628c32cc3e644",
+      "bytes": 41776
+    },
+    "system-tests": {
+      "sha256": "4d08bb71d4e69e7d10e7803f36e8147561a1c8f3905159ea985b5fb93bc3ced4",
+      "bytes": 41776
+    }
+  },
+  "remote_status": "pending"
+}

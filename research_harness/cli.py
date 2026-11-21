@@ -95,6 +95,8 @@ def main():
     bc.add_parser("import", help="Merge pauses only; never clear local records").add_argument("packet")
     tabular = sub.add_parser("tabular", help="Reviewed baseline/feature trials, exclusion memory and private evidence")
     tabular_commands = tabular.add_subparsers(dest="tabular_command", required=True)
+    tabular_health = tabular_commands.add_parser("doctor", help="Check fixed worker installation; no SR assets, Codex or research")
+    tabular_health.add_argument("--probe-isolation", action="store_true", help="Explicitly run the native synthetic kernel probe after prerequisites pass")
     tabular_fetch = tabular_commands.add_parser("fetch", help="Download pinned public UCI data only; no scoring")
     tabular_fetch.add_argument("--out", required=True)
     tabular_prepare = tabular_commands.add_parser("prepare", help="Prepare pinned UCI data and a review packet; no training")
@@ -165,6 +167,8 @@ def main():
     command=te.add_parser("unpack"); command.add_argument("packet"); command.add_argument("--out",required=True)
     airfoil = sub.add_parser("airfoil", help="Pinned condition-grouped public task; baseline qualification requires review")
     ac = airfoil.add_subparsers(dest="airfoil_command", required=True)
+    airfoil_health = ac.add_parser("doctor", help="Check fixed worker installation; no data, Codex or research")
+    airfoil_health.add_argument("--probe-isolation", action="store_true", help="Explicitly run the native synthetic kernel probe after prerequisites pass")
     ae = ac.add_parser("evidence", help="Private read-only Airfoil audit evidence; no execution or memory import").add_subparsers(dest="airfoil_evidence_command", required=True)
     ap = ae.add_parser("export"); ap.add_argument("--review", required=True); ap.add_argument("--out", required=True)
     ae.add_parser("verify").add_argument("packet")
@@ -231,7 +235,12 @@ def main():
             else: output = dq.decide(args.packet, args.sha256, args.reviewer, args.decision, args.reason)
         elif args.command == "airfoil":
             from . import airfoil_baseline as ab
-            if args.airfoil_command == "evidence":
+            if args.airfoil_command == "doctor":
+                from .tabular_doctor import doctor
+                output = doctor(probe_isolation=args.probe_isolation)
+                print(json.dumps(output, indent=2, ensure_ascii=False))
+                return 0 if output['ok'] else 1
+            elif args.airfoil_command == "evidence":
                 from . import airfoil_evidence as ae
                 if args.airfoil_evidence_command == "export": output = ae.export(args.review, args.out)
                 elif args.airfoil_evidence_command == "unpack": output = ae.unpack(args.packet, args.out)
@@ -262,7 +271,12 @@ def main():
                 return 0 if output["measurement_valid"] else 1
         elif args.command == "tabular":
             from .tabular_baseline import prepare, load_review, approve as approve_baseline, execute as execute_baseline
-            if args.tabular_command == "handoff":
+            if args.tabular_command == "doctor":
+                from .tabular_doctor import doctor
+                output = doctor(probe_isolation=args.probe_isolation)
+                print(json.dumps(output, indent=2, ensure_ascii=False))
+                return 0 if output['ok'] else 1
+            elif args.tabular_command == "handoff":
                 from . import tabular_handoff as th
                 options={'root':args.root} if args.root is not None else {}
                 if args.tabular_handoff_command=='status': output=th.status(**options)
