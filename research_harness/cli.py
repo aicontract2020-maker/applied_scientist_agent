@@ -73,6 +73,9 @@ def main():
     task_check.add_argument("--workflow", required=True)
     task_check.add_argument("--review", required=True, help="Prepared study or review directory")
     task_check.add_argument("--root", help="Existing checkout state to inspect; default: installation checkout")
+    task_review = task_commands.add_parser("review", help="Summarize verified frozen tabular materials before human approval; never authorizes execution")
+    task_review.add_argument("--workflow", required=True)
+    task_review.add_argument("--review", required=True, help="Prepared baseline or candidate review directory")
     data_review = sub.add_parser("data-review", help="Offline metadata qualification; never authorizes experiments")
     dc = data_review.add_subparsers(dest="data_review_command", required=True)
     dc.add_parser("template", help="Write an unfilled metadata template").add_argument("--out", required=True)
@@ -365,6 +368,9 @@ def main():
             if args.task_command == 'workflows':
                 from .workflows import catalog
                 output = catalog()
+            elif args.task_command == 'review':
+                from .review_summary import inspect
+                output = inspect(args.workflow, args.review)
             elif args.task_command == 'check':
                 from .workflows import check
                 output = check(args.workflow, args.review, **({'root': args.root} if args.root else {}))

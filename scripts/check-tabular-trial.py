@@ -13,6 +13,7 @@ from research_harness.tabular_trial import prepare,approve_trial,execute_trial,a
 from examples.data_qualification.baseline import qualification,USE
 from research_harness.tabular_data import write_json
 from research_harness.workflows import check
+from research_harness.review_summary import inspect as review_summary
 
 root=Path(__file__).resolve().parents[1]; (root/'runs').mkdir(exist_ok=True)
 parser=argparse.ArgumentParser()
@@ -25,6 +26,8 @@ for i in range(350):
 with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs') as tmp:
     work=Path(tmp); baseline=work/'baseline'
     packet=prepare_rows(rows,baseline,{'id':'synthetic-software-fixture'})
+    assert review_summary('abalone-baseline-v1',baseline)['packet_sha256'] == packet['sha256']
+    assert not (baseline/'approval.json').exists()
     approve(baseline,packet['sha256'],'SOFTWARE FIXTURE ONLY')
     assert check('abalone-baseline-v1',baseline,root=work)['execution_authorized'] is False
     qualified=execute(baseline)
@@ -53,6 +56,8 @@ with tempfile.TemporaryDirectory(prefix='tabular trial fixture ',dir=root/'runs'
     trial=work/'trial'; review=prepare(baseline,work/'proposal.json',trial,work/'library.json',root=work,
                                       data_review=work/'qualification/packet.json',intended_use=USE)
     # Fixtures never create approval or reservation in the user's real data scope.
+    assert review_summary('abalone-candidate-v1',trial)['packet_sha256'] == review['sha256']
+    assert not (trial/'trial-approval.json').exists()
     approve_trial(trial,review['sha256'],'SOFTWARE FIXTURE ONLY',root=work)
     assert preflight_trial(trial,root=work)['data_admission']['execution_authorized'] is False
     assert check('abalone-candidate-v1',trial,root=work)['checks']['memory_checked'] is True

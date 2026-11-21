@@ -8,6 +8,7 @@ import tempfile
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from research_harness import airfoil_baseline as ab, airfoil_trial as at
 from research_harness.workflows import check
+from research_harness.review_summary import inspect as review_summary
 from examples.data_qualification.baseline import qualification as data_qualification,USE
 
 root=Path(__file__).resolve().parents[1];(root/'runs').mkdir(exist_ok=True)
@@ -15,7 +16,10 @@ rows=[{'id':f'fixture-{i:03}-{j}','features':[500.+500*j,float(i),.1+i*.001,30.+
        'target':100.+15*math.sin(i/9)+j*j} for i in range(150) for j in range(3)]
 with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs') as tmp:
     folder=Path(tmp); base=folder/'baseline'; memory=folder/'checkout'; trial=folder/'trial'
-    bp=ab.prepare_rows(rows,base);ab.approve(base,bp['sha256'],'SOFTWARE FIXTURE ONLY',root=memory)
+    bp=ab.prepare_rows(rows,base)
+    assert review_summary('airfoil-baseline-v1',base)['packet_sha256'] == bp['sha256']
+    assert not (base/'approval.json').exists()
+    ab.approve(base,bp['sha256'],'SOFTWARE FIXTURE ONLY',root=memory)
     memory.mkdir(exist_ok=True)
     assert check('airfoil-baseline-v1',base,root=memory)['execution_authorized'] is False
     qualification=ab.execute(base,root=memory)
@@ -25,6 +29,7 @@ with tempfile.TemporaryDirectory(prefix='airfoil trial fixture ',dir=root/'runs'
     prepared=at.prepare(base,root/'tasks/airfoil_noise/a2/proposal.json',trial,root=memory,
                         data_review=folder/'qualification/packet.json',intended_use=USE)
     assert not (trial/'trial-approval.json').exists() and not (trial/'trial-run').exists()
+    assert review_summary('airfoil-candidate-v1',trial)['packet_sha256'] == prepared['sha256']
     at.approve(trial,prepared['sha256'],'SOFTWARE FIXTURE ONLY',root=memory)
     assert at.preflight(trial,root=memory)['data_admission']['execution_authorized'] is False
     assert check('airfoil-candidate-v1',trial,root=memory)['checks']['memory_checked'] is True

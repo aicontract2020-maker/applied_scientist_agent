@@ -1,0 +1,58 @@
+{
+  "date": "2026-11-21",
+  "baseline_commit": "cd107bbb231ef8226ec966b097ccc5147121fdde",
+  "new_research_experiments": 0,
+  "real_data_scored": false,
+  "research_model_calls": 0,
+  "local_macos_python312": {
+    "tests": 415,
+    "skipped": 0,
+    "status": "success"
+  },
+  "local_macos_python310": {
+    "tests": 415,
+    "skipped": 16,
+    "status": "success"
+  },
+  "extra_system_python39": {
+    "tests": 415,
+    "skipped": 16,
+    "status": "success",
+    "official_support_minimum": "3.10"
+  },
+  "new_review_summary_tests": 21,
+  "actual_macos_isolated_synthetic_flows": [
+    "Abalone baseline and candidate",
+    "Airfoil grouped baseline and candidate"
+  ],
+  "summary_verified_before_each_synthetic_approval": true,
+  "real_archived_baseline_audit_in_integration": true,
+  "native_loaders_preflights_approval_execution_isolation_unchanged": true,
+  "unified_preflight_check_ast_unchanged": true,
+  "all_existing_runtime_except_cli_and_catalog_unchanged": true,
+  "tasks_and_templates_unchanged": true,
+  "unchanged_file_count": 420,
+  "logs": {
+    "full": {
+      "sha256": "8275092c0ccf5e7cd79881c2940a545b02113b35b956e06a63edc4b6559a6b84",
+      "bytes": 66462
+    },
+    "python310": {
+      "sha256": "d0aafe934c6a95d85b421234d622035f0f10d9f5455ab678961563d79296463c",
+      "bytes": 43909
+    },
+    "system-tests": {
+      "sha256": "dc73d2e195d0e7da333cf951e36c7e0db689d0c4ef775c3578eae12581596141",
+      "bytes": 43909
+    },
+    "tabular-isolation": {
+      "sha256": "27d6e41ff61787de2aaa2cc9c1187bdb7fec77c75029bf303713a88de37ed6e6",
+      "bytes": 683
+    },
+    "airfoil-isolation": {
+      "sha256": "808ed7347c5b6d50799a387a8237068380d650bd88ba07d336aa8acb5de9d4b5",
+      "bytes": 731
+    }
+  },
+  "remote_status": "pending"
+}

@@ -59,6 +59,8 @@ def workflow(workflow_id):
     if not isinstance(workflow_id, str) or workflow_id not in _WORKFLOWS:
         raise ValueError('Unknown workflow; use task workflows for supported IDs')
     return dict(deepcopy(_WORKFLOWS[workflow_id]), id=workflow_id,
+                frozen_review_summary=(None if workflow_id == 'swinir-s-x2' else
+                                       f'task review --workflow {workflow_id} --review PATH'),
                 environment_check=('doctor' if workflow_id == 'swinir-s-x2' else
                                    'airfoil doctor' if workflow_id.startswith('airfoil-') else 'tabular doctor'),
                 execution_python='3.12',

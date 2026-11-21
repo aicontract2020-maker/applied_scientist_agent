@@ -69,3 +69,11 @@ Abalone / Airfoil 使用 `tabular doctor` / `airfoil doctor`，检查共享的
 固定 worker 环境，无需 SR 资源或 Codex 登录。默认不测试内核隔离，显式
 `--probe-isolation` 才运行合成探针；不覆盖自主提案 actor。完整说明见
 [表格安装诊断](TABULAR_DOCTOR.md)。安装诊断与材料只读检查均不授权实验。
+
+## 批准前查看冻结材料
+
+0.35 的四类 Abalone / Airfoil 工作流增加 `frozen_review_summary` 入口
+提示。`task review --workflow ID --review PATH` 无需已有执行批准，从原生
+校验后的冻结内容生成协议、候选与资格摘要；不检查当前执行资格。SR 不套用
+该格式。完整边界见[批准前审阅](REVIEW_SUMMARY.md)。准备材料、审阅、记录
+批准、只读执行前检查与实际隔离执行仍是独立步骤。
